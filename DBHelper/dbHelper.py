@@ -83,7 +83,6 @@ class database:
                 flag = True
             except Exception as e:
                 flag = False
-        print(self._conn)
         return flag
             
     # 查询

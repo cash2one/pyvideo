@@ -8,7 +8,7 @@ import time
 def index():
     # url = 'http://v.qq.com/vplus/3fcca62af8c4b211b87401b4530cff9a/videos '
 
-    uid = '607af5db22c0f59aa0b6c87bb849e22c'
+    uid = '3fcca62af8c4b211b87401b4530cff9a'
     pagenum = 1
 
     url = 'http://c.v.qq.com/vchannelinfo?otype=json&uin='+ uid +'&qm=1&pagenum='+ str(pagenum) +'&num=24&sorttype=0&orderflag=0&callback=jQuery19104105733024427589_1531375140863&low_login=1&_=1531375140876'

@@ -7,7 +7,6 @@ from PyQt5.QtCore import *
 import subprocess
 
 
-
 class Ffmpeg(QWidget):
     def __init__(self):
         super().__init__()
@@ -77,8 +76,20 @@ class Ffmpeg(QWidget):
         grid.addWidget(self.eLabel, 5, 2)
         grid.addWidget(sButton, 4, 3)
 
+        # 转换格式
+        m3u8Label = QLabel('格式转换')
+        grid.addWidget(m3u8Label, 6, 0)
+        downLabel = QLabel('下载地址')
+        grid.addWidget(downLabel, 6, 1)
+        self.m3u8Url = QLineEdit('')
+        grid.addWidget(self.m3u8Url, 6, 2)
+
+        downBtn = QPushButton('开始转换')
+        downBtn.clicked.connect(self.downClick)
+        grid.addWidget(downBtn, 6,3)
+
         # QToolTip.setFont(QFont('SansSerif', 10))
-        self.resize(500, 200)
+        self.resize(500, 259)
         self.move(100, 100)
         self.setWindowIcon(QIcon('./Title.ico'))
         self.setWindowTitle("Hello world")
@@ -92,13 +103,26 @@ class Ffmpeg(QWidget):
         # btn.move(0, 0)
         self.show()
 
+    def downClick(self):
+        infile = self.infile.text()
+        outfile = self.outfile.text()
+
+        strcmd = ['ffmpeg -i ' + infile + ' ' + outfile]
+        result=subprocess.run(args=strcmd,stdout=subprocess.PIPE,shell=True)
+        print(result)
+
+        # url = self.m3u8Url.text()
+        # downloader = m3u8.Downloader(50)
+        # downloader.run(url, '')
+
+
     def startClick(self):
         infile = self.infile.text()
         outfile = self.outfile.text()
         start = self.sLabel.text()
         end = self.eLabel.text()
 
-        strcmd = ['ffmpeg -ss '+start+' -to '+edn+' -i '+infile+' -acodec copy -vcodec copy '+outfile+' -y']
+        strcmd = ['ffmpeg -ss '+start+' -to '+end+' -i '+infile+' -acodec copy -vcodec copy '+outfile+' -y']
         result=subprocess.run(args=strcmd,stdout=subprocess.PIPE,shell=True)
         print(result)
 

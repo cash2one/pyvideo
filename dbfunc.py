@@ -15,11 +15,12 @@ def createTable():
                 second_class CHAR(10),
                 is_exist_local int(1), 
                 local_path CHAR(255), 
-                qq_create_time DATE, 
+                qq_create_time CHAR(50), 
                 create_time DATETIME, 
                 publish_time DATETIME, 
                 other char(255), 
-                extension char(255) )"""    
+                extension char(255)
+                vid char(255) )"""    
     res = db.createTable(table, sql)
 
     if res:
@@ -27,12 +28,22 @@ def createTable():
     else:
         print('fail')
 
-def insertVideo(qq, title, url, alias, tags, first_class, second_class, is_exist_local, local_path, qq_create_time, create_time):
+def insertVideo(qq, title, url, alias, tags, first_class, second_class, is_exist_local, local_path, qq_create_time, create_time, vid):
     db = dbHelper.database()
-    sql = "INSERT INTO videos (qq, title, url, alias, tags, first_class, second_class, is_exist_local, local_path, qq_create_time, create_time) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s','%d', '%s', '%s', '%s') " % (qq, title, url, alias, tags, first_class, second_class, is_exist_local, local_path, qq_create_time, create_time )
-
-    db.update(sql)
-    db.close()
+    sql = "select * from videos where vid = '%s'" % vid    
+    dd = db.fetch(sql) 
+    if dd:
+        print('videos 表中已存在了')
+        # 更新时间 qq_create_time
+        sql = "update videos set qq_create_time = '%s' where vid = '%s'" % (qq_create_time, vid)
+        db.update(sql)
+        db.close()
+    else:
+        sql = "INSERT INTO videos (qq, title, url, alias, tags, first_class, second_class, is_exist_local, local_path, qq_create_time, create_time, vid) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s','%d', '%s', '%s', '%s', '%s') " % (qq, title, url, alias, tags, first_class, second_class, int(is_exist_local), local_path, qq_create_time, create_time, vid )
+        db.update(sql)
+        db.close()
+        print('inset')
+    
 
 def updateVideo(id, data):
     db = dbHelper.database()
@@ -40,19 +51,19 @@ def updateVideo(id, data):
 
     valueStr = ''
     for key in arrKey:
-        item = key + ' = ' + data[key]
+        item = key + ' = ' + "'" +data[key] + "'"
         if valueStr == '':
             valueStr = item
         else:
             valueStr = valueStr + ', ' + item
     sql = "update videos set %s where id = '%d'" % (valueStr, int(id))
-    
+    print(sql)
     db.update(sql)
     db.close()
 
-def fetchVideo():
+def fetchVideo(qq):
     db = dbHelper.database()
-    sql = "SELECT * FROM videos WHERE qq = '810359132' AND alias = '23' AND publish_time is null"
+    sql = "SELECT * FROM videos WHERE qq = '%s' AND publish_time is null" % qq
     res = db.fetch(sql)
     print(len(res))
     return res

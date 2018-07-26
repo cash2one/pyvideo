@@ -4,19 +4,22 @@ import os
 import time
 from splinter import Browser
 import dbfunc
+from config import *
 
 
 def login():
 
-    name = '810359132'
-    pwd = 'huang1325049637'
+    name = account
+    pwd = pwdDic[account]
+    headless = True
 
-    with Browser('chrome', headless=True) as browser:
+    with Browser('chrome', headless=headless) as browser:
         # Visit URL
-        url = "https://kandian.mp.qq.com/vpage/login"
+        url = LoginURL
         browser.visit(url)
 
         with browser.get_iframe("login_if") as iframe:
+            print('正在登录qq: '+name+ '   请稍后...')
             iframe.find_by_id('switcher_plogin').first.click()
 
             iframe.find_by_id('u').first.fill(name)
@@ -25,7 +28,8 @@ def login():
             iframe.find_by_id("login_button").first.click()
 
         time.sleep(5)
-        datas = dbfunc.fetchVideo()
+        print('登录成功')
+        datas = dbfunc.fetchVideo(name)
 
         for data in datas:
             start(data, browser)
@@ -43,7 +47,7 @@ def checkTitle(browser):
 # 发布视频
 def pubVideo(browser, row_url):
     try:
-        url = 'https://kandian.mp.qq.com/page/video#video_pub'
+        url = PubVideoURL
         browser.visit(url)
         browser.find_by_id('select_from_video_url').first.click()
         time.sleep(1)
@@ -72,6 +76,7 @@ def pubStart(browser, row_url):
         pubStart(browser, row_url)
 
 def start(data, browser):
+    
     title = data[2]
     print(title)
 
@@ -109,7 +114,11 @@ def start(data, browser):
 
     # 发布视频
     browser.find_by_id('video_publish_commit').first.click()
+    
+    today = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) 
 
+    dic = {'publish_time': today}
+    dbfunc.updateVideo(data[0], dic)
     time.sleep(3)
 
 def main():

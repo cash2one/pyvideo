@@ -92,16 +92,4 @@ class Downloader:
 
 if __name__ == '__main__':
     downloader = Downloader(50)
-    urls = [
-        # 'https://apd-4f7fc087ddc9fae42753cf007ffbdc9e.v.smtcdns.com/sportsts.tc.qq.com/AisR9J2j9Tuan2QmRVoDvRbg4Gu07YnuYZ3h-dpTrU6Q/6WDFKE_3MS4oJvDYL6lr9PKGgjbuaD39IlqOhODWEFjeZ-dYNUg2EBdnSAye7lYlXJyebYEtXfDucbeYivg0Gb33cvKC3r5IisNR1A_5wfnKwhwu5Cs22xvdKsSuex1HhnEeqxAdsE7Y_y112W2-aKJLcht5x1KS/v0027g56cwe.321003.ts.m3u8?ver=4',
-        # 'https://apd-da72055aec33e26527c552c05ea6ba10.v.smtcdns.com/sportsts.tc.qq.com/A3gtvlDBItXBqVB3ROO3yXOflhE_rfQmvJ6SYlg7Ld_E/ZJTbiVG2l2VyEC2SxzHOLvUrNajNasGh0_33RlBNrQ8mfIgNLk3pi_JcbsBaCHl7zOtfPurxzoTtoNyJd_SXISbIcVpwmKdLYi4VkonogSckch5O_0JJGpyv0EHvOxD48ZElxFwKHwEmzECaPuL9NWWW3GNozjEm/y0027wib6gl.321003.ts.m3u8?ver=4',
-        # 'https://apd-7676325332803fa71d2ea55232e16b4c.v.smtcdns.com/sportsts.tc.qq.com/A-Jot-T84we2MT0CTL-kQlk9MEw0Y13wfrsP1_dk9zqQ/A39-xrWRmR6801KS1cncZjX7u3evrGJzS6ZYeCbWjkCp6DHOXETKd27UK_Xof1ljT2h9mkjHgYLDNBVtzapGYqDestiEpOSfv8aPvAXy22qm3VNdBLJnm8Pvq2i8H4d-MDh6-_6doXqYTfzUUPD1vCxCpN_MI_q4/g0027jr26hp.321003.ts.m3u8',
-        # 'https://apd-f4ab557363ab26ce964e0c7ed77c6b96.v.smtcdns.com/sportsts.tc.qq.com/A3TTnuaDVBeZnUKA9pFkFj3KYNa_5VF2-GmE4DV-O3fQ/OxxKtRbrtFA5INFNzpKlSJKab4oHlLDy8yseL9Do1M73z9KbVTlNaMC0HKEBd7Xp-YYe5pYWIVYvuqz4Cu_o8AcEGckNj2dASBYjXPXBE3_pAC-ym50ksAo2Y4npAcwmT3CW4w2tAK3i-JhcI0r2OS8JFwbvzXSv/w0027jhwjvv.321003.ts.m3u8?ver=4',
-        # 'https://apd-2383372cc465d3b73d760fbb1ea2e0ff.v.smtcdns.com/moviets.tc.qq.com/A1HUYGu8UnskQhtcHLuNDIdiSrHokgUG_4vWnOFBI0HE/GcmrT2cO4hqfdcq22g4vpmQUvC-oOSeOO-15NFtU7NK90auioy2XHZEGpRBQTssgRuuXrEV1NiXl-UEjjkolRVKd2sOd72sb-AHj74BKfeA95jXGwXnUOZt7-QB8cxFRcbW9N1V-vUvCARIH-R242BwlruRaEOYG/d0027j9renh.321003.ts.m3u8?ver=4',
-        'https://apd-b0e2e60de0e3b19b61ef9876dd7f08d6.v.smtcdns.com/vipts.tc.qq.com/A5vVkIWnu95KBqAhaDF3eT8lU2qy42BlcFj3DKBPgDUo/NQUhmKjPtG6edB0UVIHjl8h1dstxx8zUPtVxBuNFFCe9NHJ7yACPcl9weR6NULjnq0wnw-Xz4Sr-xqMSEIOWb5oVIkL33LpkRk3sK__iUKmOfGri5DOklQONbqxMgl9GBY6bvsTIrQzQBZiuIKqx2AjNqAMrvMbm/070_e0027x9f4bn.321003.ts.m3u8?ver=4'
-    ]
-
-    # 【团战】丝毫不给活路越塔就是杀 RSG带兵线强势扳回一城
-    # 【团战】RSG控制链无解 扁鹊爆毒连收两人
-    for url in urls:
-        downloader.run(url, '')
+    downloader.run('https://ltsdl.qq.com/bVbo7sBtR-4u6GDM7hDWRdTI7JqeZNcEw0FrBOdD_Kt5b6mYNpGU8xfVYY4fPKuWS7Fj8E5AIMzUQqWt65Iup9fC3Tg_rWNKVY4C13-GcK1VIAf3izqXCBp9CKJEoFUSqMLZUeFvxOcYQ2_OUl_izukWWgzS_eGb/w0027h1d2g9.321003.ts.m3u8?ver=4', '')

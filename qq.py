@@ -6,7 +6,6 @@ import dbfunc
 import time
 
 
-
 def index(uid, pagenum):
     # url = 'http://v.qq.com/vplus/3fcca62af8c4b211b87401b4530cff9a/videos '
 

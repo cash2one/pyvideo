@@ -14,7 +14,7 @@ dbname = mod_config.getConfig("database", "dbname")
 def getConfig(section, key):
     config = configparser.ConfigParser()
     path = os.path.split(os.path.realpath(__file__))[0] + '/configure.conf'
-    config.read(path)
+    config.read(path, encoding='UTF-8')
     return config.get(section, key)
 
 #其中 os.path.split(os.path.realpath(__file__))[0] 得到的是当前文件模块的目录

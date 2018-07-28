@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/config.py" line="11" mnemonic="3" />
+    <bookmark url="file://$PROJECT_DIR$/config.py" line="10" mnemonic="3" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fb29a654-3d19-4790-9ddb-3ba054fdd910" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DBHelper/dbHelper.py" beforeDir="false" afterPath="$PROJECT_DIR$/DBHelper/dbHelper.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dbfunc.py" beforeDir="false" afterPath="$PROJECT_DIR$/dbfunc.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/kandian.py" beforeDir="false" afterPath="$PROJECT_DIR$/kandian.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/qq.py" beforeDir="false" afterPath="$PROJECT_DIR$/qq.py" afterDir="false" />
     </list>
@@ -21,19 +18,16 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="qq.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="qq.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/qq.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="253">
-              <caret line="71" column="39" selection-start-line="71" selection-start-column="39" selection-end-line="71" selection-end-column="39" />
-              <folding>
-                <element signature="e#1#16#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="92">
+              <caret line="4" column="13" lean-forward="true" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="dbfunc.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="dbfunc.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/dbfunc.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="161">
@@ -46,7 +40,7 @@
         <entry file="file://$PROJECT_DIR$/kandian.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="989">
-              <caret line="124" column="11" lean-forward="true" selection-start-line="124" selection-start-column="11" selection-end-line="124" selection-end-column="11" />
+              <caret line="127" column="11" lean-forward="true" selection-start-line="127" selection-start-column="11" selection-end-line="127" selection-end-column="11" />
               <folding>
                 <element signature="e#24#33#0" expanded="true" />
               </folding>
@@ -57,8 +51,8 @@
       <file leaf-file-name="config.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/config.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="207">
-              <caret line="9" column="41" lean-forward="true" selection-start-line="9" selection-start-column="41" selection-end-line="9" selection-end-column="41" />
+            <state relative-caret-position="154">
+              <caret line="14" column="5" lean-forward="true" selection-start-line="14" selection-start-column="5" selection-end-line="14" selection-end-column="5" />
             </state>
           </provider>
         </entry>
@@ -79,6 +73,12 @@
       <find>_cursur</find>
       <find>insertVideo</find>
       <find>select_from_video_url</find>
+      <find>f401289eef888c247afa2888d66bd01c</find>
+      <find>9d0387de8f60ab27bafef9e42a504593</find>
+      <find>0c4932b8a08dd5b42a4797b4c8060361</find>
+      <find>0c6fcdeff1c6fd7788923deaee77407e</find>
+      <find>3fcca62af8c4b211b87401b4530cff9a</find>
+      <find>312e417342de792818616f9785799de9</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -88,10 +88,10 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/DBHelper/dbHelper.py" />
-        <option value="$PROJECT_DIR$/qq.py" />
-        <option value="$PROJECT_DIR$/config.py" />
         <option value="$PROJECT_DIR$/kandian.py" />
         <option value="$PROJECT_DIR$/dbfunc.py" />
+        <option value="$PROJECT_DIR$/config.py" />
+        <option value="$PROJECT_DIR$/qq.py" />
       </list>
     </option>
   </component>
@@ -201,27 +201,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/qq.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="253">
-          <caret line="71" column="39" selection-start-line="71" selection-start-column="39" selection-end-line="71" selection-end-column="39" />
-          <folding>
-            <element signature="e#1#16#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/config.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="207">
-          <caret line="9" column="41" lean-forward="true" selection-start-line="9" selection-start-column="41" selection-end-line="9" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/kandian.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="989">
-          <caret line="124" column="11" lean-forward="true" selection-start-line="124" selection-start-column="11" selection-end-line="124" selection-end-column="11" />
+          <caret line="127" column="11" lean-forward="true" selection-start-line="127" selection-start-column="11" selection-end-line="127" selection-end-column="11" />
           <folding>
             <element signature="e#24#33#0" expanded="true" />
           </folding>
@@ -232,6 +215,20 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="161">
           <caret line="52" column="22" lean-forward="true" selection-start-line="52" selection-start-column="22" selection-end-line="52" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="154">
+          <caret line="14" column="5" lean-forward="true" selection-start-line="14" selection-start-column="5" selection-end-line="14" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/qq.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="92">
+          <caret line="4" column="13" lean-forward="true" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
         </state>
       </provider>
     </entry>

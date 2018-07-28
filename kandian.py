@@ -15,6 +15,9 @@ def login():
 
     datas = dbfunc.fetchVideo(name)
 
+    datas = dbfunc.fetchVideo(name)
+
+
     with Browser('chrome', headless=headless) as browser:
         # Visit URL
         url = LoginURL
@@ -116,7 +119,7 @@ def start(data, browser):
     browser.find_by_id('video_publish_commit').first.click()
     
     today = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) 
-
+    # TODO 验证 发布成功
     dic = {'publish_time': today}
     dbfunc.updateVideo(data[0], dic)
     time.sleep(3)

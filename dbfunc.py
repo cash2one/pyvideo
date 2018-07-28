@@ -36,22 +36,22 @@ def insertVideo(qq, euin,tx_name,title, url, alias, tags, first_class, second_cl
     sql = "select * from videos where vid = '%s'" % vid    
     dd = db.fetch(sql)
 
-    exist_name = db.fetch("select * from videos where title = '%s'" % title)
-    if exist_name:
-        print('exist name')
-    else:
+    # exist_name = db.fetch("select * from videos where title = '%s'" % title)
+    # if exist_name:
+    #     print('exist name')
+    # else:
 
-        if dd:
-            print('videos table is exist update time')
-            # 更新时间 qq_create_time
-            sql = "update videos set qq_create_time = '%s' where vid = '%s'" % (qq_create_time, vid)
-            db.update(sql)
-            db.close()
-        else:
-            sql = "INSERT INTO videos (qq, euin,tx_name, title, url, alias, tags, first_class, second_class, is_exist_local, local_path, qq_create_time, create_time, vid) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s','%d', '%s', '%s', '%s', '%s') " % (qq, euin,tx_name,title, url, alias, tags, first_class, second_class, int(is_exist_local), local_path, qq_create_time, create_time, vid )
-            db.update(sql)
-            db.close()
-            print('inset into success')
+    if dd:
+        print('videos table is exist update time')
+        # 更新时间 qq_create_time
+        sql = "update videos set qq_create_time = '%s' where vid = '%s'" % (qq_create_time, vid)
+        db.update(sql)
+        db.close()
+    else:
+        sql = "INSERT INTO videos (qq, euin,tx_name, title, url, alias, tags, first_class, second_class, is_exist_local, local_path, qq_create_time, create_time, vid) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s','%d', '%s', '%s', '%s', '%s') " % (qq, euin,tx_name,title, url, alias, tags, first_class, second_class, int(is_exist_local), local_path, qq_create_time, create_time, vid )
+        db.update(sql)
+        db.close()
+        print('inset into success')
     
 
 def updateVideo(id, data):

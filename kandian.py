@@ -11,12 +11,9 @@ def login():
 
     name = account
     pwd = pwdDic[account]
-    headless = False
+    headless = True
 
     datas = dbfunc.fetchVideo(name)
-
-    datas = dbfunc.fetchVideo(name)
-
 
     with Browser('chrome', headless=headless) as browser:
         # Visit URL
@@ -34,8 +31,10 @@ def login():
 
         time.sleep(5)
         print('登录成功')
-
-        for data in datas:
+        for i in range(0, len(datas)):
+            # data = datas[len(datas)-i-1]
+            data = datas[i]
+        # for data in datas:
             start(data, browser)
 
 # 确定视频 未成功

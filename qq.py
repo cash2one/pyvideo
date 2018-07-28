@@ -17,7 +17,7 @@ def index(uid, pagenum):
 
     jsondd = json.loads(dd)
     videolst = jsondd['videolst']
-    
+    euin = jsondd['euin']
     for video in videolst:
 
         uploadtime = video['uploadtime']
@@ -43,21 +43,23 @@ def index(uid, pagenum):
         qq_create_time = uploadtime
         create_time = today
         vid = video['vid']
+        tx_name = ''
 
-        dbfunc.insertVideo(account, title, url, alias, tags, first_class, second_class, is_exist_local, local_path, qq_create_time, create_time, vid)
+        dbfunc.insertVideo(account, euin, tx_name, title, url, alias, tags, first_class, second_class, is_exist_local, local_path, qq_create_time, create_time, vid)
 
 uids = [
 
     'f401289eef888c247afa2888d66bd01c',     # 其实你很幽默 国外 幽默段子 憨豆先生
     '9d0387de8f60ab27bafef9e42a504593',     # 搞笑 有色有声姐
 
-    '0c4932b8a08dd5b42a4797b4c8060361',     # 电视剧 畅涵影视 
+    '0c4932b8a08dd5b42a4797b4c8060361',     # 电视剧 畅涵影视
+    '0c6fcdeff1c6fd7788923deaee77407e',     # 综艺明星 明星风云
+
     '48655f5bb2709cfef893016a79843b0d',     # 影视 风云英雄 
     '35f2a7e76ee6cf68b1f4158faf187d3f',     # 影视 余独不觉 
     '96486663bb39295ba0b6c87bb849e22c',     # 影视新天地
     '7464eec19eb5b6e885fc9e995a19b595',     # 电影 寻找感动瞬间   猴子看影视
     '0524cbe3cafc8c0d3d9d36e561cdbe5c',     # 林正英  圆圆的酒窝 鬼片
-    '0c6fcdeff1c6fd7788923deaee77407e',     # 综艺明星 明星风云 
 
     '3fcca62af8c4b211b87401b4530cff9a',     # 动漫 皮皮马动漫
     '3189c372f7673e44573f990813172070',     # 动漫 火影

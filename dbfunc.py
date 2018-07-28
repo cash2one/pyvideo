@@ -6,21 +6,24 @@ def createTable():
     table = 'videos'
     sql = """CREATE TABLE videos (
                 id int auto_increment primary key,
-                qq CHAR(20),
-                title CHAR(255), 
-                url CHAR(255), 
-                alias CHAR(255), 
-                tags CHAR(255), 
-                first_class CHAR(10),
-                second_class CHAR(10),
-                is_exist_local int(1), 
-                local_path CHAR(255), 
-                qq_create_time CHAR(50), 
+                qq varchar(20),
+                title varchar(255), 
+                url varchar(255), 
+                alias varchar(255), 
+                tags varchar(255), 
+                first_class varchar(10),
+                second_class varchar(10),
+                qq_create_time varchar(50), 
                 create_time DATETIME, 
                 publish_time DATETIME, 
-                other char(255), 
-                extension char(255)
-                vid char(255) )"""    
+                tx_name varchar(100),
+                euin varchar(100),
+                vid varchar(50),
+                is_exist_local int(1), 
+                local_path varchar(255), 
+                other varchar(255), 
+                extension varchar(255) )
+                """
     res = db.createTable(table, sql)
 
     if res:
@@ -28,21 +31,27 @@ def createTable():
     else:
         print('fail')
 
-def insertVideo(qq, title, url, alias, tags, first_class, second_class, is_exist_local, local_path, qq_create_time, create_time, vid):
+def insertVideo(qq, euin,tx_name,title, url, alias, tags, first_class, second_class, is_exist_local, local_path, qq_create_time, create_time, vid):
     db = dbHelper.database()
     sql = "select * from videos where vid = '%s'" % vid    
-    dd = db.fetch(sql) 
-    if dd:
-        print('videos 表中已存在了')
-        # 更新时间 qq_create_time
-        sql = "update videos set qq_create_time = '%s' where vid = '%s'" % (qq_create_time, vid)
-        db.update(sql)
-        db.close()
+    dd = db.fetch(sql)
+
+    exist_name = db.fetch("select * from videos where title = '%s'" % title)
+    if exist_name:
+        print('exist name')
     else:
-        sql = "INSERT INTO videos (qq, title, url, alias, tags, first_class, second_class, is_exist_local, local_path, qq_create_time, create_time, vid) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s','%d', '%s', '%s', '%s', '%s') " % (qq, title, url, alias, tags, first_class, second_class, int(is_exist_local), local_path, qq_create_time, create_time, vid )
-        db.update(sql)
-        db.close()
-        print('inset')
+
+        if dd:
+            print('videos table is exist update time')
+            # 更新时间 qq_create_time
+            sql = "update videos set qq_create_time = '%s' where vid = '%s'" % (qq_create_time, vid)
+            db.update(sql)
+            db.close()
+        else:
+            sql = "INSERT INTO videos (qq, euin,tx_name, title, url, alias, tags, first_class, second_class, is_exist_local, local_path, qq_create_time, create_time, vid) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s','%d', '%s', '%s', '%s', '%s') " % (qq, euin,tx_name,title, url, alias, tags, first_class, second_class, int(is_exist_local), local_path, qq_create_time, create_time, vid )
+            db.update(sql)
+            db.close()
+            print('inset into success')
     
 
 def updateVideo(id, data):

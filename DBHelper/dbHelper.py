@@ -58,7 +58,7 @@ class database:
         self._conn = self.connectMySQL()
 
         if (self._conn) :
-            self._cursur = self._conn.cursor()
+            self._cursor = self._conn.cursor()
 
     # 连接
     def connectMySQL(self):
@@ -78,10 +78,11 @@ class database:
         if self._conn:
             try:
                 # 如果表存在则删除
-                # cursor.execute('drop table if exists '+ table)
-                self._cursur.execute(sql)
+                self._cursor.execute('drop table if exists '+ table)
+                self._cursor.execute(sql)
                 flag = True
             except Exception as e:
+                print(e)
                 flag = False
         return flag
             
@@ -90,8 +91,8 @@ class database:
         res = ''
         if (self._conn):
             try:
-                self._cursur.execute(sql)
-                res = self._cursur.fetchall()
+                self._cursor.execute(sql)
+                res = self._cursor.fetchall()
             except Exception as e:
                 res = False
         return res
@@ -101,7 +102,7 @@ class database:
         flag = False
         if (self._conn):
             try:
-                self._cursur.execute(sql)
+                self._cursor.execute(sql)
                 self._conn.commit()
                 flag = True
             except Exception as e:
@@ -112,8 +113,8 @@ class database:
     def close(self):
         if (self._conn):
             try:
-                if (type(self._cursur) == 'object'):
-                    self._cursur.close()
+                if (type(self._cursor) == 'object'):
+                    self._cursor.close()
                 if (type(self._conn) == 'object'):
                     self._conn.close()
             except Exception as e:

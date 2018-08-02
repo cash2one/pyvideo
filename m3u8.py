@@ -92,4 +92,5 @@ class Downloader:
 
 if __name__ == '__main__':
     downloader = Downloader(50)
-    downloader.run('https://ltsdl.qq.com/bVbo7sBtR-4u6GDM7hDWRdTI7JqeZNcEw0FrBOdD_Kt5b6mYNpGU8xfVYY4fPKuWS7Fj8E5AIMzUQqWt65Iup9fC3Tg_rWNKVY4C13-GcK1VIAf3izqXCBp9CKJEoFUSqMLZUeFvxOcYQ2_OUl_izukWWgzS_eGb/w0027h1d2g9.321003.ts.m3u8?ver=4', '')
+    url = 'http://pl-ali.youku.com/playlist/m3u8?vid=XMzYzMjk0MDA2OA%3D%3D&type=hd2&ups_client_netip=dded2e63&utid=iTbUE8VuE3ECAXZyBV8VD0xE&ccode=0512&psid=38fbd7be3bd83e3abe1f537a09cf991c&duration=295&expire=18000&drm_type=1&drm_device=7&ups_ts=1533090628&onOff=0&encr=0&ups_key=0bb2f500fbafbccb45fc45258c4f3e2e'
+    downloader.run(url, '')

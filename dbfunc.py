@@ -1,6 +1,21 @@
 
 from DBHelper import dbHelper
 
+def createBaseTable():
+    db = dbHelper.database()
+    table = 'anchor'
+    sql = """create table anchor (
+        aid int auto_increment primary key, 
+        name varchar(100), 
+        uin varchar(100),
+        intr varchar(255),
+        vnum int(10),
+        page int(10) default 1,
+        allpage int(10) default 1,
+        ext varchar(255) )"""
+    db.createTable(table, sql)
+
+
 def createTable():
     db = dbHelper.database()
     table = 'videos'
@@ -16,13 +31,11 @@ def createTable():
                 qq_create_time varchar(50), 
                 create_time DATETIME, 
                 publish_time DATETIME, 
-                tx_name varchar(100),
-                euin varchar(100),
+                aid varchar(100),
                 vid varchar(50),
                 is_exist_local int(1), 
                 local_path varchar(255), 
-                other varchar(255), 
-                extension varchar(255) )
+                ext varchar(255) )
                 """
     res = db.createTable(table, sql)
 
@@ -31,7 +44,24 @@ def createTable():
     else:
         print('fail')
 
-def insertVideo(qq, euin,tx_name,title, url, alias, tags, first_class, second_class, is_exist_local, local_path, qq_create_time, create_time, vid):
+# anchor
+def insertAnchor(name, uin, intr, vnum):
+    db = dbHelper.database()
+    sql = "insert into anchor(name, uin, intr, vnum) values ('%s', '%s', '%s', '%d')" % (name, uin, intr, int(vnum))
+    flag = db.update(sql)
+    db.close()
+        
+    return flag
+
+def fetchAllAnchor():
+    db = dbHelper.database()
+    sql = 'select * from anchor'
+    res = db.fetch(sql)
+    print(len(res))
+    return res
+
+# video
+def insertVideo(qq, aid, title, url, alias, tags, first_class, second_class, is_exist_local, local_path, qq_create_time, create_time, vid):
     db = dbHelper.database()
     sql = "select * from videos where vid = '%s'" % vid    
     dd = db.fetch(sql)
@@ -48,13 +78,13 @@ def insertVideo(qq, euin,tx_name,title, url, alias, tags, first_class, second_cl
         db.update(sql)
         db.close()
     else:
-        sql = "INSERT INTO videos (qq, euin,tx_name, title, url, alias, tags, first_class, second_class, is_exist_local, local_path, qq_create_time, create_time, vid) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s','%d', '%s', '%s', '%s', '%s') " % (qq, euin,tx_name,title, url, alias, tags, first_class, second_class, int(is_exist_local), local_path, qq_create_time, create_time, vid )
+        sql = "INSERT INTO videos (qq, aid, title, url, alias, tags, first_class, second_class, is_exist_local, local_path, qq_create_time, create_time, vid) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s','%d', '%s', '%s', '%s', '%s') " % (qq, aid, title, url, alias, tags, first_class, second_class, int(is_exist_local), local_path, qq_create_time, create_time, vid )
         db.update(sql)
         db.close()
         print('inset into success')
     
 
-def updateVideo(id, data):
+def updateVideo(id, data, table=None):
     db = dbHelper.database()
     arrKey = data.keys()
 
@@ -65,7 +95,7 @@ def updateVideo(id, data):
             valueStr = item
         else:
             valueStr = valueStr + ', ' + item
-    sql = "update videos set %s where id = '%d'" % (valueStr, int(id))
+    sql = "update %s set %s where id = '%d'" % (table, valueStr, int(id))
     print(sql)
     db.update(sql)
     db.close()
@@ -78,6 +108,7 @@ def fetchVideo(qq):
     return res
 
 def main():
+    createBaseTable()
     createTable()
 
 if __name__ == '__main__':

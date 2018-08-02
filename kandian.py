@@ -120,7 +120,7 @@ def start(data, browser):
     today = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) 
     # TODO 验证 发布成功
     dic = {'publish_time': today}
-    dbfunc.updateVideo(data[0], dic)
+    dbfunc.updateVideo(data[0], dic, 'videos')
     time.sleep(3)
 
 def main():

@@ -82,7 +82,7 @@ class database:
                 self._cursor.execute(sql)
                 flag = True
             except Exception as e:
-                print(e)
+                print(str(e))
                 flag = False
         return flag
             
@@ -106,7 +106,7 @@ class database:
                 self._conn.commit()
                 flag = True
             except Exception as e:
-                print('update fail: '+ e)
+                print('update fail: '+ str(e))
                 flag = False
         return flag
 

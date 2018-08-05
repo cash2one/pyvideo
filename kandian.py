@@ -6,14 +6,14 @@ from splinter import Browser
 import dbfunc
 from config import *
 
+def login(name=account, pwd=pwdDic[account]):
 
-def login():
-
-    name = account
-    pwd = pwdDic[account]
+    print('name: '+ name)
     headless = True
 
     datas = dbfunc.fetchVideo(name)
+    if len(datas) == 0:
+        return False
 
     with Browser('chrome', headless=headless) as browser:
         # Visit URL

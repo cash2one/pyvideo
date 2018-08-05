@@ -1,5 +1,6 @@
 
 from DBHelper import dbHelper
+from config import *
 
 def createBaseTable():
     db = dbHelper.database()
@@ -33,6 +34,7 @@ def createTable():
                 publish_time DATETIME, 
                 aid varchar(100),
                 vid varchar(50),
+                pic varchar(255),
                 is_exist_local int(1), 
                 local_path varchar(255), 
                 ext varchar(255) )
@@ -43,6 +45,33 @@ def createTable():
         print('succ')
     else:
         print('fail')
+
+# kduser
+def createTablekduser():
+    db = dbHelper.database()
+    table = 'kduser'
+    sql = """CREATE TABLE kduser(
+                id int auto_increment primary key,
+                qq varchar(50),
+                pwd varchar(50),
+                ext varchar(255)
+                )"""
+    res = db.createTable(table, sql)
+
+def insetkdUser():
+    # qq pwd ext
+    qqarr = pwdDic.keys()
+    db = dbHelper.database()
+    for qq in qqarr:
+        sql = "insert into kduser (qq, pwd, ext) values ('%s', '%s', '%s')" % (qq, pwdDic[qq], '')
+        db.update(sql)
+    db.close()
+
+def fetchAllUser():
+    db = dbHelper.database()
+    sql = 'select * from kduser'
+    res = db.fetch(sql)
+    return res
 
 # anchor
 def insertAnchor(name, uin, intr, vnum):
@@ -61,7 +90,7 @@ def fetchAllAnchor():
     return res
 
 # video
-def insertVideo(qq, aid, title, url, alias, tags, first_class, second_class, is_exist_local, local_path, qq_create_time, create_time, vid):
+def insertVideo(qq, aid, title, url, alias, tags, first_class, second_class, is_exist_local, local_path, qq_create_time, create_time, vid, pic):
     db = dbHelper.database()
     sql = "select * from videos where vid = '%s'" % vid    
     dd = db.fetch(sql)
@@ -72,13 +101,14 @@ def insertVideo(qq, aid, title, url, alias, tags, first_class, second_class, is_
     # else:
 
     if dd:
-        print('videos table is exist update time')
         # 更新时间 qq_create_time
         sql = "update videos set qq_create_time = '%s' where vid = '%s'" % (qq_create_time, vid)
+        print('videos table is exist update time '+ sql)
+
         db.update(sql)
         db.close()
     else:
-        sql = "INSERT INTO videos (qq, aid, title, url, alias, tags, first_class, second_class, is_exist_local, local_path, qq_create_time, create_time, vid) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s','%d', '%s', '%s', '%s', '%s') " % (qq, aid, title, url, alias, tags, first_class, second_class, int(is_exist_local), local_path, qq_create_time, create_time, vid )
+        sql = "INSERT INTO videos (qq, aid, title, url, alias, tags, first_class, second_class, is_exist_local, local_path, qq_create_time, create_time, vid, pic) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s','%d', '%s', '%s', '%s', '%s', '%s') " % (qq, aid, title, url, alias, tags, first_class, second_class, int(is_exist_local), local_path, qq_create_time, create_time, vid, pic )
         db.update(sql)
         db.close()
         print('inset into success')
@@ -107,9 +137,16 @@ def fetchVideo(qq):
     print(len(res))
     return res
 
+def fetchVideoFromAnchor(aid):
+    db = dbHelper.database()
+    sql = "select * from videos where aid = '%d' and publish_time is null " % int(aid)
+    res = db.fetch(sql)
+    return res
+
 def main():
-    createBaseTable()
-    createTable()
+    createTablekduser()
+    # createBaseTable()
+    # createTable()
 
 if __name__ == '__main__':
     main()

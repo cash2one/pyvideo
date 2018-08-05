@@ -49,14 +49,21 @@ def index(anchor):
         create_time = today
         vid = video['vid']
         aid = aid
+        pic = video['pic']
 
-        dbfunc.insertVideo(account, aid, title, url, alias, tags, first_class, second_class, is_exist_local, local_path, qq_create_time, create_time, vid)
+        dbfunc.insertVideo(account, aid, title, url, alias, tags, first_class, second_class, is_exist_local, local_path, qq_create_time, create_time, vid, pic)
+
+# anchors anchor数组
+def main(anchors=dbfunc.fetchAllAnchor()):
+    # anchors = dbfunc.fetchAllAnchor()
+
+    for anchor in anchors:
+        index(anchor)
+
+if __name__ == '__main__':
+    main()
 
 
-anchors = dbfunc.fetchAllAnchor()
-
-for anchor in anchors:
-    index(anchor)
 
 
 # uids = [

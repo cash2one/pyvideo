@@ -26,6 +26,7 @@ class VideoItemWidget(QWidget):
         second_text = video[7]
         time = video[8]
         create_time = str(video[9])
+        finish_time = str(video[10])
         self.lb_title = QLabel(title)
         self.lb_title.setFont(QFont("Arial", 10, QFont.Bold))
         self.lb_title.setWordWrap(True)
@@ -36,6 +37,8 @@ class VideoItemWidget(QWidget):
         self.create_time = QLabel('收集日期: '+ create_time)
         self.create_time.setFont(QFont("Arial", 10, QFont.StyleItalic))
 
+        self.finish_time = QLabel('完成日期: '+ finish_time)
+        self.finish_time.setFont(QFont("Arial", 10, QFont.StyleItalic))
 
         self.lb_subtitle = QTextEdit(subtitle)
         self.lb_subtitle.setFont(QFont("Arial", 10, QFont.StyleItalic))
@@ -104,6 +107,7 @@ class VideoItemWidget(QWidget):
         ly_right.addWidget(self.time)
 
         ly_right.addWidget(self.create_time)
+        ly_right.addWidget(self.finish_time)
 
         ly_right.addWidget(self.lb_subtitle)
 

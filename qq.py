@@ -33,7 +33,7 @@ def index(anchor):
         # if uploadtime.find(u'内') != -1:
         #     uploadtime = today
 
-        account = ''
+        # account = ''
         title = video['title']
         print(title)
         url = video['url']
@@ -41,8 +41,13 @@ def index(anchor):
         # tags 分词
         seg_list = gfunc.participle(title)
         tags = ' '.join(seg_list)
-        first_class = ''
-        second_class = ''
+
+        clas = gfunc.classFromTags(tags)
+        first_class = clas[0]
+        second_class = clas[1]
+        # TODO 
+        account = clas[2]
+
         is_exist_local = 0
         local_path = ''
         qq_create_time = uploadtime

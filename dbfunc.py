@@ -1,6 +1,8 @@
 
 from DBHelper import dbHelper
 from config import *
+import random
+import gfunc
 
 def createBaseTable():
     db = dbHelper.database()
@@ -89,6 +91,37 @@ def fetchAllAnchor():
     print(len(res))
     return res
 
+def updateAllVideo():
+    res = fetchAllVideo()
+
+    for item in res:
+        qq = item[1]
+        title = item[2]
+        alias = item[4]
+
+        tags = item[5]
+        
+        first_class = item[6]
+        second_class = item[7]
+
+        if len(qq) == 0:
+            seg_list = gfunc.participle(title)
+            tags = ' '.join(seg_list)
+
+            clas = gfunc.classFromTags(tags)
+            first_class = clas[0]
+            second_class = clas[1]
+            qq = clas[2]
+        idd = item[0]
+        data = {
+            'qq': qq,
+            'first_class': first_class,
+            'second_class': second_class,
+            'tags': tags,
+        }
+        print('data: '+str(data))
+        updateVideo(idd, data, 'videos')
+
 # video
 def insertVideo(qq, aid, title, url, alias, tags, first_class, second_class, is_exist_local, local_path, qq_create_time, create_time, vid, pic):
     db = dbHelper.database()
@@ -99,11 +132,11 @@ def insertVideo(qq, aid, title, url, alias, tags, first_class, second_class, is_
     # if exist_name:
     #     print('exist name')
     # else:
-
+    
     if dd:
-        # 更新时间 qq_create_time
+
         sql = "update videos set qq_create_time = '%s' where vid = '%s'" % (qq_create_time, vid)
-        print('videos table is exist update time '+ sql)
+        print('videos table is exist update time ')
 
         db.update(sql)
         db.close()
@@ -117,22 +150,45 @@ def insertVideo(qq, aid, title, url, alias, tags, first_class, second_class, is_
 def updateVideo(id, data, table=None):
     db = dbHelper.database()
     arrKey = data.keys()
-
     valueStr = ''
     for key in arrKey:
-        item = key + ' = ' + "'" +data[key] + "'"
-        if valueStr == '':
-            valueStr = item
-        else:
-            valueStr = valueStr + ', ' + item
-    sql = "update %s set %s where id = '%d'" % (table, valueStr, int(id))
-    print(sql)
-    db.update(sql)
+        if len(data[key]) != 0:
+            item = key + ' = ' + "'" +data[key] + "'"
+            if valueStr == '':
+                valueStr = item
+            else:
+                valueStr = valueStr + ', ' + item
+    if len(valueStr) > 0:
+        sql = "update %s set %s where id = '%d'" % (table, valueStr, int(id))
+        print(sql)
+        db.update(sql)
     db.close()
 
-def fetchVideo(qq):
+# 获得数据库所以得视频
+def fetchAllVideo():
     db = dbHelper.database()
-    sql = "SELECT * FROM videos WHERE qq = '%s' AND publish_time is null" % qq
+    sql = 'select * from videos'
+    res = db.fetch(sql)
+    return res
+
+def fetchVideo(qq, day=None, count=None):
+    db = dbHelper.database()
+    day_sql = ''
+    if day != None:
+        day_sql = "AND create_time >= date_format(NOW(),'%Y-%m-%d')"
+    count_sql = ''
+    if count != None:
+        count_sql = "limit 0,%d" % int(count)
+    
+    sql = "SELECT * FROM videos WHERE qq = '%s' AND publish_time is null %s %s" % (qq, day_sql, count_sql)
+    print(sql)
+    res = db.fetch(sql)
+    print(len(res))
+    return res
+
+def fetchVideoFromAlias(qq, alias):
+    db = dbHelper.database()
+    sql = "SELECT * FROM videos WHERE qq = '%s' AND publish_time is null AND alias = '%s'" % (qq, alias)
     res = db.fetch(sql)
     print(len(res))
     return res
@@ -143,8 +199,16 @@ def fetchVideoFromAnchor(aid):
     res = db.fetch(sql)
     return res
 
+def fetchTodayVideo():
+    db = dbHelper.database()
+    sql = "SELECT * FROM videos WHERE create_time >= date_format(NOW(),'%Y-%m-%d')"
+    res = db.fetch(sql)
+    print(len(res))
+    return res
 def main():
-    createTablekduser()
+    # fetchVideoFromAlias('3216598385', 'b')
+    updateAllVideo()
+    # createTablekduser()
     # createBaseTable()
     # createTable()
 

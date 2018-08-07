@@ -11,7 +11,12 @@ def login(name=account, pwd=pwdDic[account]):
     print('name: '+ name)
     headless = True
 
-    datas = dbfunc.fetchVideo(name)
+    datas = dbfunc.fetchVideo(name, 'today', 10)
+
+    # TODO
+    if len(datas) < 10:
+        pass
+
     if len(datas) == 0:
         return False
 
@@ -36,6 +41,8 @@ def login(name=account, pwd=pwdDic[account]):
             data = datas[i]
         # for data in datas:
             start(data, browser)
+            if i == len(datas)-1:
+                print(name+' 上传完成')
 
 # 确定视频 未成功
 def checkTitle(browser):

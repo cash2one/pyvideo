@@ -59,9 +59,13 @@ class Home(QWidget):
         updateCurrentBtn = QPushButton('更新当前')
         updateCurrentBtn.clicked.connect(self.updateCurrentClick)
 
+        todayVideoBtn = QPushButton('今天的视频')
+        todayVideoBtn.clicked.connect(self.todayVideoClick)
+
         centerTopHLayout.addWidget(collectCurrentBtn)
         centerTopHLayout.addWidget(collectAllBtn)
         centerTopHLayout.addWidget(updateCurrentBtn)
+        centerTopHLayout.addWidget(todayVideoBtn)
 
         self.centerListWidget = QListWidget()
         centerVBoxLayout.addWidget(self.centerListWidget)
@@ -108,14 +112,28 @@ class Home(QWidget):
             self._setItem(video)
         # self.centerListWidget.clear()
         # self.centerListWidget.repaint()
+    
+    # 更新list videos
+    def updateListWedget(self):
+        self.centerListWidget.clear()
+        for video in self.videos:
+            self._setItem(video)
 
+    # 今天添加的视频
+    def todayVideoClick(self):
+        self.videos = dbfunc.fetchTodayVideo()
+        self.updateListWedget()
+
+    # 采集当前主播的视频
     def collectCurrentClick(self):
-
+        index = self.combBox.currentIndex()
         qq.main([self.anchors[index]])
 
+    # 采集腾讯视频
     def collectAllClick(self):
         qq.main()
 
+    # 更新当前 videos
     def updateCurrentClick(self):
         self.currentChanged()
     

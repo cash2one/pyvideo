@@ -14,6 +14,7 @@ def index(anchor):
     pagenum = anchor[5]
     url = 'http://c.v.qq.com/vchannelinfo?otype=json&uin='+ uin +'&qm=1&pagenum='+ str(pagenum) +'&num=24&sorttype=0&orderflag=0&callback=jQuery19104105733024427589_1531375140863&low_login=1&_=1531375140876'
     print(url)
+
     req = requests.get(url)
     html = req.text    
     dd = re.findall('\(({.*?})\)', html)[0]
@@ -36,6 +37,7 @@ def index(anchor):
         # account = ''
         title = video['title']
         print(title)
+
         url = video['url']
         alias = ''
         # tags 分词
@@ -59,9 +61,9 @@ def index(anchor):
         dbfunc.insertVideo(account, aid, title, url, alias, tags, first_class, second_class, is_exist_local, local_path, qq_create_time, create_time, vid, pic)
 
 # anchors anchor数组
-def main(anchors=dbfunc.fetchAllAnchor()):
-    # anchors = dbfunc.fetchAllAnchor()
-
+def main(anchors=None):
+    if anchors is None:
+        anchors = dbfunc.fetchAllAnchor()
     for anchor in anchors:
         index(anchor)
 

@@ -60,6 +60,13 @@ class Ffmpeg(QWidget):
 
         grid.addWidget(ffmpegButton, 1, 3)
 
+        ffmpegdirBtn = QPushButton('文件夹下去水印')
+        ffmpegdirBtn.clicked.connect(self.ffmpegdirClick)
+        grid.addWidget(ffmpegdirBtn, 2, 3)
+
+        dirName = QLabel('infile')
+        grid.addWidget(dirName, 3, 0)
+
            # 裁剪 
         cLabel = QLabel('裁剪')
         grid.addWidget(cLabel, 4, 0)
@@ -92,16 +99,35 @@ class Ffmpeg(QWidget):
         self.resize(500, 259)
         self.move(100, 100)
         self.setWindowIcon(QIcon('./Title.ico'))
-        self.setWindowTitle("Hello world")
+        self.setWindowTitle("去水印")
 
         self.setToolTip("<b>this is widget</b>")
 
-        # btn = QPushButton("quit Button", self)  # self类似于C++ this指针
-        # btn.setToolTip("This is a button will quit itself")
-        # btn.clicked.connect(QCoreApplication.instance().quit)
-        # btn.resize(btn.sizeHint())
-        # btn.move(0, 0)
         self.show()
+
+    def ffmpegdirClick(self):
+         # ffmpeg -i zy.mp4 -vf delogo=x=1048:y=45:w=195:h=55 3.mp4
+
+        x = self.xLabel.text()
+        y = self.yLabel.text()
+        w = self.wLable.text()
+        h = self.hLabel.text()
+
+        path = 'infile'
+        files = os.listdir(path)
+
+        datas = []
+        for file in files:
+            if file.find('mp4') != -1:
+                datas.append('infile/'+file)
+
+        for data in datas:
+            infile = data
+            outfile = data.replace('infile/', 'outfile/')
+            
+            strcmd = ['ffmpeg -i ' +infile+' -vf delogo=x='+x+':y='+y+':w='+w+':h='+h +' '+outfile]
+            result=subprocess.run(args=strcmd,stdout=subprocess.PIPE,shell=True)
+            print(result)
 
     def downClick(self):
         infile = self.infile.text()

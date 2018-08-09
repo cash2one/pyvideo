@@ -22,7 +22,6 @@ def participle(str):
                 res_list.append('英雄联盟')
             res_list.append(seg) 
     
-    print(res_list)
     return res_list
 
 def classFromTags(tags):

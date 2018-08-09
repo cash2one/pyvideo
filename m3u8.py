@@ -92,5 +92,7 @@ class Downloader:
 
 if __name__ == '__main__':
     downloader = Downloader(50)
-    url = 'http://pl-ali.youku.com/playlist/m3u8?vid=XMzYzMjk0MDA2OA%3D%3D&type=hd2&ups_client_netip=dded2e63&utid=iTbUE8VuE3ECAXZyBV8VD0xE&ccode=0512&psid=38fbd7be3bd83e3abe1f537a09cf991c&duration=295&expire=18000&drm_type=1&drm_device=7&ups_ts=1533090628&onOff=0&encr=0&ups_key=0bb2f500fbafbccb45fc45258c4f3e2e'
+    # url = 'http://pl-ali.youku.com/playlist/m3u8?vid=XMzYzMjk0MDA2OA%3D%3D&type=hd2&ups_client_netip=dded2e63&utid=iTbUE8VuE3ECAXZyBV8VD0xE&ccode=0512&psid=38fbd7be3bd83e3abe1f537a09cf991c&duration=295&expire=18000&drm_type=1&drm_device=7&ups_ts=1533090628&onOff=0&encr=0&ups_key=0bb2f500fbafbccb45fc45258c4f3e2e'
+    # url = 'http://183.66.104.115/sportsts.tc.qq.com/AVIo9SUuntMHJ8anwe6vTUC2lRA09JDybd6yx6IjCNX8/4TDxaVQl2c132vUv5tFfXzGfYLtKfOwKC2EzGvSurKakB18tMGyiuKgi_qrMuZsvoZKCEZTqb_HWymMxAymXXkwVWc-PiWcjjZeWVJcKLrJ0pBs_rkTS0Q/t0027ynq4y3.321003.ts.m3u8?ver=4'
+    url = 'http://ltsbsy.qq.com/uwMRJfz-r5jAYaQXGdGnCtD0ZkRh8BgOUQePMGh65cs/ZL5mczBKBiRr0gPwt4Kp1ZEqTKJEMlN37uO5ASCpifEj-c9wT_oPOavgD0DYxI9WvbaNRw09DrWkyxMdJzv-f5E9ycyUak_yqqUeGgyXWcirKWXxEN4Pzw/g0027mj8rbi.321003.ts.m3u8?ver=4'
     downloader.run(url, '')

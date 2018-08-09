@@ -88,7 +88,6 @@ def fetchAllAnchor():
     db = dbHelper.database()
     sql = 'select * from anchor'
     res = db.fetch(sql)
-    print(len(res))
     return res
 
 def updateAllVideo():
@@ -119,7 +118,6 @@ def updateAllVideo():
             'second_class': second_class,
             'tags': tags,
         }
-        print('data: '+str(data))
         updateVideo(idd, data, 'videos')
 
 # video
@@ -160,14 +158,23 @@ def updateVideo(id, data, table=None):
                 valueStr = valueStr + ', ' + item
     if len(valueStr) > 0:
         sql = "update %s set %s where id = '%d'" % (table, valueStr, int(id))
-        print(sql)
         db.update(sql)
     db.close()
 
-# 获得数据库所以得视频
+# 获得数据库所有的视频
 def fetchAllVideo():
     db = dbHelper.database()
     sql = 'select * from videos'
+    res = db.fetch(sql)
+    return res
+
+# 今天已发布的视频
+def fetchTodayPublishedVideo(qq):
+    db = dbHelper.database()  
+    day_sql = "AND create_time >= date_format(NOW(),'%Y-%m-%d')"
+    
+    sql = "SELECT * FROM videos WHERE qq = '%s' AND publish_time is not null %s" % (qq, day_sql)
+
     res = db.fetch(sql)
     return res
 
@@ -181,16 +188,13 @@ def fetchVideo(qq, day=None, count=None):
         count_sql = "limit 0,%d" % int(count)
     
     sql = "SELECT * FROM videos WHERE qq = '%s' AND publish_time is null %s %s" % (qq, day_sql, count_sql)
-    print(sql)
     res = db.fetch(sql)
-    print(len(res))
     return res
 
 def fetchVideoFromAlias(qq, alias):
     db = dbHelper.database()
     sql = "SELECT * FROM videos WHERE qq = '%s' AND publish_time is null AND alias = '%s'" % (qq, alias)
     res = db.fetch(sql)
-    print(len(res))
     return res
 
 def fetchVideoFromAnchor(aid):
@@ -203,7 +207,6 @@ def fetchTodayVideo():
     db = dbHelper.database()
     sql = "SELECT * FROM videos WHERE create_time >= date_format(NOW(),'%Y-%m-%d')"
     res = db.fetch(sql)
-    print(len(res))
     return res
 def main():
     # fetchVideoFromAlias('3216598385', 'b')

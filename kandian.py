@@ -5,10 +5,14 @@ import time
 from splinter import Browser
 import dbfunc
 from config import *
+from PyQt5.QtWidgets import *
+
 
 def login(name=account, pwd=pwdDic[account]):
 
-    print('name: '+ name)
+    print('准备上传看点用户：'+ name)
+    # QApplication.processEvents()
+
     headless = True
 
     datas = dbfunc.fetchVideo(name, 'today', 10)
@@ -18,9 +22,11 @@ def login(name=account, pwd=pwdDic[account]):
         pass
 
     if len(datas) == 0:
+        print('当前账号 '+name+' 可用视频为0')
         return False
+    # QApplication.processEvents()
 
-    with Browser('chrome', headless=headless) as browser:
+    with Browser('chrome', executable_path='./chromedriver', headless=headless) as browser:
         # Visit URL
         url = LoginURL
         browser.visit(url)
@@ -35,14 +41,14 @@ def login(name=account, pwd=pwdDic[account]):
             iframe.find_by_id("login_button").first.click()
 
         time.sleep(5)
-        print('登录成功')
+        print('看点账号：'+ name +' 登录成功')
         for i in range(0, len(datas)):
             # data = datas[len(datas)-i-1]
             data = datas[i]
         # for data in datas:
             start(data, browser)
             if i == len(datas)-1:
-                print(name+' 上传完成')
+                print(name+'看点账号：'+name+' 上传完成')
 
 # 确定视频 未成功
 def checkTitle(browser):
@@ -128,6 +134,7 @@ def start(data, browser):
     # TODO 验证 发布成功
     dic = {'publish_time': today}
     dbfunc.updateVideo(data[0], dic, 'videos')
+    print('上传成功')
     time.sleep(3)
 
 def main():

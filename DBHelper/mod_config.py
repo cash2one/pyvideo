@@ -13,7 +13,8 @@ dbname = mod_config.getConfig("database", "dbname")
 '''
 def getConfig(section, key):
     config = configparser.ConfigParser()
-    path = os.path.split(os.path.realpath(__file__))[0] + '/configure.conf'
+    # path = os.path.split(os.path.realpath(__file__))[0] + '/configure.conf'
+    path = 'DBHelper/configure.conf'
     config.read(path, encoding='UTF-8')
     return config.get(section, key)
 

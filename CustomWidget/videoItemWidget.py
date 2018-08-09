@@ -8,7 +8,7 @@ from PyQt5.QtWebEngineWidgets import QWebEngineView
 import webview
 import dbfunc
 
-class VideoItemWidget(QWidget):
+class VideoItem(QWidget):
     """ a widget contains a picture and two line of text """
     def __init__(self, video):
         """
@@ -16,7 +16,7 @@ class VideoItemWidget(QWidget):
         :param subtitle: str subtitle
         :param icon_path: path of picture
         """
-        super(VideoItemWidget, self).__init__()
+        super().__init__()
         self.video = video
         title = video[2]
         subtitle = video[5]
@@ -63,7 +63,7 @@ class VideoItemWidget(QWidget):
 
         url = video[13] 
         if url is None:
-            url = 'https://puui.qpic.cn/vpic/0/r0745f7blex_160_90_3.jpg/0'
+            url = 'http://puui.qpic.cn/vpic/0/r0745f7blex_160_90_3.jpg/0'
         
         req = requests.get(url)
 

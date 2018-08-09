@@ -2,6 +2,7 @@ import sys
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
+from PyQt5 import QtCore
 
 import requests
 from bs4 import BeautifulSoup 
@@ -9,6 +10,9 @@ import dbfunc
 import kandian
 import qq
 from CustomWidget import videoItemWidget
+from CustomWidget import consoleWidget
+import time
+
 
 class Home(QWidget):
     def __init__(self):
@@ -48,7 +52,7 @@ class Home(QWidget):
         # 中间
         # 
 
-        centerTopHLayout = QHBoxLayout()
+        centerTopHLayout = QGridLayout()
         centerVBoxLayout.addLayout(centerTopHLayout)
 
         collectCurrentBtn = QPushButton('采集当前视频')
@@ -62,10 +66,19 @@ class Home(QWidget):
         todayVideoBtn = QPushButton('今天的视频')
         todayVideoBtn.clicked.connect(self.todayVideoClick)
 
-        centerTopHLayout.addWidget(collectCurrentBtn)
-        centerTopHLayout.addWidget(collectAllBtn)
-        centerTopHLayout.addWidget(updateCurrentBtn)
-        centerTopHLayout.addWidget(todayVideoBtn)
+        showVideoNumBtn = QPushButton('展示今天账号视频数量')
+        showVideoNumBtn.clicked.connect(self.showVideoNumClick)
+
+        self.showVideoNumLabel = QLabel()
+        self.showVideoNumLabel.setWordWrap(True)
+
+        centerTopHLayout.addWidget(collectCurrentBtn, 0, 0)
+        centerTopHLayout.addWidget(collectAllBtn, 0, 1)
+        centerTopHLayout.addWidget(updateCurrentBtn, 0, 2)
+        centerTopHLayout.addWidget(todayVideoBtn, 0, 3)
+
+        centerTopHLayout.addWidget(showVideoNumBtn, 1, 0)
+        centerTopHLayout.addWidget(self.showVideoNumLabel, 1, 1, 1, 3)
 
         self.centerListWidget = QListWidget()
         centerVBoxLayout.addWidget(self.centerListWidget)
@@ -84,6 +97,8 @@ class Home(QWidget):
         qqBtn.clicked.connect(self.startKandianClick)
         rightVBoxLayout.addWidget(qqBtn)
 
+        self.consoleWidget = consoleWidget.MyConsole()
+        rightVBoxLayout.addWidget(self.consoleWidget)
 
         # self.addWidget(addTxBtn)
         
@@ -91,20 +106,43 @@ class Home(QWidget):
         # self.setWindowTitle('QCheckBox')
         # self.show()
     def _setItem(self, video):
+        QApplication.processEvents()
+
         item_widget = QListWidgetItem()
         # 必须设置这个 大小才显示
         item_widget.setSizeHint(QSize(200, 350))
         self.centerListWidget.addItem(item_widget)
 
-        videoWidget = videoItemWidget.VideoItemWidget(video)
+        videoWidget = videoItemWidget.VideoItem(video)
         self.centerListWidget.setItemWidget(item_widget, videoWidget)  
 
+        QApplication.processEvents()
+
+    # 展示今天账号视频数量
+    def showVideoNumClick(self):
+        anchors=dbfunc.fetchAllUser()
+        self.showVideoNumLabel.clear()
+        text = ''
+        for anchor in anchors:
+            qq = anchor[1]
+            res = dbfunc.fetchVideo(qq, 'today')
+            todayres = dbfunc.fetchTodayPublishedVideo(qq)
+            text = text + qq+': '+ str(len(todayres)) + ' -- ' + str(len(res)) + ' '
+            # 刷新页面
+            # QApplication.processEvents()
+
+        print(text)
+        self.showVideoNumLabel.setText(text)
+
+    # 更新选中腾讯用户
     def currentChanged(self):
         index = self.leftListWidget.currentRow()
-
         aid = self.anchors[index][0]
+
+        print('更新腾讯主播：'+ self.anchors[index][1])
+
         res = dbfunc.fetchVideoFromAnchor(aid)
-        print(len(res))
+        print(self.anchors[index][1] + ' 总共视频数量: '+ str(len(res)))
         self.centerListWidget.clear()
 
         self.videos = res
@@ -115,12 +153,15 @@ class Home(QWidget):
     
     # 更新list videos
     def updateListWedget(self):
+        print('更新 列表')
         self.centerListWidget.clear()
         for video in self.videos:
             self._setItem(video)
+        print('刷新结束')
 
     # 今天添加的视频
     def todayVideoClick(self):
+        print('获取今天采集的视频')
         self.videos = dbfunc.fetchTodayVideo()
         self.updateListWedget()
 
@@ -131,12 +172,20 @@ class Home(QWidget):
 
     # 采集腾讯视频
     def collectAllClick(self):
+        print('开始采集腾讯视频')
+
+        qq.main()
+
+        print('采集结束')
+
+    def callbackCollectAllVideo(self):
         qq.main()
 
     # 更新当前 videos
     def updateCurrentClick(self):
         self.currentChanged()
     
+    # 开始上传看点
     def startKandianClick(self):
         index = self.combBox.currentIndex()
         name = self.kdusers[index][1]

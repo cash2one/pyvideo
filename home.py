@@ -23,37 +23,42 @@ class Home(QWidget):
         self.videos = dbfunc.fetchVideoFromAnchor(1)
         self.initUI()
 
-    def initUI(self):
+    def leftUI(self):
+        self.leftVBoxLayout = QVBoxLayout()
 
-        conHBoxLayout = QHBoxLayout()
-        self.setLayout(conHBoxLayout)
-        leftVBoxLayout = QVBoxLayout()
-        rightVBoxLayout = QVBoxLayout()
-        centerVBoxLayout = QVBoxLayout()
-        
-        conHBoxLayout.addLayout(leftVBoxLayout)
-        conHBoxLayout.addLayout(centerVBoxLayout)
-        conHBoxLayout.addLayout(rightVBoxLayout)
-        conHBoxLayout.setStretchFactor(leftVBoxLayout, 1)
-        conHBoxLayout.setStretchFactor(centerVBoxLayout, 3)
-        conHBoxLayout.setStretchFactor(rightVBoxLayout, 1)
-
-        # 左边
         addTxBtn = QPushButton('添加腾讯用户')
         addTxBtn.clicked.connect(self.addTxClick)
 
-        leftVBoxLayout.addWidget(addTxBtn)
-
         self.leftListWidget = QListWidget()
-        leftVBoxLayout.addWidget(self.leftListWidget)
         self.leftListWidget.addItems(["%s" % anchor[1] for anchor in self.anchors])
         self.leftListWidget.setCurrentRow(0)
         self.leftListWidget.clicked.connect(self.currentChanged)
-        # 中间
-        # 
+
+        self.leftVBoxLayout.addWidget(addTxBtn)
+        self.leftVBoxLayout.addWidget(self.leftListWidget)
+
+
+
+    def rightUI(self):
+        self.rightVBoxLayout = QVBoxLayout()
+
+        self.combBox = QComboBox()
+        self.combBox.addItems(["%s" % user[1] for user in self.kdusers])
+
+        qqBtn = QPushButton('开始行动')
+        qqBtn.clicked.connect(self.startKandianClick)
+
+        self.consoleWidget = consoleWidget.MyConsole()
+                
+        self.rightVBoxLayout.addWidget(self.combBox)
+        self.rightVBoxLayout.addWidget(qqBtn)
+        self.rightVBoxLayout.addWidget(self.consoleWidget)
+
+    def centerUI(self):
+        self.centerVBoxLayout = QVBoxLayout()
 
         centerTopHLayout = QGridLayout()
-        centerVBoxLayout.addLayout(centerTopHLayout)
+        self.centerVBoxLayout.addLayout(centerTopHLayout)
 
         collectCurrentBtn = QPushButton('采集当前视频')
         collectCurrentBtn.clicked.connect(self.collectCurrentClick)
@@ -81,42 +86,45 @@ class Home(QWidget):
         centerTopHLayout.addWidget(self.showVideoNumLabel, 1, 1, 1, 3)
 
         self.centerListWidget = QListWidget()
-        centerVBoxLayout.addWidget(self.centerListWidget)
+        self.centerVBoxLayout.addWidget(self.centerListWidget)
         self.centerListWidget.setViewMode(QListView.IconMode)
         self.centerListWidget.setFlow(QListView.LeftToRight)
         # self.centerListWidget.addItems(['%s' % video[2] for video in self.videos])
         for video in self.videos:
             self._setItem(video)
 
-        # 右边
-        self.combBox = QComboBox()
-        self.combBox.addItems(["%s" % user[1] for user in self.kdusers])
-        rightVBoxLayout.addWidget(self.combBox)
-
-        qqBtn = QPushButton('开始行动')
-        qqBtn.clicked.connect(self.startKandianClick)
-        rightVBoxLayout.addWidget(qqBtn)
-
-        self.consoleWidget = consoleWidget.MyConsole()
-        rightVBoxLayout.addWidget(self.consoleWidget)
-
-        # self.addWidget(addTxBtn)
-        
-        # self.setGeometry(300, 300, 250, 150)
-        # self.setWindowTitle('QCheckBox')
-        # self.show()
     def _setItem(self, video):
         QApplication.processEvents()
 
         item_widget = QListWidgetItem()
         # 必须设置这个 大小才显示
-        item_widget.setSizeHint(QSize(200, 350))
+        item_widget.setSizeHint(QSize(220, 350))
         self.centerListWidget.addItem(item_widget)
 
-        videoWidget = videoItemWidget.VideoItem(video)
+        videoWidget = videoItemWidget.VideoItem(video, self.kdusers)
         self.centerListWidget.setItemWidget(item_widget, videoWidget)  
 
         QApplication.processEvents()
+
+    def addUI(self):
+        self.setLayout(self.boxLayout)
+
+        self.boxLayout.addLayout(self.leftVBoxLayout)
+        self.boxLayout.addLayout(self.centerVBoxLayout)
+        self.boxLayout.addLayout(self.rightVBoxLayout)
+        # 横向比例布局 1: 3: 1
+        self.boxLayout.setStretchFactor(self.leftVBoxLayout, 1)
+        self.boxLayout.setStretchFactor(self.centerVBoxLayout, 3)
+        self.boxLayout.setStretchFactor(self.rightVBoxLayout, 1)
+
+    def initUI(self):
+        self.boxLayout = QHBoxLayout()
+        self.setLayout(self.boxLayout)
+        self.leftUI()
+        self.centerUI()
+        self.rightUI()
+
+        self.addUI()
 
     # 展示今天账号视频数量
     def showVideoNumClick(self):

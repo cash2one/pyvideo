@@ -143,7 +143,13 @@ def insertVideo(qq, aid, title, url, alias, tags, first_class, second_class, is_
         db.update(sql)
         db.close()
         print('inset into success')
-    
+
+def updateVideoQQ(id, qq):
+    db = dbHelper.database()
+    sql = "update videos set qq = '%s' where id = '%d'" % (qq, int(id))
+    print(sql)
+    db.update(sql)
+    db.close()
 
 def updateVideo(id, data, table=None):
     db = dbHelper.database()
@@ -158,6 +164,7 @@ def updateVideo(id, data, table=None):
                 valueStr = valueStr + ', ' + item
     if len(valueStr) > 0:
         sql = "update %s set %s where id = '%d'" % (table, valueStr, int(id))
+        print(sql)
         db.update(sql)
     db.close()
 

@@ -4,6 +4,14 @@ from config import *
 import random
 import gfunc
 
+# 删除
+def delVideos():
+    db = dbHelper.database()
+    sql = "DELETE FROM videos where pic is null"
+    db.update(sql)
+    db.close()
+
+# 创建 anchor
 def createBaseTable():
     db = dbHelper.database()
     table = 'anchor'
@@ -18,7 +26,7 @@ def createBaseTable():
         ext varchar(255) )"""
     db.createTable(table, sql)
 
-
+# videos
 def createTable():
     db = dbHelper.database()
     table = 'videos'
@@ -60,14 +68,16 @@ def createTablekduser():
                 )"""
     res = db.createTable(table, sql)
 
-def insetkdUser():
+def insetkdUser(qq, pwd, ext):
     # qq pwd ext
-    qqarr = pwdDic.keys()
+    # qqarr = pwdDic.keys()
     db = dbHelper.database()
-    for qq in qqarr:
-        sql = "insert into kduser (qq, pwd, ext) values ('%s', '%s', '%s')" % (qq, pwdDic[qq], '')
-        db.update(sql)
+    sql = "insert into kduser (qq, pwd, ext) values ('%s', '%s', '%s')" % (qq, pwd, ext)
+    flag = db.update(sql)
+
+    print(sql+str(flag))
     db.close()
+    return flag
 
 def fetchAllUser():
     db = dbHelper.database()
@@ -151,6 +161,24 @@ def updateVideoQQ(id, qq):
     db.update(sql)
     db.close()
 
+# 为空时会更新
+def updateVideoFromData(id, data, table=None):
+    db = dbHelper.database()
+    arrKey = data.keys()
+    valueStr = ''
+    for key in arrKey:
+        item = key + ' = ' + "'" +data[key] + "'"
+        if valueStr == '':
+            valueStr = item
+        else:
+            valueStr = valueStr + ', ' + item
+    if len(valueStr) > 0:
+        sql = "update %s set %s where id = '%d'" % (table, valueStr, int(id))
+        print(sql)
+        db.update(sql)
+    db.close()
+
+# 字段值为空时不会更新
 def updateVideo(id, data, table=None):
     db = dbHelper.database()
     arrKey = data.keys()
@@ -178,9 +206,9 @@ def fetchAllVideo():
 # 今天已发布的视频
 def fetchTodayPublishedVideo(qq):
     db = dbHelper.database()  
-    day_sql = "AND create_time >= date_format(NOW(),'%Y-%m-%d')"
+    day_sql = "AND publish_time >= date_format(NOW(),'%Y-%m-%d')"
     
-    sql = "SELECT * FROM videos WHERE qq = '%s' AND publish_time is not null %s" % (qq, day_sql)
+    sql = "SELECT * FROM videos WHERE qq = '%s' %s" % (qq, day_sql)
 
     res = db.fetch(sql)
     return res
@@ -216,11 +244,12 @@ def fetchTodayVideo():
     res = db.fetch(sql)
     return res
 def main():
+    # delVideos()
     # fetchVideoFromAlias('3216598385', 'b')
-    updateAllVideo()
-    # createTablekduser()
-    # createBaseTable()
-    # createTable()
+    # updateAllVideo()
+    createTablekduser()
+    createBaseTable()
+    createTable()
 
 if __name__ == '__main__':
     main()

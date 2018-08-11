@@ -9,8 +9,7 @@ from bs4 import BeautifulSoup
 import dbfunc
 import kandian
 import qq
-from CustomWidget import videoItemWidget
-from CustomWidget import consoleWidget
+from CustomWidget import videoItemWidget, consoleWidget, userWidget
 import time
 import webview
 import txvideo
@@ -25,6 +24,7 @@ class Home(QWidget):
         self.videos = dbfunc.fetchVideoFromAnchor(1)
         self.initUI()
         self.web = webview.Form()
+        self.userwidget = userWidget.UserWidget(self.userWidgetCallback)
 
     def leftUI(self):
         self.leftVBoxLayout = QVBoxLayout()
@@ -43,17 +43,27 @@ class Home(QWidget):
 
     def rightUI(self):
         self.rightVBoxLayout = QVBoxLayout()
+        hbox = QHBoxLayout()
+
+        addKandianBtn = QPushButton('添加看点用户')
+        addKandianBtn.clicked.connect(self.addKandianClick)
 
         self.combBox = QComboBox()
         self.combBox.addItems(["%s" % user[1] for user in self.kdusers])
 
-        qqBtn = QPushButton('开始行动')
+        qqBtn = QPushButton('今天')
         qqBtn.clicked.connect(self.startKandianClick)
 
+        currentBtn = QPushButton('当前')
+        currentBtn.clicked.connect(self.currentKandianClick)
+
         self.consoleWidget = consoleWidget.MyConsole()
-                
+        self.rightVBoxLayout.addWidget(addKandianBtn)
         self.rightVBoxLayout.addWidget(self.combBox)
-        self.rightVBoxLayout.addWidget(qqBtn)
+        self.rightVBoxLayout.addLayout(hbox)
+
+        hbox.addWidget(qqBtn)
+        hbox.addWidget(currentBtn)
         self.rightVBoxLayout.addWidget(self.consoleWidget)
 
     def centerUI(self):
@@ -75,17 +85,23 @@ class Home(QWidget):
 
         showVideoNumBtn = QPushButton('展示今天账号视频数量')
         showVideoNumBtn.clicked.connect(self.showVideoNumClick)
-
         self.showVideoNumLabel = QLabel()
         self.showVideoNumLabel.setWordWrap(True)
+
+        currentVideoNumBtn = QPushButton('展示当前账号视频数量')
+        currentVideoNumBtn.clicked.connect(self.currentVideoNumClick)
+
+        self.currentVideoNumLabel = QLabel()
+        self.currentVideoNumLabel.setWordWrap(True)
 
         centerTopHLayout.addWidget(collectCurrentBtn, 0, 0)
         centerTopHLayout.addWidget(collectAllBtn, 0, 1)
         centerTopHLayout.addWidget(updateCurrentBtn, 0, 2)
         centerTopHLayout.addWidget(todayVideoBtn, 0, 3)
-
         centerTopHLayout.addWidget(showVideoNumBtn, 1, 0)
         centerTopHLayout.addWidget(self.showVideoNumLabel, 1, 1, 1, 3)
+        centerTopHLayout.addWidget(currentVideoNumBtn, 2, 0)
+        centerTopHLayout.addWidget(self.currentVideoNumLabel, 2, 1, 2, 3)
 
         self.centerListWidget = QListWidget()
         self.centerVBoxLayout.addWidget(self.centerListWidget)
@@ -174,6 +190,26 @@ class Home(QWidget):
         print(text)
         self.showVideoNumLabel.setText(text)
 
+    # 展示当前腾讯视频数量
+    def currentVideoNumClick(self):
+        anchors=dbfunc.fetchAllUser()
+        qqdic = {}
+        for item in anchors:
+            qq = item[1]
+            qqdic[qq] = 0
+
+        for video in self.videos:
+            qq = video[1]
+
+            if len(qq) > 0:
+                qqdic[qq] = qqdic[qq] + 1
+        text = ''
+        qqkeys = qqdic.keys()
+        for item in qqkeys:
+            text = text + item + ': '+str(qqdic[item]) + '    '
+        print(text)
+        self.currentVideoNumLabel.setText(text)
+            
     # 更新选中腾讯用户
     def currentChanged(self):
         index = self.leftListWidget.currentRow()
@@ -213,9 +249,7 @@ class Home(QWidget):
     # 采集腾讯视频
     def collectAllClick(self):
         print('开始采集腾讯视频')
-
         qq.main()
-
         print('采集结束')
 
     def callbackCollectAllVideo(self):
@@ -225,14 +259,30 @@ class Home(QWidget):
     def updateCurrentClick(self):
         self.currentChanged()
     
-    # 开始上传看点
+    # 上传看点 今天的
     def startKandianClick(self):
         index = self.combBox.currentIndex()
         name = self.kdusers[index][1]
         pwd = self.kdusers[index][2]
         kandian.login(name, pwd)
         # print(str(index))
+    # 当前页选中的
+    def currentKandianClick(self):
+        data = []
+        index = self.combBox.currentIndex()
+        name = self.kdusers[index][1]
+        pwd = self.kdusers[index][2]
 
+        for video in self.videos:
+            publish_time = video[10]
+
+            qq = video[1]
+            if qq == name and publish_time is None:
+                data.append(video)
+
+        kandian.login(name, pwd, data)
+
+            
     def addTxClick(self):
         value, ok = QInputDialog.getText(self, "添加腾讯用户", "请输入文本uin:", QLineEdit.Normal, "")
 
@@ -270,14 +320,23 @@ class Home(QWidget):
                                 '',
                                 "添加失败",  
                                 QMessageBox.Yes) 
-               
+    
+    def addKandianClick(self):
+        self.userwidget.show()
+        self.userwidget.raise_()
+
+    def userWidgetCallback(self, name):
+        # 添加成功看点账号更新
+        self.anchors = dbfunc.fetchAllAnchor()
+        self.combBox.addItem(name)
 
 if __name__ == '__main__':
     
     app = QApplication(sys.argv)
     home = Home()
-    home.setGeometry(0, 0, 1200, 700)
-    home.setWindowTitle('kandian')
+    rect = QApplication.desktop().screenGeometry()
+    home.resize(rect.width(), rect.height())
+    home.setWindowTitle('看点自动测试')
     home.show()
     
     sys.exit(app.exec_())

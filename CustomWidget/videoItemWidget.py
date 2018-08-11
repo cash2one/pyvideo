@@ -7,6 +7,7 @@ from CustomWidget import labelButton
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 import webview
 import dbfunc
+import gfunc
 
 class VideoItem(QWidget):
     """ a widget contains a picture and two line of text """
@@ -78,28 +79,40 @@ class VideoItem(QWidget):
 
         self.qqbox.currentIndexChanged.connect(self.qqclick)
 
+        self.data = gfunc.readJsonFile('classify')
+        firstArr = self.data['first']
 
-        firstArr = ['电影', '电视剧', '综艺', '动漫', '游戏']
         self.first_class = QComboBox()
-        
         self.first_class.addItems(["%s" % first for first in firstArr])
-
+        firstIndex = 0
         if len(first_text) > 0:
             for i in range(0, len(firstArr)):
                 if first_text == firstArr[i]:
-                    self.first_class.setCurrentIndex(i)
-        self.first_class.currentIndexChanged.connect(self.firstclick)
+                    firstIndex = i
+        if firstIndex == 0:
+            self.first_class.setEditable(True) 
+        else:
+            self.first_class.setEditable(False) 
 
-        secondArr = ['电影剪辑', '连续剧', '栏目', '综艺演出', '动漫', '游戏']
+        self.first_class.setCurrentIndex(firstIndex)
+        self.first_class.currentIndexChanged.connect(self.firstclick)
+        
+
+        secondArr = self.data['second']
         self.second_class = QComboBox()
         self.second_class.addItems(["%s" % item for item in secondArr])
-
+        secondIndex = 0
         if len(second_text) > 0:
             for i in range(0, len(secondArr)):
                 if second_text == secondArr[i]:
-                    self.second_class.setCurrentIndex(i)
+                    secondIndex = i 
+        if secondIndex == 0:
+            self.second_class.setEditable(True) 
+        else:
+            self.second_class.setEditable(False)       
+        self.second_class.setCurrentIndex(secondIndex)
         self.second_class.currentIndexChanged.connect(self.secondclick)
-
+        
 
         url = video[13] 
         if url is None:
@@ -114,6 +127,7 @@ class VideoItem(QWidget):
         self.lb_icon.setPixmap(pixMap)
         self.double_click_fun = None
         self.init_ui()
+
     
     def qqclick(self):
         qq = self.qqbox.currentText()
@@ -135,14 +149,45 @@ class VideoItem(QWidget):
 
     def firstclick(self):
         firstText = self.first_class.currentText()
+        index = self.first_class.currentIndex()
+        if index == 0:
+            self.first_class.setEditable(True)
+        else:
+            self.first_class.setEditable(False)
         dic = {'first_class': firstText}
-        self._updateVideo(dic)
+        dbfunc.updateVideoFromData(self.video[0], dic, 'videos')
+        self.writeClassify('first', firstText)
 
+    # mode first second string
+    def writeClassify(self, mode, text):   
+        # 去掉前后空格 rstrip 后空格
+        text = text.strip()     
+        flag = False
+
+        itemArr = self.data[mode]
+        for item in itemArr:
+            if item == text:
+                flag = True
+        if flag == False:
+            # 新增
+            itemArr.append(text)
+            self.data[mode] = itemArr
+            print(self.data)
+            gfunc.writeJsonFile(self.data, 'classify')
+                
+        
     def secondclick(self):
         secondText = self.second_class.currentText()
+        index = self.second_class.currentIndex()
+        if index == 0:
+            self.second_class.setEditable(True)
+        else:
+            self.second_class.setEditable(False)
         dic = {'second_class': secondText}
-        self._updateVideo(dic)
-    
+        dbfunc.updateVideoFromData(self.video[0], dic, 'videos')
+        self.writeClassify('second', secondText)
+
+
     def editingFinished(self):
         # 编辑完成 更新数据库
         firsttext = self.first_class.text()

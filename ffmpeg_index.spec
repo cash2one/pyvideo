@@ -3,7 +3,7 @@
 block_cipher = None
 
 
-a = Analysis(['home.py'],
+a = Analysis(['ffmpeg_index.py'],
              pathex=['/Users/huangtao/Desktop/pyvideo'],
              binaries=[],
              datas=[],
@@ -21,7 +21,7 @@ exe = EXE(pyz,
           a.binaries,
           a.zipfiles,
           a.datas,
-          name='home',
+          name='ffmpeg_index',
           debug=False,
           strip=False,
           upx=True,

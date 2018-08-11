@@ -8,14 +8,18 @@ from config import *
 from PyQt5.QtWidgets import *
 
 
-def login(name=account, pwd=pwdDic[account]):
+def login(name=account, pwd=pwdDic[account], videos=None):
 
     print('准备上传看点用户：'+ name)
     # QApplication.processEvents()
 
     headless = True
-
-    datas = dbfunc.fetchVideo(name, 'today', 10)
+    if videos is None:
+        todayPub = dbfunc.fetchTodayPublishedVideo(name)
+        allnum = 10
+        datas = dbfunc.fetchVideo(name, 'today', 10-len(todayPub))
+    else:
+        datas = videos
 
     # TODO
     if len(datas) < 10:
@@ -54,7 +58,7 @@ def login(name=account, pwd=pwdDic[account]):
         # for data in datas:
             start(data, browser)
             if i == len(datas)-1:
-                print(name+'看点账号：'+name+' 上传完成')
+                print('看点账号：'+name+' 上传完成 \n *****************')
 
 # 确定视频 未成功
 def checkTitle(browser):

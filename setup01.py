@@ -9,10 +9,23 @@ from setuptools import setup
 import os
 # driver_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'chromedriver')
 
+APP_NAME = 'KandianTest'
+
 APP = ['home.py']
-DATA_FILES = ['Source', 'DBHelper', 'CustomWidget', 'chromedriver']
+DATA_FILES = ['Source', 'DBHelper', 'CustomWidget']
 OPTIONS = {
     'argv_emulation': True,
+    'iconfile': './Source/app.icns',
+    'plist': {
+        'CFBundleName': APP_NAME,
+        'CFBundleDisplayName': APP_NAME,
+        'CFBundleGetInfoString': "Making Sandwiches",
+        'CFBundleIdentifier': "com.metachris.osx.sandwich",
+        'CFBundleVersion': "0.1.0",
+        'CFBundleShortVersionString': "0.1.0",
+        'NSHumanReadableCopyright': u"Copyright © 2018, Chris Hager, All Rights Reserved"
+    }
+
 }
 
 setup(

@@ -34,12 +34,12 @@ class Form(QWidget):
 
     def load(self, url):
         self.webview.load(QUrl(url))
+        self.show()
         self.webview.show()
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     screen = Form()
-    screen.show()
     url = "https://www.baidu.com"
     screen.load(url)
     sys.exit(app.exec_())

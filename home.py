@@ -12,6 +12,8 @@ import qq
 from CustomWidget import videoItemWidget
 from CustomWidget import consoleWidget
 import time
+import webview
+import txvideo
 
 
 class Home(QWidget):
@@ -22,6 +24,7 @@ class Home(QWidget):
         self.anchors = dbfunc.fetchAllAnchor()
         self.videos = dbfunc.fetchVideoFromAnchor(1)
         self.initUI()
+        self.web = webview.Form()
 
     def leftUI(self):
         self.leftVBoxLayout = QVBoxLayout()
@@ -36,7 +39,6 @@ class Home(QWidget):
 
         self.leftVBoxLayout.addWidget(addTxBtn)
         self.leftVBoxLayout.addWidget(self.leftListWidget)
-
 
 
     def rightUI(self):
@@ -93,6 +95,33 @@ class Home(QWidget):
         for video in self.videos:
             self._setItem(video)
 
+    def callback(self, url):
+        print(url)
+        self.web.load(url)
+
+        # streamArr = txvideo.jiexi_tx(url)
+        # if len(streamArr) > 0:
+        #     streamurl = streamArr[0]['urls'][0]
+        #     print(streamurl)
+
+        #     self.web.load(streamurl)
+            # self.downvideo(streamurl)
+
+    def downvideo(self, url):
+        header = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64)\
+                    AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 UBrowser/6.2.3964.2 Safari/537.36"}
+        res = requests.get(url, headers=header)
+        video = res.content
+
+        file = url.split('/')[-1]
+        print('url: '+ url)
+        with open(file, "wb") as f:
+            f.write(video)
+
+
+
+
+
     def _setItem(self, video):
         QApplication.processEvents()
 
@@ -101,10 +130,11 @@ class Home(QWidget):
         item_widget.setSizeHint(QSize(220, 350))
         self.centerListWidget.addItem(item_widget)
 
-        videoWidget = videoItemWidget.VideoItem(video, self.kdusers)
+        videoWidget = videoItemWidget.VideoItem(video, self.kdusers, self.callback)
         self.centerListWidget.setItemWidget(item_widget, videoWidget)  
 
         QApplication.processEvents()
+
 
     def addUI(self):
         self.setLayout(self.boxLayout)
@@ -134,8 +164,10 @@ class Home(QWidget):
         for anchor in anchors:
             qq = anchor[1]
             res = dbfunc.fetchVideo(qq, 'today')
+            res_all = dbfunc.fetchVideo(qq)
+
             todayres = dbfunc.fetchTodayPublishedVideo(qq)
-            text = text + qq+': '+ str(len(todayres)) + ' -- ' + str(len(res)) + ' '
+            text = text + qq+': '+ str(len(todayres)) + ' -- ' + str(len(res)) + ' -- ' + str(len(res_all)) + ' '
             # 刷新页面
             # QApplication.processEvents()
 
@@ -161,7 +193,7 @@ class Home(QWidget):
     
     # 更新list videos
     def updateListWedget(self):
-        print('更新 列表')
+        print('更新列表：'+str(len(self.videos)))
         self.centerListWidget.clear()
         for video in self.videos:
             self._setItem(video)
@@ -243,7 +275,6 @@ class Home(QWidget):
 if __name__ == '__main__':
     
     app = QApplication(sys.argv)
-
     home = Home()
     home.setGeometry(0, 0, 1200, 700)
     home.setWindowTitle('kandian')

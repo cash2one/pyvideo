@@ -10,13 +10,14 @@ import dbfunc
 
 class VideoItem(QWidget):
     """ a widget contains a picture and two line of text """
-    def __init__(self, video, qqs):
+    def __init__(self, video, qqs, callback):
         """
         :param title: str title
         :param subtitle: str subtitle
         :param icon_path: path of picture
         """
         super().__init__()
+        self.callback = callback
         self.video = video
         title = video[2]
         tags = video[5]
@@ -89,8 +90,6 @@ class VideoItem(QWidget):
                     self.first_class.setCurrentIndex(i)
         self.first_class.currentIndexChanged.connect(self.firstclick)
 
-
-
         secondArr = ['电影剪辑', '连续剧', '栏目', '综艺演出', '动漫', '游戏']
         self.second_class = QComboBox()
         self.second_class.addItems(["%s" % item for item in secondArr])
@@ -162,12 +161,6 @@ class VideoItem(QWidget):
         print(dic)
         dbfunc.updateVideo(self.video[0], dic, 'videos')
 
-        
-        # self.video[6] = text
-
-    def text_edited(self):
-        print('edit '+self.first_class.text())
-
     def init_ui(self):
         """handle layout"""
         ly_main = QVBoxLayout()
@@ -195,7 +188,7 @@ class VideoItem(QWidget):
 
 
     def playClick(self):
-        print('1111')
+        self.callback(self.video[3])
         # app = QApplication([])
         # view = QWebEngineView()
         # view.load(QUrl("http://www.baidu.com"))

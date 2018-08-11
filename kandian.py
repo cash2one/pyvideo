@@ -20,13 +20,19 @@ def login(name=account, pwd=pwdDic[account]):
     # TODO
     if len(datas) < 10:
         pass
+    
+    print('当前账号 '+name+' 可用视频为: '+ str(len(datas)))
 
     if len(datas) == 0:
-        print('当前账号 '+name+' 可用视频为0')
         return False
     # QApplication.processEvents()
+    driverpath = ''
+    if PLATFORM == 'MAC':
+        driverpath = './Source/mac/chromedriver'
+    elif PLATFORM == 'WIN':
+        driverpath = './Source/win/chromedriver.exe'
 
-    with Browser('chrome', executable_path='./chromedriver', headless=headless) as browser:
+    with Browser('chrome', executable_path=driverpath, headless=headless) as browser:
         # Visit URL
         url = LoginURL
         browser.visit(url)

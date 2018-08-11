@@ -1,3 +1,5 @@
+# 平台
+PLATFORM = 'MAC'  # MAC WIN
 
 account = '1194332304'
 

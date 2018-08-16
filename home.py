@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5 import QtCore
-
+import qdarkstyle
 import requests
 from bs4 import BeautifulSoup 
 import dbfunc
@@ -13,6 +13,8 @@ from CustomWidget import videoItemWidget, consoleWidget, userWidget
 import time
 import webview
 import txvideo
+import localVideo
+import douyinWidget
 
 
 class Home(QWidget):
@@ -23,7 +25,6 @@ class Home(QWidget):
         self.anchors = dbfunc.fetchAllAnchor()
         self.videos = dbfunc.fetchVideoFromAnchor(1)
         self.initUI()
-        self.web = webview.Form()
         self.userwidget = userWidget.UserWidget(self.userWidgetCallback)
 
     def leftUI(self):
@@ -68,6 +69,15 @@ class Home(QWidget):
 
     def centerUI(self):
         self.centerVBoxLayout = QVBoxLayout()
+        self.localVideo = localVideo.LocalVideo()
+        self.txVideo = QWidget()
+        self.douyinVideo = douyinWidget.Douyin()
+        self.tabWidget = QTabWidget()
+
+        self.tabWidget.addTab(self.txVideo, '腾讯视频')
+        self.tabWidget.addTab(self.douyinVideo, '抖音视频')
+        self.tabWidget.addTab(self.localVideo, '本地视频')
+        self.txVideo.setLayout(self.centerVBoxLayout)
 
         centerTopHLayout = QGridLayout()
         self.centerVBoxLayout.addLayout(centerTopHLayout)
@@ -80,8 +90,11 @@ class Home(QWidget):
         updateCurrentBtn = QPushButton('更新当前')
         updateCurrentBtn.clicked.connect(self.updateCurrentClick)
 
-        todayVideoBtn = QPushButton('今天的视频')
+        todayVideoBtn = QPushButton('今天视频')
         todayVideoBtn.clicked.connect(self.todayVideoClick)
+
+        notPubAllVideoBtn = QPushButton('未发布视频')
+        notPubAllVideoBtn.clicked.connect(self.notPubAllVideoClick)
 
         showVideoNumBtn = QPushButton('展示今天账号视频数量')
         showVideoNumBtn.clicked.connect(self.showVideoNumClick)
@@ -98,10 +111,11 @@ class Home(QWidget):
         centerTopHLayout.addWidget(collectAllBtn, 0, 1)
         centerTopHLayout.addWidget(updateCurrentBtn, 0, 2)
         centerTopHLayout.addWidget(todayVideoBtn, 0, 3)
+        centerTopHLayout.addWidget(notPubAllVideoBtn, 0, 4)
         centerTopHLayout.addWidget(showVideoNumBtn, 1, 0)
-        centerTopHLayout.addWidget(self.showVideoNumLabel, 1, 1, 1, 3)
+        centerTopHLayout.addWidget(self.showVideoNumLabel, 1, 1, 1, 4)
         centerTopHLayout.addWidget(currentVideoNumBtn, 2, 0)
-        centerTopHLayout.addWidget(self.currentVideoNumLabel, 2, 1, 2, 3)
+        centerTopHLayout.addWidget(self.currentVideoNumLabel, 2, 1, 2, 4)
 
         self.centerListWidget = QListWidget()
         self.centerVBoxLayout.addWidget(self.centerListWidget)
@@ -113,6 +127,7 @@ class Home(QWidget):
 
     def callback(self, url):
         print(url)
+        self.web = webview.Form()
         self.web.load(url)
 
         # streamArr = txvideo.jiexi_tx(url)
@@ -143,7 +158,7 @@ class Home(QWidget):
 
         item_widget = QListWidgetItem()
         # 必须设置这个 大小才显示
-        item_widget.setSizeHint(QSize(220, 350))
+        item_widget.setSizeHint(QSize(210, 305))
         self.centerListWidget.addItem(item_widget)
 
         videoWidget = videoItemWidget.VideoItem(video, self.kdusers, self.callback)
@@ -156,11 +171,12 @@ class Home(QWidget):
         self.setLayout(self.boxLayout)
 
         self.boxLayout.addLayout(self.leftVBoxLayout)
-        self.boxLayout.addLayout(self.centerVBoxLayout)
+        # self.boxLayout.addLayout(self.centerVBoxLayout)
+        self.boxLayout.addWidget(self.tabWidget)
         self.boxLayout.addLayout(self.rightVBoxLayout)
         # 横向比例布局 1: 3: 1
         self.boxLayout.setStretchFactor(self.leftVBoxLayout, 1)
-        self.boxLayout.setStretchFactor(self.centerVBoxLayout, 3)
+        self.boxLayout.setStretchFactor(self.tabWidget, 4)
         self.boxLayout.setStretchFactor(self.rightVBoxLayout, 1)
 
     def initUI(self):
@@ -190,6 +206,12 @@ class Home(QWidget):
         print(text)
         self.showVideoNumLabel.setText(text)
 
+    # 未发布的视频
+    def notPubAllVideoClick(self):
+        res = dbfunc.fetchNotPublishedAndQQ()
+        self.videos = res
+        self.updateListWedget()
+
     # 展示当前腾讯视频数量
     def currentVideoNumClick(self):
         anchors=dbfunc.fetchAllUser()
@@ -200,7 +222,7 @@ class Home(QWidget):
 
         for video in self.videos:
             qq = video[1]
-
+            qq = qq.strip() # 去掉前后空格
             if len(qq) > 0:
                 qqdic[qq] = qqdic[qq] + 1
         text = ''
@@ -213,19 +235,20 @@ class Home(QWidget):
     # 更新选中腾讯用户
     def currentChanged(self):
         index = self.leftListWidget.currentRow()
-        aid = self.anchors[index][0]
+        # todo 
+        if len(self.anchors) > 0:
+            
+            aid = self.anchors[index][0]
 
-        print('更新腾讯主播：'+ self.anchors[index][1])
+            print('更新腾讯主播：'+ self.anchors[index][1])
 
-        res = dbfunc.fetchVideoFromAnchor(aid)
-        print(self.anchors[index][1] + ' 总共视频数量: '+ str(len(res)))
-        self.centerListWidget.clear()
+            res = dbfunc.fetchVideoFromAnchor(aid)
+            print(self.anchors[index][1] + ' 总共视频数量: '+ str(len(res)))
+            self.centerListWidget.clear()
+            self.videos = res
+            for video in self.videos:
+                self._setItem(video)
 
-        self.videos = res
-        for video in self.videos:
-            self._setItem(video)
-        # self.centerListWidget.clear()
-        # self.centerListWidget.repaint()
     
     # 更新list videos
     def updateListWedget(self):
@@ -315,6 +338,7 @@ class Home(QWidget):
                                     '',
                                     "添加成功",  
                                     QMessageBox.Yes)
+
                 else:
                     QMessageBox.warning(self,
                                 '',
@@ -333,6 +357,10 @@ class Home(QWidget):
 if __name__ == '__main__':
     
     app = QApplication(sys.argv)
+    app.setWindowIcon(QIcon("./Source/app.png"))
+
+    app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
+
     home = Home()
     rect = QApplication.desktop().screenGeometry()
     home.resize(rect.width(), rect.height())

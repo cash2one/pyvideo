@@ -1,0 +1,328 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+APP	setup01.py	/^APP = ['home.py']$/;"	v
+APP_NAME	setup01.py	/^APP_NAME = 'KandianTest'$/;"	v
+BeautifulSoup	home.py	/^from bs4 import BeautifulSoup $/;"	i
+Browser	kandian.py	/^from splinter import Browser$/;"	i
+Comic30	config.py	/^Comic30 = [$/;"	v
+Comic33	config.py	/^Comic33 = [$/;"	v
+Comic81	config.py	/^Comic81 = [$/;"	v
+DATA_FILES	setup01.py	/^DATA_FILES = ['Source', 'DBHelper', 'CustomWidget']$/;"	v
+DB	DBHelper/dbHelper.py	/^DB = "database"    #数据库配置$/;"	v
+DBCHARSET	DBHelper/dbHelper.py	/^DBCHARSET = mod_config.getConfig(DB, 'dbcharset')$/;"	v
+DBHOST	DBHelper/dbHelper.py	/^DBHOST = mod_config.getConfig(DB, 'dbhost')$/;"	v
+DBNAME	DBHelper/dbHelper.py	/^DBNAME = mod_config.getConfig(DB, 'dbname')$/;"	v
+DBPORT	DBHelper/dbHelper.py	/^DBPORT = mod_config.getConfig(DB, "dbport")$/;"	v
+DBPWD	DBHelper/dbHelper.py	/^DBPWD = mod_config.getConfig(DB, 'dbpassword')$/;"	v
+DBUSER	DBHelper/dbHelper.py	/^DBUSER = mod_config.getConfig(DB, 'dbuser')$/;"	v
+Douyin	douyinWidget.py	/^class Douyin(QWidget):$/;"	c
+Downloader	m3u8.py	/^class Downloader:$/;"	c
+EmittingStream	CustomWidget/consoleWidget.py	/^class EmittingStream(QtCore.QObject):$/;"	c
+EmittingStream	test01.py	/^class EmittingStream(QtCore.QObject):$/;"	c
+Ffmpeg	ffmpeg_index.py	/^class Ffmpeg(QWidget):$/;"	c
+Form	webview.py	/^class Form(QWidget):$/;"	c
+Gamecj	config.py	/^Gamecj = [$/;"	v
+Gamecj_cf	config.py	/^Gamecj_cf = [$/;"	v
+Gamelol	config.py	/^Gamelol = [$/;"	v
+Games	config.py	/^Games = [$/;"	v
+Gamewz	config.py	/^Gamewz = [$/;"	v
+Home	home.py	/^class Home(QWidget):$/;"	c
+Index	index.py	/^class Index(QWidget):$/;"	c
+LabelButton	CustomWidget/labelButton.py	/^class LabelButton(QLabel):$/;"	c
+LocalVideo	localVideo.py	/^class LocalVideo(QWidget):$/;"	c
+Login	Login.py	/^class Login(QDialog):$/;"	c
+LoginURL	config.py	/^LoginURL = 'https:\/\/kandian.mp.qq.com\/vpage\/login'$/;"	v
+MainWindow	MainWindow.py	/^class MainWindow(object):$/;"	c
+MainWindow	test01.py	/^class MainWindow(QMainWindow):$/;"	c
+Movie	config.py	/^Movie = [$/;"	v
+MyConsole	CustomWidget/consoleWidget.py	/^class MyConsole(QTextEdit):$/;"	c
+MyConsole	test01.py	/^class MyConsole(QWidget):$/;"	c
+OPTIONS	setup01.py	/^OPTIONS = {$/;"	v
+PLATFORM	config.py	/^PLATFORM = 'MAC'  # MAC WIN$/;"	v
+Pool	m3u8.py	/^from gevent.pool import Pool$/;"	i
+PubVideoURL	config.py	/^PubVideoURL = 'https:\/\/kandian.mp.qq.com\/page\/video#video_pub'$/;"	v
+QDialog	Login.py	/^from PyQt5.QtWidgets import QDialog$/;"	i
+QWebEngineView	CustomWidget/videoItemWidget.py	/^from PyQt5.QtWebEngineWidgets import QWebEngineView$/;"	i
+QtCore	CustomWidget/consoleWidget.py	/^from PyQt5 import QtCore$/;"	i
+QtCore	home.py	/^from PyQt5 import QtCore$/;"	i
+QtCore	test01.py	/^from PyQt5 import QtCore$/;"	i
+QtCore	ui_Login.py	/^from PyQt5 import QtCore, QtGui, QtWidgets$/;"	i
+QtGui	CustomWidget/consoleWidget.py	/^from PyQt5 import QtGui$/;"	i
+QtGui	ui_Login.py	/^from PyQt5 import QtCore, QtGui, QtWidgets$/;"	i
+QtWidgets	MainWindow.py	/^from PyQt5.QtWidgets import QtWidgets$/;"	i
+QtWidgets	ui_Login.py	/^from PyQt5 import QtCore, QtGui, QtWidgets$/;"	i
+Teleplay	config.py	/^Teleplay = [$/;"	v
+Ui_Dialog	ui_Login.py	/^class Ui_Dialog(object):$/;"	c
+UserWidget	CustomWidget/userWidget.py	/^class UserWidget(QWidget):$/;"	c
+Variety	config.py	/^Variety = [$/;"	v
+VideoItem	CustomWidget/videoItemWidget.py	/^class VideoItem(QWidget):$/;"	c
+__del__	CustomWidget/consoleWidget.py	/^    def __del__(self):$/;"	m	class:MyConsole	file:
+__del__	test01.py	/^    def __del__(self):$/;"	m	class:MainWindow	file:
+__init__	CustomWidget/consoleWidget.py	/^    def __init__(self):$/;"	m	class:MyConsole
+__init__	CustomWidget/userWidget.py	/^    def __init__(self, callback):$/;"	m	class:UserWidget
+__init__	CustomWidget/videoItemWidget.py	/^    def __init__(self, video, qqs, callback):$/;"	m	class:VideoItem
+__init__	DBHelper/dbHelper.py	/^    def __init__(self, dbname=None, dbhost=None):$/;"	m	class:database
+__init__	Login.py	/^    def __init__(self, *args):$/;"	m	class:Login
+__init__	MainWindow.py	/^	def __init__(self, arg):$/;"	m	class:MainWindow
+__init__	douyinWidget.py	/^    def __init__(self):$/;"	m	class:Douyin
+__init__	ffmpeg_index.py	/^    def __init__(self):$/;"	m	class:Ffmpeg
+__init__	home.py	/^    def __init__(self):$/;"	m	class:Home
+__init__	index.py	/^    def __init__(self):$/;"	m	class:Index
+__init__	localVideo.py	/^    def __init__(self):$/;"	m	class:LocalVideo
+__init__	m3u8.py	/^    def __init__(self, pool_size, retry=3):$/;"	m	class:Downloader
+__init__	test01.py	/^    def __init__(self,parent):$/;"	m	class:MyConsole
+__init__	test01.py	/^    def __init__(self,parent=None):$/;"	m	class:MainWindow
+__init__	webview.py	/^    def __init__(self, parent=None):$/;"	m	class:Form
+_download	m3u8.py	/^    def _download(self, ts_list):$/;"	m	class:Downloader
+_get_http_session	m3u8.py	/^    def _get_http_session(self, pool_connections, pool_maxsize, max_retries):$/;"	m	class:Downloader
+_join_file	m3u8.py	/^    def _join_file(self):$/;"	m	class:Downloader
+_setItem	home.py	/^    def _setItem(self, video):$/;"	m	class:Home
+_updateVideo	CustomWidget/videoItemWidget.py	/^    def _updateVideo(self, dic):$/;"	m	class:VideoItem
+_worker	m3u8.py	/^    def _worker(self, ts_tuple):$/;"	m	class:Downloader
+account	config.py	/^account = '1194332304'$/;"	v
+addKandianClick	home.py	/^    def addKandianClick(self):$/;"	m	class:Home
+addTxClick	home.py	/^    def addTxClick(self):$/;"	m	class:Home
+addUI	home.py	/^    def addUI(self):$/;"	m	class:Home
+app	ffmpeg_index.py	/^    app = QApplication(sys.argv)$/;"	v	class:Ffmpeg
+app	home.py	/^    app = QApplication(sys.argv)$/;"	v
+app	setup01.py	/^    app=APP,$/;"	v
+app	webview.py	/^    app = QApplication(sys.argv)$/;"	v
+btnClick	CustomWidget/userWidget.py	/^    def btnClick(self):$/;"	m	class:UserWidget
+callback	home.py	/^    def callback(self, url):$/;"	m	class:Home
+callbackCollectAllVideo	home.py	/^    def callbackCollectAllVideo(self):$/;"	m	class:Home
+centerUI	home.py	/^    def centerUI(self):$/;"	m	class:Home
+checkTitle	kandian.py	/^def checkTitle(browser):$/;"	f
+classFromTags	gfunc.py	/^def classFromTags(tags):$/;"	f
+click	douyinWidget.py	/^    def click(self):$/;"	m	class:Douyin
+click	localVideo.py	/^    def click(self):$/;"	m	class:LocalVideo
+clicked	CustomWidget/labelButton.py	/^    clicked = pyqtSignal()$/;"	v	class:LabelButton
+close	DBHelper/dbHelper.py	/^    def close(self):$/;"	m	class:database
+collectAllClick	home.py	/^    def collectAllClick(self):$/;"	m	class:Home
+collectCurrentClick	home.py	/^    def collectCurrentClick(self):$/;"	m	class:Home
+configparser	DBHelper/mod_config.py	/^import configparser$/;"	i
+connectMySQL	DBHelper/dbHelper.py	/^    def connectMySQL(self):$/;"	m	class:database
+consoleWidget	home.py	/^from CustomWidget import videoItemWidget, consoleWidget, userWidget$/;"	i
+createBaseTable	dbfunc.py	/^def createBaseTable():$/;"	f
+createDB	DBHelper/dbHelper.py	/^def createDB(isNew=None):$/;"	f
+createDir	gfunc.py	/^def createDir(dir):$/;"	f
+createTable	DBHelper/dbHelper.py	/^    def createTable(self, table, sql):$/;"	m	class:database
+createTable	dbfunc.py	/^def createTable():$/;"	f
+createTablekduser	dbfunc.py	/^def createTablekduser():$/;"	f
+currentChanged	home.py	/^    def currentChanged(self):$/;"	m	class:Home
+currentKandianClick	home.py	/^    def currentKandianClick(self):$/;"	m	class:Home
+currentVideoNumClick	home.py	/^    def currentVideoNumClick(self):$/;"	m	class:Home
+data	kuaishou.py	/^data = {$/;"	v
+data	test.py	/^data = {$/;"	v
+data_files	setup01.py	/^    data_files=DATA_FILES,$/;"	v
+database	DBHelper/dbHelper.py	/^class database:$/;"	c
+dbHelper	dbfunc.py	/^from DBHelper import dbHelper$/;"	i
+dbfunc	CustomWidget/userWidget.py	/^import dbfunc$/;"	i
+dbfunc	CustomWidget/videoItemWidget.py	/^import dbfunc$/;"	i
+dbfunc	home.py	/^import dbfunc$/;"	i
+dbfunc	kandian.py	/^import dbfunc$/;"	i
+dbfunc	qq.py	/^import dbfunc$/;"	i
+dd	kuaishou.py	/^dd = {$/;"	v
+delVideos	dbfunc.py	/^def delVideos():$/;"	f
+douyinWidget	home.py	/^import douyinWidget$/;"	i
+down2file	youkuDown.py	/^def down2file(urls,filename):$/;"	f
+downClick	ffmpeg_index.py	/^    def downClick(self):$/;"	m	class:Ffmpeg
+downloader	m3u8.py	/^    downloader = Downloader(50)$/;"	v	class:Downloader
+downvideo	home.py	/^    def downvideo(self, url):$/;"	m	class:Home
+editingFinished	CustomWidget/videoItemWidget.py	/^    def editingFinished(self):$/;"	m	class:VideoItem
+ex	ffmpeg_index.py	/^    ex = Ffmpeg()$/;"	v	class:Ffmpeg
+exists	gfunc.py	/^def exists(dir):$/;"	f
+fetch	DBHelper/dbHelper.py	/^    def fetch(self, sql):$/;"	m	class:database
+fetchAllAnchor	dbfunc.py	/^def fetchAllAnchor():$/;"	f
+fetchAllUser	dbfunc.py	/^def fetchAllUser():$/;"	f
+fetchAllVideo	dbfunc.py	/^def fetchAllVideo():$/;"	f
+fetchNotPublishedAndQQ	dbfunc.py	/^def fetchNotPublishedAndQQ():$/;"	f
+fetchTodayPublishedVideo	dbfunc.py	/^def fetchTodayPublishedVideo(qq):$/;"	f
+fetchTodayVideo	dbfunc.py	/^def fetchTodayVideo():$/;"	f
+fetchVideo	dbfunc.py	/^def fetchVideo(qq, day=None, count=None):$/;"	f
+fetchVideoFromAlias	dbfunc.py	/^def fetchVideoFromAlias(qq, alias):$/;"	f
+fetchVideoFromAnchor	dbfunc.py	/^def fetchVideoFromAnchor(aid):$/;"	f
+ffmpegButtonClick	ffmpeg_index.py	/^    def ffmpegButtonClick(self):$/;"	m	class:Ffmpeg
+ffmpegdirClick	ffmpeg_index.py	/^    def ffmpegdirClick(self):$/;"	m	class:Ffmpeg
+firstclick	CustomWidget/videoItemWidget.py	/^    def firstclick(self):$/;"	m	class:VideoItem
+getConfig	DBHelper/mod_config.py	/^def getConfig(section, key):$/;"	f
+getLocalFile	gfunc.py	/^def getLocalFile(dirname):$/;"	f
+getRrueLink	youku.py	/^def getRrueLink(videoid, link, showid):$/;"	f
+getTrueLink	youkuDown.py	/^def getTrueLink(videoid):$/;"	f
+getVideoInfo	youku.py	/^def getVideoInfo(url):$/;"	f
+getVideoInfo	youkuDown.py	/^def getVideoInfo(url):$/;"	f
+get_lb_subtitle	CustomWidget/videoItemWidget.py	/^    def get_lb_subtitle(self):$/;"	m	class:VideoItem
+get_lb_title	CustomWidget/videoItemWidget.py	/^    def get_lb_title(self):$/;"	m	class:VideoItem
+getvid_tx	txvideo.py	/^def getvid_tx(txurl):$/;"	f
+gevent	m3u8.py	/^import gevent$/;"	i
+gfunc	CustomWidget/videoItemWidget.py	/^import gfunc$/;"	i
+gfunc	dbfunc.py	/^import gfunc$/;"	i
+gfunc	douyinWidget.py	/^import gfunc$/;"	i
+gfunc	localVideo.py	/^import gfunc$/;"	i
+gfunc	qq.py	/^import gfunc$/;"	i
+gfunc	test.py	/^import gfunc$/;"	i
+header	test.py	/^header = {$/;"	v
+hh	kuaishou.py	/^hh = {$/;"	v
+home	home.py	/^    home = Home()$/;"	v
+index	qq.py	/^def index(anchor):$/;"	f
+initUI	CustomWidget/userWidget.py	/^    def initUI(self):$/;"	m	class:UserWidget
+initUI	douyinWidget.py	/^    def initUI(self):$/;"	m	class:Douyin
+initUI	home.py	/^    def initUI(self):$/;"	m	class:Home
+initUI	localVideo.py	/^    def initUI(self):$/;"	m	class:LocalVideo
+initUI	test01.py	/^    def initUI(self):$/;"	m	class:MyConsole
+initUi	index.py	/^    def initUi(self):$/;"	m	class:Index
+init_ui	CustomWidget/videoItemWidget.py	/^    def init_ui(self):$/;"	m	class:VideoItem
+insertAnchor	dbfunc.py	/^def insertAnchor(name, uin, intr, vnum):$/;"	f
+insertVideo	dbfunc.py	/^def insertVideo(qq, aid, title, url, alias, tags, first_class, second_class, is_exist_local, local_path, qq_create_time, create_time, vid, pic):$/;"	f
+insetkdUser	dbfunc.py	/^def insetkdUser(qq, pwd, ext):$/;"	f
+isfile	gfunc.py	/^def isfile(file):$/;"	f
+jieba	gfunc.py	/^import jieba$/;"	i
+jiexi_tx	txvideo.py	/^def jiexi_tx(txurl):$/;"	f
+json	gfunc.py	/^import json$/;"	i
+json	kuaishou.py	/^import json$/;"	i
+json	qq.py	/^import json$/;"	i
+json	txvideo.py	/^import json$/;"	i
+json	youku.py	/^import json$/;"	i
+json	youkuDown.py	/^import json$/;"	i
+kandian	home.py	/^import kandian$/;"	i
+labelButton	CustomWidget/videoItemWidget.py	/^from CustomWidget import labelButton$/;"	i
+leftUI	home.py	/^    def leftUI(self):$/;"	m	class:Home
+load	webview.py	/^    def load(self, url):$/;"	m	class:Form
+loadUi	Login.py	/^from PyQt5.uic import loadUi$/;"	i
+localVideo	home.py	/^import localVideo$/;"	i
+login	kandian.py	/^def login(name=account, pwd=pwdDic[account], videos=None):$/;"	f
+main	CustomWidget/consoleWidget.py	/^def main():$/;"	f
+main	DBHelper/dbHelper.py	/^def main():$/;"	f
+main	dbfunc.py	/^def main():$/;"	f
+main	index.py	/^def main():$/;"	f
+main	kandian.py	/^def main():$/;"	f
+main	qq.py	/^def main(anchors=None):$/;"	f
+main	test01.py	/^def main():$/;"	f
+main	youku.py	/^def main():$/;"	f
+mod_config	DBHelper/dbHelper.py	/^from DBHelper import mod_config$/;"	i
+monkey	m3u8.py	/^from gevent import monkey$/;"	i
+mouseReleaseEvent	CustomWidget/labelButton.py	/^    def mouseReleaseEvent(self, QMouseEvent):$/;"	m	class:LabelButton
+normalOutputWritten	CustomWidget/consoleWidget.py	/^    def normalOutputWritten(self, text):$/;"	m	class:MyConsole
+normalOutputWritten	test01.py	/^    def normalOutputWritten(self, text):$/;"	m	class:MainWindow
+notPubAllVideoClick	home.py	/^    def notPubAllVideoClick(self):$/;"	m	class:Home
+onLoginButton	test01.py	/^    def onLoginButton(self):$/;"	m	class:MyConsole
+options	setup01.py	/^    options={'py2app': OPTIONS},$/;"	v
+os	DBHelper/mod_config.py	/^import os$/;"	i
+os	gfunc.py	/^import os$/;"	i
+os	index.py	/^import os$/;"	i
+os	kandian.py	/^import os$/;"	i
+os	m3u8.py	/^import os$/;"	i
+os	setup01.py	/^import os$/;"	i
+os	test.py	/^import os$/;"	i
+participle	gfunc.py	/^def participle(str):$/;"	f
+playButtonClick	ffmpeg_index.py	/^    def playButtonClick(self):$/;"	m	class:Ffmpeg
+playClick	CustomWidget/videoItemWidget.py	/^    def playClick(self):$/;"	m	class:VideoItem
+pubStart	kandian.py	/^def pubStart(browser, row_url):$/;"	f
+pubVideo	kandian.py	/^def pubVideo(browser, row_url):$/;"	f
+pwdDic	config.py	/^pwdDic = {$/;"	v
+pymysql	DBHelper/dbHelper.py	/^import pymysql$/;"	i
+qdarkstyle	home.py	/^import qdarkstyle$/;"	i
+qq	home.py	/^import qq$/;"	i
+qqclick	CustomWidget/videoItemWidget.py	/^    def qqclick(self):$/;"	m	class:VideoItem
+quote	youku.py	/^from urllib.parse import quote$/;"	i
+random	dbfunc.py	/^import random$/;"	i
+random	gfunc.py	/^import random$/;"	i
+random	youku.py	/^import random$/;"	i
+random	youkuDown.py	/^import random$/;"	i
+re	qq.py	/^import re$/;"	i
+re	youku.py	/^import re$/;"	i
+re	youkuDown.py	/^import re$/;"	i
+readJsonFile	gfunc.py	/^def readJsonFile(name, dirname='Source'):$/;"	f
+rect	home.py	/^    rect = QApplication.desktop().screenGeometry()$/;"	v
+req	test.py	/^    req = requests.post(url, json=data)$/;"	v
+request	youku.py	/^import urllib.request$/;"	i
+request	youkuDown.py	/^import urllib.request$/;"	i
+requests	CustomWidget/videoItemWidget.py	/^import requests$/;"	i
+requests	home.py	/^import requests$/;"	i
+requests	kuaishou.py	/^import requests$/;"	i
+requests	m3u8.py	/^import requests$/;"	i
+requests	qq.py	/^import requests$/;"	i
+requests	test.py	/^import requests$/;"	i
+requests	txvideo.py	/^import requests$/;"	i
+requests	youku.py	/^import requests$/;"	i
+res	kuaishou.py	/^res = requests.post(url, headers=hh, data=data)$/;"	v
+res	tt.py	/^res = ws_api.get_gzh_info('午夜门')$/;"	v
+retranslateUi	ui_Login.py	/^    def retranslateUi(self, Dialog):$/;"	m	class:Ui_Dialog
+rightUI	home.py	/^    def rightUI(self):$/;"	m	class:Home
+run	m3u8.py	/^    def run(self, m3u8_url, dir=''):$/;"	m	class:Downloader
+screen	webview.py	/^    screen = Form()$/;"	v
+secondclick	CustomWidget/videoItemWidget.py	/^    def secondclick(self):$/;"	m	class:VideoItem
+setUI	ffmpeg_index.py	/^    def setUI(self):$/;"	m	class:Ffmpeg
+setup	setup01.py	/^from setuptools import setup$/;"	i
+setupUi	index.py	/^    def setupUi(self):$/;"	m	class:Index
+setupUi	ui_Login.py	/^    def setupUi(self, Dialog):$/;"	m	class:Ui_Dialog
+setup_requires	setup01.py	/^    setup_requires=['py2app'],$/;"	v
+show	tip.py	/^def show(parent, title='', detail=''):$/;"	f
+showVideoNumClick	home.py	/^    def showVideoNumClick(self):$/;"	m	class:Home
+start	kandian.py	/^def start(data, browser):$/;"	f
+startClick	ffmpeg_index.py	/^    def startClick(self):$/;"	m	class:Ffmpeg
+startKandianClick	home.py	/^    def startKandianClick(self):$/;"	m	class:Home
+subprocess	ffmpeg_index.py	/^import subprocess$/;"	i
+subprocess	index.py	/^import subprocess$/;"	i
+sys	CustomWidget/consoleWidget.py	/^import sys$/;"	i
+sys	CustomWidget/labelButton.py	/^import sys$/;"	i
+sys	CustomWidget/userWidget.py	/^import sys$/;"	i
+sys	CustomWidget/videoItemWidget.py	/^import sys$/;"	i
+sys	Login.py	/^import sys$/;"	i
+sys	MainWindow.py	/^import sys $/;"	i
+sys	douyinWidget.py	/^import sys$/;"	i
+sys	ffmpeg_index.py	/^import sys$/;"	i
+sys	gfunc.py	/^import sys$/;"	i
+sys	home.py	/^import sys$/;"	i
+sys	index.py	/^import sys$/;"	i
+sys	localVideo.py	/^import sys$/;"	i
+sys	test.py	/^import sys$/;"	i
+sys	test01.py	/^import sys$/;"	i
+sys	webview.py	/^import sys$/;"	i
+sys	youku.py	/^import sys$/;"	i
+sys	youkuDown.py	/^import sys$/;"	i
+tagsEdit	CustomWidget/videoItemWidget.py	/^    def tagsEdit(self):$/;"	m	class:VideoItem
+test01	test.py	/^import test01$/;"	i
+textWritten	CustomWidget/consoleWidget.py	/^        textWritten = QtCore.pyqtSignal(str)$/;"	v	class:EmittingStream
+textWritten	test01.py	/^        textWritten = QtCore.pyqtSignal(str)$/;"	v	class:EmittingStream
+time	CustomWidget/consoleWidget.py	/^import time$/;"	i
+time	home.py	/^import time$/;"	i
+time	kandian.py	/^import time$/;"	i
+time	m3u8.py	/^import time$/;"	i
+time	qq.py	/^import time$/;"	i
+time	test.py	/^import time$/;"	i
+time	youku.py	/^import time$/;"	i
+time	youkuDown.py	/^import time$/;"	i
+titleChanged	CustomWidget/videoItemWidget.py	/^    def titleChanged(self):$/;"	m	class:VideoItem
+todayVideoClick	home.py	/^    def todayVideoClick(self):$/;"	m	class:Home
+txvideo	home.py	/^import txvideo$/;"	i
+uic	test01.py	/^from PyQt5 import uic$/;"	i
+update	DBHelper/dbHelper.py	/^    def update(self, sql):$/;"	m	class:database
+updateAllVideo	dbfunc.py	/^def updateAllVideo():$/;"	f
+updateCurrentClick	home.py	/^    def updateCurrentClick(self):$/;"	m	class:Home
+updateListWedget	home.py	/^    def updateListWedget(self):$/;"	m	class:Home
+updateVideo	dbfunc.py	/^def updateVideo(id, data, table=None):$/;"	f
+updateVideoFromData	dbfunc.py	/^def updateVideoFromData(id, data, table=None):$/;"	f
+updateVideoQQ	dbfunc.py	/^def updateVideoQQ(id, qq):$/;"	f
+url	test.py	/^url = 'http:\/\/vd.l.qq.com\/proxyhttp'$/;"	v
+url	webview.py	/^    url = "https:\/\/www.baidu.com"$/;"	v
+urllib	youku.py	/^import urllib.request$/;"	i
+urllib	youkuDown.py	/^import urllib.request$/;"	i
+urlparse	m3u8.py	/^import urlparse$/;"	i
+userWidget	home.py	/^from CustomWidget import videoItemWidget, consoleWidget, userWidget$/;"	i
+userWidgetCallback	home.py	/^    def userWidgetCallback(self, name):$/;"	m	class:Home
+videoItemWidget	home.py	/^from CustomWidget import videoItemWidget, consoleWidget, userWidget$/;"	i
+webview	CustomWidget/videoItemWidget.py	/^import webview$/;"	i
+webview	home.py	/^import webview$/;"	i
+wechatsogou	tt.py	/^import wechatsogou$/;"	i
+write	CustomWidget/consoleWidget.py	/^        def write(self, text):$/;"	m	class:EmittingStream
+write	test01.py	/^        def write(self, text):$/;"	m	class:EmittingStream
+writeClassify	CustomWidget/videoItemWidget.py	/^    def writeClassify(self, mode, text):   $/;"	m	class:VideoItem
+writeJsonFile	gfunc.py	/^def writeJsonFile(data, name, dirname='Source'):$/;"	f
+ws_api	tt.py	/^ws_api = wechatsogou.WechatSogouAPI()$/;"	v
+ws_api	tt.py	/^ws_api = wechatsogou.WechatSogouAPI(captcha_break_time=3)$/;"	v
+ws_api	tt.py	/^ws_api = wechatsogou.WechatSogouAPI(timeout=0.1)$/;"	v
+youkuDown	youkuDown.py	/^def youkuDown(link):$/;"	f

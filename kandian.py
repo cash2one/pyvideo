@@ -67,7 +67,7 @@ def checkTitle(browser):
         return True
     else:
         print('checkTitle error')
-        return False
+    return False
 
 # 发布视频
 def pubVideo(browser, row_url):
@@ -95,9 +95,7 @@ def pubStart(browser, row_url):
 
     pubVideo(browser, row_url)
     check = checkTitle(browser)
-    if check:
-        pass
-    else:
+    if check == False:
         pubStart(browser, row_url)
 
 def start(data, browser):
@@ -112,11 +110,18 @@ def start(data, browser):
 
     pubStart(browser, url)
  
-    # title
-    titleinput = browser.find_by_id('title-fld').first
-    titleinput.clear()
-    titleinput.fill(title)
-
+    # TODO title clear err 
+    try:
+        titleinput = browser.find_by_id('title-fld').first
+        titleinput.clear()
+        titleinput.fill(title)
+    except Exception as e:
+        print(str('title input err: '+ e))
+        time.sleep(5)
+        titleinput = browser.find_by_id('title-fld').first
+        titleinput.clear()
+        titleinput.fill(title)
+    
     # 分类
     browser.find_by_id('normal_first_class')[0].find_by_css('a')[0].click()
     browser.find_by_xpath('//input[@type="search"and@placeholder="搜索"]').first.fill(first_class_name)

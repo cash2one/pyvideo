@@ -11,11 +11,11 @@ import os
 
 APP_NAME = 'KandianTest'
 
-APP = ['home.py']
+APP = ['MainWindow.py']
 DATA_FILES = ['Source', 'DBHelper', 'CustomWidget']
 OPTIONS = {
     'argv_emulation': True,
-    'iconfile': 'Source/app.icns',
+    'iconfile': './Source/app.png',
     'plist': {
         'CFBundleName': APP_NAME,
         'CFBundleDisplayName': APP_NAME,

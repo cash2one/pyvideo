@@ -23,6 +23,7 @@ def createBaseTable():
         vnum int(10),
         page int(10) default 1,
         allpage int(10) default 1,
+        fromId int(10),
         ext varchar(255) )"""
     db.createTable(table, sql)
 
@@ -47,6 +48,7 @@ def createTable():
                 pic varchar(255),
                 is_exist_local int(1), 
                 local_path varchar(255), 
+                fromId int(10),
                 ext varchar(255) )
                 """
     res = db.createTable(table, sql)
@@ -64,18 +66,45 @@ def createTablekduser():
                 id int auto_increment primary key,
                 qq varchar(50),
                 pwd varchar(50),
+                fromId int(10),
                 ext varchar(255)
                 )"""
     res = db.createTable(table, sql)
 
-def insetkdUser(qq, pwd, ext):
-    # qq pwd ext
-    # qqarr = pwdDic.keys()
+# 创建用户
+def createUser():
     db = dbHelper.database()
-    sql = "insert into kduser (qq, pwd, ext) values ('%s', '%s', '%s')" % (qq, pwd, ext)
-    flag = db.update(sql)
+    table = 'user'
+    sql = """CREATE TABLE user(
+        userId int auto_increment primary key,
+        name varchar(100),
+        pwd varchar(100),
+        ext varchar(255)
+    )"""
+    db.createTable(table, sql)
 
-    print(sql+str(flag))
+def fetchUserFromName(name):
+    db = dbHelper.database()
+    sql = "SELECT * FROM user WHERE name='%s'" % (name)
+    res = db.fetchUser(sql)
+    return res
+
+def insetUser(name, pwd):
+    db = dbHelper.database()
+    sql = "INSERT INTO user (name, pwd) values ('%s', '%s')" % (name, pwd)
+    flag = db.inset(sql)
+    db.close()
+    return flag
+
+def insetkdUser(qq, pwd, ext):
+    # TODO fromUserId
+    login = gfunc.getLoginNameForLocal()
+    if login[0] == False:
+        return False
+        
+    db = dbHelper.database()
+    sql = "insert into kduser (qq, pwd, ext, fromUserId) values ('%s', '%s', '%s', '%s')" % (qq, pwd, ext, login[2])
+    flag = db.update(sql)
     db.close()
     return flag
 
@@ -87,8 +116,12 @@ def fetchAllUser():
 
 # anchor
 def insertAnchor(name, uin, intr, vnum):
+    # TODO fromUserId
+    login = gfunc.getLoginNameForLocal()
+    if login[0] == False:
+        return False
     db = dbHelper.database()
-    sql = "insert into anchor(name, uin, intr, vnum) values ('%s', '%s', '%s', '%d')" % (name, uin, intr, int(vnum))
+    sql = "insert into anchor(name, uin, intr, vnum, fromUserId) values ('%s', '%s', '%s', '%d', '%s')" % (name, uin, intr, int(vnum), login[2])
     flag = db.update(sql)
     db.close()
         
@@ -132,25 +165,24 @@ def updateAllVideo():
 
 # video
 def insertVideo(qq, aid, title, url, alias, tags, first_class, second_class, is_exist_local, local_path, qq_create_time, create_time, vid, pic):
+    # TODO 登录验证
+    login = gfunc.getLoginNameForLocal()
+    if login[0] == False:
+        return False
+    
     db = dbHelper.database()
     sql = "select * from videos where vid = '%s'" % vid    
     dd = db.fetch(sql)
 
-    # exist_name = db.fetch("select * from videos where title = '%s'" % title)
-    # if exist_name:
-    #     print('exist name')
-    # else:
-    
     if dd:
 
         sql = "update videos set qq_create_time = '%s' where vid = '%s'" % (qq_create_time, vid)
         print('videos table is exist update time ')
-
         db.update(sql)
         db.close()
     else:
-        sql = "INSERT INTO videos (qq, aid, title, url, alias, tags, first_class, second_class, is_exist_local, local_path, qq_create_time, create_time, vid, pic) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s','%d', '%s', '%s', '%s', '%s', '%s') " % (qq, aid, title, url, alias, tags, first_class, second_class, int(is_exist_local), local_path, qq_create_time, create_time, vid, pic )
-        db.update(sql)
+        sql = "INSERT INTO videos (qq, aid, title, url, alias, tags, first_class, second_class, is_exist_local, local_path, qq_create_time, create_time, vid, pic, fromUserId) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s','%d', '%s', '%s', '%s', '%s', '%s', '%s') " % (qq, aid, title, url, alias, tags, first_class, second_class, int(is_exist_local), local_path, qq_create_time, create_time, vid, pic, login[2] )
+        db.inset(sql)
         db.close()
         print('inset into success')
 
@@ -213,17 +245,23 @@ def fetchTodayPublishedVideo(qq):
     res = db.fetch(sql)
     return res
 
+# 未发布视频 qq
+def fetchNotPublishedAndQQ():
+    db = dbHelper.database()
+    sql = "SELECT * FROM videos WHERE qq!=0 AND publish_time is null"
+    res = db.fetch(sql)
+    if res:
+        return res
+    return []
+
 def fetchVideo(qq, day=None, count=None):
     db = dbHelper.database()
     day_sql = ''
     if day != None:
         day_sql = "AND create_time >= date_format(NOW(),'%Y-%m-%d')"
-    count_sql = ''
-    if count != None:
-        count_sql = "limit 0,%d" % int(count)
     
-    sql = "SELECT * FROM videos WHERE qq = '%s' AND publish_time is null %s %s" % (qq, day_sql, count_sql)
-    res = db.fetch(sql)
+    sql = "SELECT * FROM videos WHERE qq = '%s' AND publish_time is null %s" % (qq, day_sql)
+    res = db.fetch(sql, limit=count)
     return res
 
 def fetchVideoFromAlias(qq, alias):
@@ -243,13 +281,23 @@ def fetchTodayVideo():
     sql = "SELECT * FROM videos WHERE create_time >= date_format(NOW(),'%Y-%m-%d')"
     res = db.fetch(sql)
     return res
+
+# TODO 特殊
+def updateAllFromId():
+    db = dbHelper.database()
+    db.update("update kduser set fromUserId = '1'")
+    db.update("update videos set fromUserId = '1'")
+    db.update("update anchor set fromUserId = '1'")
+
 def main():
+    updateAllFromId()
+    # createUser()
     # delVideos()
     # fetchVideoFromAlias('3216598385', 'b')
     # updateAllVideo()
-    createTablekduser()
-    createBaseTable()
-    createTable()
+    # createTablekduser()
+    # createBaseTable()
+    # createTable()
 
 if __name__ == '__main__':
     main()

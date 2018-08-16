@@ -31,6 +31,7 @@ class VideoItem(QWidget):
         finish_time = str(video[10])
 
         self.lb_title = QTextEdit(title)
+
         self.lb_title.setFont(QFont("Arial", 10, QFont.Bold))
         self.lb_title.textChanged.connect(self.titleChanged)
 
@@ -57,7 +58,6 @@ class VideoItem(QWidget):
         # self.playbtn = QPushButton('播放')
         # self.playbtn.move()
         # self.lb_icon.setWidget(self.playbtn)
-
 
         self.qqbox = QComboBox()
         if len(qq) > 0 and finish_time != 'None' :
@@ -114,14 +114,15 @@ class VideoItem(QWidget):
         self.second_class.currentIndexChanged.connect(self.secondclick)
         
 
-        url = video[13] 
-        if url is None:
-            url = 'http://puui.qpic.cn/vpic/0/r0745f7blex_160_90_3.jpg/0'
-        
-        req = requests.get(url)
-
+        pic = video[13] 
+        if pic is None:
+            pic = 'http://puui.qpic.cn/vpic/0/r0745f7blex_160_90_3.jpg/0'
         pixMap = QPixmap()
-        pixMap.loadFromData(req.content)
+        try:
+            req = requests.get(pic)
+            pixMap.loadFromData(req.content)
+        except Exception as e:
+            pass
         # pixMap.scaled(80, 80)
         # pixMap = QPixmap(icon_path).scaled(self.lb_icon.width(), self.lb_icon.height())
         self.lb_icon.setPixmap(pixMap)
@@ -219,13 +220,24 @@ class VideoItem(QWidget):
         ly_right.addWidget(self.lb_subtitle)
 
         ly_right.addWidget(self.qqbox)
+        self.qqbox.setFixedHeight(22)
+        self.qqbox.setFont(QFont("Arial", 12, QFont.StyleItalic))
 
         ly_h_class = QHBoxLayout()
         ly_h_class.addWidget(self.first_class)
         ly_h_class.addWidget(self.second_class)
+
+        self.first_class.setFixedHeight(24)
+        self.first_class.setFont(QFont("Arial", 12, QFont.StyleItalic))
+        self.second_class.setFixedHeight(24)
+        self.second_class.setFont(QFont("Arial", 12, QFont.StyleItalic))
+
         ly_right.addLayout(ly_h_class)
 
-        ly_right.setAlignment(Qt.AlignVCenter)
+        # ly_right.setAlignment(Qt.AlignVCenter)
+        # ly_main.setAlignment(Qt.AlignVCenter)
+        ly_right.setSpacing(2)
+        ly_main.fillWidth = True
         ly_main.addWidget(self.lb_icon)
         ly_main.addLayout(ly_right)
         self.setLayout(ly_main)

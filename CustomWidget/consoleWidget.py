@@ -15,9 +15,9 @@ class MyConsole(QTextEdit):
     def __init__(self):
         super().__init__()
         self.setReadOnly(True)
-        #重定向输出
-        sys.stdout = EmittingStream(textWritten=self.normalOutputWritten)
-        sys.stderr = EmittingStream(textWritten=self.normalOutputWritten)
+        # 重定向输出
+        # sys.stdout = EmittingStream(textWritten=self.normalOutputWritten)
+        # sys.stderr = EmittingStream(textWritten=self.normalOutputWritten)
     
     def __del__(self):
         sys.stdout = sys.__stdout__

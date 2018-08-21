@@ -100,6 +100,7 @@ class database:
     def fetch(self, sql, limit=None):
         # TODO 登录
         login = gfunc.getLoginNameForLocal()
+        # print(login)
         if login[0]:
             if sql.find('where') != -1 or sql.find('WHERE') != -1:
                 extSql = " AND fromUserId = '%s'" % (login[2])

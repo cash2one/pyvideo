@@ -40,12 +40,13 @@ class Main(QMainWindow):
 
     def loginSuccess(self, name, userId):
         sip.delete(self.widget)
+        gfunc.setLoginForLocal(True, name, userId)
+
         self.widget = Home()
         self.setCentralWidget(self.widget)
         self.signInAction.setEnabled(False)
         self.quitSignInAction.setEnabled(True)
         
-        gfunc.setLoginForLocal(True, name, userId)
 
     def menuTriggered(self, q):
         if (q.text() == "退出登录"):

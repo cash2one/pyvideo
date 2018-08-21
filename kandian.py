@@ -14,12 +14,21 @@ def login(name=account, pwd=pwdDic[account], videos=None):
     # QApplication.processEvents()
 
     headless = True
+
+    todayPub = dbfunc.fetchTodayPublishedVideo(name)
+
+    todayPubNum = len(todayPub)
+    allnum = 10
+
+    makePubNum = allnum - todayPubNum
+
     if videos is None:
-        todayPub = dbfunc.fetchTodayPublishedVideo(name)
-        allnum = 10
-        datas = dbfunc.fetchVideo(name, 'today', 10-len(todayPub))
+        datas = dbfunc.fetchVideo(name, 'today', makePubNum)
     else:
-        datas = videos
+        if len(videos) <= makePubNum:
+            datas = videos
+        else:
+            datas = videos[0:makePubNum]
 
     # TODO
     if len(datas) < 10:
@@ -78,13 +87,13 @@ def pubVideo(browser, row_url):
         time.sleep(1)
         # 链接
         browser.find_by_id('full_video_url-picker').first.fill(row_url)
-        time.sleep(3)
+        time.sleep(4)
         dialog = browser.find_by_id('mask_video-picker-dialog-url-4-vip')
 
         # 确定 视频
         sure = dialog.find_by_css('div>div>a.act_ok')[0]
         sure.click()
-        time.sleep(2)
+        time.sleep(4)
 
     except Exception as e:
         print('pub video fail:'+ str(e))
@@ -116,7 +125,7 @@ def start(data, browser):
         titleinput.clear()
         titleinput.fill(title)
     except Exception as e:
-        print(str('title input err: '+ e))
+        print('title input err: '+ str(e))
         time.sleep(5)
         titleinput = browser.find_by_id('title-fld').first
         titleinput.clear()

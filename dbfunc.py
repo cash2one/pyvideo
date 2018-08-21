@@ -164,27 +164,57 @@ def updateAllVideo():
         updateVideo(idd, data, 'videos')
 
 # video
-def insertVideo(qq, aid, title, url, alias, tags, first_class, second_class, is_exist_local, local_path, qq_create_time, create_time, vid, pic):
+def insertVideo(dic):
     # TODO 登录验证
     login = gfunc.getLoginNameForLocal()
     if login[0] == False:
         return False
-    
+    vid = dic['vid']
     db = dbHelper.database()
-    sql = "select * from videos where vid = '%s'" % vid    
-    dd = db.fetch(sql)
-
-    if dd:
-
-        sql = "update videos set qq_create_time = '%s' where vid = '%s'" % (qq_create_time, vid)
-        print('videos table is exist update time ')
+    # 查询vid 是否存在 存在更新qq_create_time 不存在加入
+    isExist = db.fetch("select * from videos where vid = '%s'" % vid )
+    print('查询 数据库videos中 vid是否存在...')
+    if isExist:
+        # 更新
+        sql = "update videos set qq_create_time = '%s' where vid = '%s'" % (dic['qq_create_time'], vid)
         db.update(sql)
-        db.close()
+        print('videos table is exist update time')
     else:
-        sql = "INSERT INTO videos (qq, aid, title, url, alias, tags, first_class, second_class, is_exist_local, local_path, qq_create_time, create_time, vid, pic, fromUserId) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s','%d', '%s', '%s', '%s', '%s', '%s', '%s') " % (qq, aid, title, url, alias, tags, first_class, second_class, int(is_exist_local), local_path, qq_create_time, create_time, vid, pic, login[2] )
+        ls = list(dic)
+        sql = 'insert %s (' % 'videos' + ','.join(ls) + ') values (' +\
+               ','.join(['%({})r'.format(field) for field in ls]) + ');'
+        sql = sql % dic
+
         db.inset(sql)
-        db.close()
-        print('inset into success')
+        print('inset video success')
+    # TODO 
+    db.close()
+
+
+
+
+# # video
+# def insertVideo(qq, aid, title, url, alias, tags, first_class, second_class, is_exist_local, local_path, qq_create_time, create_time, vid, pic):
+#     # TODO 登录验证
+#     login = gfunc.getLoginNameForLocal()
+#     if login[0] == False:
+#         return False
+    
+#     db = dbHelper.database()
+#     sql = "select * from videos where vid = '%s'" % vid    
+#     dd = db.fetch(sql)
+
+#     if dd:
+
+#         sql = "update videos set qq_create_time = '%s' where vid = '%s'" % (qq_create_time, vid)
+#         print('videos table is exist update time ')
+#         db.update(sql)
+#         db.close()
+#     else:
+#         sql = "INSERT INTO videos (qq, aid, title, url, alias, tags, first_class, second_class, is_exist_local, local_path, qq_create_time, create_time, vid, pic, fromUserId) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s','%d', '%s', '%s', '%s', '%s', '%s', '%s') " % (qq, aid, title, url, alias, tags, first_class, second_class, int(is_exist_local), local_path, qq_create_time, create_time, vid, pic, login[2] )
+#         db.inset(sql)
+#         db.close()
+#         print('inset into success')
 
 def updateVideoQQ(id, qq):
     db = dbHelper.database()
@@ -280,7 +310,12 @@ def fetchTodayVideo():
     db = dbHelper.database()
     sql = "SELECT * FROM videos WHERE create_time >= date_format(NOW(),'%Y-%m-%d')"
     res = db.fetch(sql)
-    return res
+
+    dd = []
+    for item in res:
+        if item[8].find('小时') != -1:
+            dd.append(item)
+    return dd
 
 # TODO 特殊
 def updateAllFromId():

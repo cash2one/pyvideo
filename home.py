@@ -15,6 +15,7 @@ import webview
 import txvideo
 import localVideo
 import douyinWidget
+from txVideoWidget import TXVideoWidget
 
 
 class Home(QWidget):
@@ -23,7 +24,11 @@ class Home(QWidget):
     
         self.kdusers = dbfunc.fetchAllUser()
         self.anchors = dbfunc.fetchAllAnchor()
-        self.videos = dbfunc.fetchVideoFromAnchor(1)
+        aid = '0'
+        if len(self.anchors) > 0:
+            aid = self.anchors[0][0]
+        print(aid)
+        self.videos = dbfunc.fetchVideoFromAnchor(aid)
         self.initUI()
         self.userwidget = userWidget.UserWidget(self.userWidgetCallback)
 
@@ -69,7 +74,7 @@ class Home(QWidget):
 
     def centerUI(self):
         self.centerVBoxLayout = QVBoxLayout()
-        self.localVideo = localVideo.LocalVideo()
+        self.localVideo = TXVideoWidget()
         self.txVideo = QWidget()
         self.douyinVideo = douyinWidget.Douyin()
         self.tabWidget = QTabWidget()
@@ -77,14 +82,19 @@ class Home(QWidget):
         self.tabWidget.addTab(self.txVideo, '腾讯视频')
         self.tabWidget.addTab(self.douyinVideo, '抖音视频')
         self.tabWidget.addTab(self.localVideo, '本地视频')
-        self.txVideo.setLayout(self.centerVBoxLayout)
+        self.txHLayout = QHBoxLayout()
+        self.txVideo.setLayout(self.txHLayout)
+        self.txHLayout.addLayout(self.leftVBoxLayout)
+        self.txHLayout.addLayout(self.centerVBoxLayout)
+        self.txHLayout.setStretchFactor(self.leftVBoxLayout, 1)
+        self.txHLayout.setStretchFactor(self.centerVBoxLayout, 5)
 
         centerTopHLayout = QGridLayout()
         self.centerVBoxLayout.addLayout(centerTopHLayout)
 
         collectCurrentBtn = QPushButton('采集当前视频')
         collectCurrentBtn.clicked.connect(self.collectCurrentClick)
-        collectAllBtn = QPushButton('采集腾讯视频')
+        collectAllBtn = QPushButton('采集一页腾讯视频')
         collectAllBtn.clicked.connect(self.collectAllClick)
 
         updateCurrentBtn = QPushButton('更新当前')
@@ -124,6 +134,70 @@ class Home(QWidget):
         # self.centerListWidget.addItems(['%s' % video[2] for video in self.videos])
         for video in self.videos:
             self._setItem(video)
+
+        self.centerBottomHLayout = QHBoxLayout()
+        self.centerBottomHLayout.setAlignment(Qt.AlignCenter)
+        self.centerVBoxLayout.addLayout(self.centerBottomHLayout)
+
+
+    def addPage(self):
+        self.allpage = 11
+        self.pageBtnArr = []
+        self.maxpage = 12
+        if self.allpage >= 11:
+           self.maxpage = 12
+        else:
+            self.maxpage = self.allpage+2
+
+        for i in range(0, self.maxpage):
+            pbtn = QPushButton(str(i+1))
+            pbtn.setCheckable(False)
+            pbtn.setFixedSize(QSize(32, 26))
+            pbtn.clicked.connect(self.pageAction)
+            self.pageBtnArr.append(pbtn)
+            self.centerBottomHLayout.addWidget(pbtn)
+            if i == 0:
+                pbtn.setText('1')
+            elif i == self.maxpage-1:
+                pbtn.setText(str(self.allpage))
+            elif  i == 1:
+                pbtn.setText('...')
+                pbtn.hide()
+            elif i == self.maxpage-2:
+                pbtn.setText('...')
+                if self.allpage > 10:
+                    pbtn.show()
+                else:
+                    pbtn.hide()
+            else:
+                pbtn.setText(str(i))
+
+        # for i in range(0, len(self.pageBtnArr)):
+        #     btn = self.pageBtnArr[i]
+        #     btn.setText(str(page-3+i))
+            
+    def pageAction(self):
+        text = self.sender().text()
+        if text == '...':
+            return
+        page = int(text)
+        print(page)
+        btnLen = len(self.pageBtnArr)
+        # 左4右5
+        if self.allpage > 10:
+            if 10-page < 4:
+                self.pageBtnArr[1].show()
+            elif 10-page >=4:
+                self.pageBtnArr[1].hide()
+            elif self.allpage-page>7:
+                self.pageBtnArr[btnLen-2].show()
+            elif self.allpage-page<=7:
+                self.pageBtnArr[btnLen-2].hide()
+            else:
+                for i in range(2, btnLen-2):
+                    self.pageBtnArr[i].setText(str(page-5+i))
+
+    
 
     def callback(self, url):
         print(url)
@@ -170,12 +244,12 @@ class Home(QWidget):
     def addUI(self):
         self.setLayout(self.boxLayout)
 
-        self.boxLayout.addLayout(self.leftVBoxLayout)
+        # self.boxLayout.addLayout(self.leftVBoxLayout)
         # self.boxLayout.addLayout(self.centerVBoxLayout)
         self.boxLayout.addWidget(self.tabWidget)
         self.boxLayout.addLayout(self.rightVBoxLayout)
         # 横向比例布局 1: 3: 1
-        self.boxLayout.setStretchFactor(self.leftVBoxLayout, 1)
+        # self.boxLayout.setStretchFactor(self.leftVBoxLayout, 1)
         self.boxLayout.setStretchFactor(self.tabWidget, 4)
         self.boxLayout.setStretchFactor(self.rightVBoxLayout, 1)
 
@@ -266,8 +340,9 @@ class Home(QWidget):
 
     # 采集当前主播的视频
     def collectCurrentClick(self):
+        print('采集当前主播所有视频')
         index = self.combBox.currentIndex()
-        qq.main([self.anchors[index]])
+        qq.main([self.anchors[index]], page='all')
 
     # 采集腾讯视频
     def collectAllClick(self):
@@ -354,17 +429,17 @@ class Home(QWidget):
         self.anchors = dbfunc.fetchAllAnchor()
         self.combBox.addItem(name)
 
-if __name__ == '__main__':
+# if __name__ == '__main__':
     
-    app = QApplication(sys.argv)
-    app.setWindowIcon(QIcon("./Source/app.png"))
+#     app = QApplication(sys.argv)
+#     app.setWindowIcon(QIcon("./Source/app.png"))
 
-    app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
+#     app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
 
-    home = Home()
-    rect = QApplication.desktop().screenGeometry()
-    home.resize(rect.width(), rect.height())
-    home.setWindowTitle('看点自动测试')
-    home.show()
+#     home = Home()
+#     rect = QApplication.desktop().screenGeometry()
+#     home.resize(rect.width(), rect.height())
+#     home.setWindowTitle('看点自动测试')
+#     home.show()
     
-    sys.exit(app.exec_())
+#     sys.exit(app.exec_())

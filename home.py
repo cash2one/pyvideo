@@ -341,7 +341,8 @@ class Home(QWidget):
     # 采集当前主播的视频
     def collectCurrentClick(self):
         print('采集当前主播所有视频')
-        index = self.combBox.currentIndex()
+        index = self.leftListWidget.currentRow()
+        print(index)
         qq.main([self.anchors[index]], page='all')
 
     # 采集腾讯视频

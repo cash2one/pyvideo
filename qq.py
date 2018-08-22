@@ -59,9 +59,7 @@ def index(anchor, page=None):
     aid = anchor[0]
     uin = anchor[2]
     pagenum = anchor[5]
-    
     jsondata = getJsonFromUin(uin, pagenum)
-    print(jsondata['videolst'])
     addVideos(jsondata['videolst'], aid)
 
     if page != None:
@@ -71,6 +69,8 @@ def index(anchor, page=None):
         loopnum = math.ceil(int(vtotal)/30)
         
         for i in range(1, loopnum):
+            print(uin)
+
             pagenum += 1
             jsondata = getJsonFromUin(uin, pagenum)
             addVideos(jsondata['videolst'], aid)

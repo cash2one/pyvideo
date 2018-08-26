@@ -16,6 +16,7 @@ import txvideo
 import localVideo
 import douyinWidget
 from txVideoWidget import TXVideoWidget
+from MainKwei import KweiWidget
 
 
 class Home(QWidget):
@@ -78,10 +79,13 @@ class Home(QWidget):
         self.txVideo = QWidget()
         self.douyinVideo = douyinWidget.Douyin()
         self.tabWidget = QTabWidget()
+        self.kweiWidget = KweiWidget() 
 
         self.tabWidget.addTab(self.txVideo, '腾讯视频')
         self.tabWidget.addTab(self.douyinVideo, '抖音视频')
+        self.tabWidget.addTab(self.kweiWidget, '快手视频')
         self.tabWidget.addTab(self.localVideo, '本地视频')
+        
         self.txHLayout = QHBoxLayout()
         self.txVideo.setLayout(self.txHLayout)
         self.txHLayout.addLayout(self.leftVBoxLayout)
@@ -308,7 +312,7 @@ class Home(QWidget):
             
     # 更新选中腾讯用户
     def currentChanged(self):
-        index = self.leftListWidget.currentRow()
+        index = self.leftListWidget.currenttRow()
         # todo 
         if len(self.anchors) > 0:
             

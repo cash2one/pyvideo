@@ -5,9 +5,12 @@ import sys
 import dbfunc
 
 class UserWidget(QWidget):
-    def __init__(self, callback):
+
+    callback_sign = pyqtSignal(str)
+
+    def __init__(self, platformItem):
         super().__init__()
-        self.callback = callback
+        self.platformItem = platformItem
         self.initUI()
 
     def initUI(self):
@@ -37,7 +40,7 @@ class UserWidget(QWidget):
         mainLayout.addWidget(btn, 3, 0, 3, 3)
 
         self.resize(300, 200)
-        self.setWindowTitle('添加看点用户')
+        self.setWindowTitle('添加%s用户' % self.platformItem['name'])
         # self.show()
 
     def btnClick(self):
@@ -48,15 +51,16 @@ class UserWidget(QWidget):
         if len(name) == 0 or len(pwd) == 0:
             QMessageBox.warning(self, '', "请输入账号和密码", QMessageBox.Yes)
             return
-        
-        res = dbfunc.insetkdUser(name, pwd, ext)
+        platform = self.platformItem['platform']
+        res = dbfunc.insertUploader(name, pwd, ext, platform)
 
         if res:
-            print('添加看点用户成功：' + name)
+            print('添加'+self.platformItem['name']+'用户成功：' + name)
             button = QMessageBox.information(self, name, "添加成功", QMessageBox.Yes)
             if button:
                 self.close()
-                self.callback(name)
+                self.callback_sign.emit(platform)
+                
 
 # def main():
 #     app = QApplication(sys.argv)

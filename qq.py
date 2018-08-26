@@ -6,6 +6,7 @@ import dbfunc
 import time
 import gfunc
 import math
+from config import *
 
 def getJsonFromUin(uin, pagenum):
     num = 30 # 最多30 一般24
@@ -34,16 +35,17 @@ def addVideo(video, aid):
         'tags': tags,
         'first_class': classly[0],
         'second_class': classly[1],
-        'qq_create_time': video['uploadtime'],
+        'platform_create_time': video['uploadtime'],
         'create_time': time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) ,
         'aid': aid,
         'vid': video['vid'],
         'pic': video['pic'],
         'is_exist_local': 0,
         'local_path': '',
-        'fromUserId': gfunc.getLoginNameForLocal()[2]
+        'fromUserId': gfunc.getUserId(),
+        'platform': TencentPlatform
     }
-
+    # 
     dbfunc.insertVideo(dic)
 
 def addVideos(videolst, aid):
@@ -53,6 +55,8 @@ def addVideos(videolst, aid):
     except Exception as e:
         pass
     
+def updateAnchorVNum(vtotal, aid):
+    dbfunc.updateAnchor({'vnum': vtotal}, {'aid': aid})
 
 def index(anchor, page=None):
     # url = 'http://v.qq.com/vplus/3fcca62af8c4b211b87401b4530cff9a/videos '
@@ -63,10 +67,11 @@ def index(anchor, page=None):
     jsondata = getJsonFromUin(uin, pagenum)
     print(jsondata['videolst'])
     addVideos(jsondata['videolst'], aid)
+    vtotal = jsondata['vtotal']
+    updateAnchorVNum(vtotal, aid)
 
     if page != None:
 
-        vtotal = jsondata['vtotal']
         # 向上取整
         loopnum = math.ceil(int(vtotal)/30)
         
@@ -75,15 +80,15 @@ def index(anchor, page=None):
             jsondata = getJsonFromUin(uin, pagenum)
             addVideos(jsondata['videolst'], aid)
 
-# anchors anchor数组
+# anchors anchor数组 page=all
 def main(anchors=None, page=None):
     if anchors is None:
         anchors = dbfunc.fetchAllAnchor()
     for anchor in anchors:
         index(anchor, page)
 
-if __name__ == '__main__':
-    main()
+# if __name__ == '__main__':
+#     main()
 
 
 

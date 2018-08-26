@@ -1,7 +1,23 @@
 # 平台
-PLATFORM = 'MAC'  # MAC WIN
+PLATFORM = 'WIN'  # MAC WIN
 
-account = '1194332304'
+# 平台
+TencentPlatform = 'tencent'
+KuaishouPlatform = 'kuaishou'
+
+KandianPlatform = 'kandian'
+QierhaoPlatform = 'qierhao'
+
+Headers = {
+    'user_agent': 'Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)'
+}
+
+VPlusBaseUrl = 'http://v.qq.com/vplus/'
+
+# video 状态
+VideoStatus = ['未发布', '今天', '待发布', '已发布']
+
+account = '2030657847'
 
 pwdDic = {
     '1194332304': 'mima1325049637', # 绝地求生 cf 王者荣耀 lol

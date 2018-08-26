@@ -143,6 +143,18 @@ def getLoginNameForLocal():
     data = readJsonFile('app')
     return [data['isLogin'], data['name'], data['userId']]
 
+def getUserId():
+   data = readJsonFile('app')
+   return data['userId']
+
+def getUserName():
+    data = readJsonFile('app')
+    return data['name']
+
+def isLogin():
+    data = readJsonFile('app')
+    return data['isLogin']
+
         
          
 

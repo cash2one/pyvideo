@@ -12,9 +12,6 @@ def login(name=account, pwd=pwdDic[account], videos=None):
 
     print('准备上传看点用户：'+ name)
     # QApplication.processEvents()
-
-    headless = True
-
     todayPub = dbfunc.fetchTodayPublishedVideo(name)
 
     todayPubNum = len(todayPub)
@@ -44,6 +41,8 @@ def login(name=account, pwd=pwdDic[account], videos=None):
         driverpath = './Source/mac/chromedriver'
     elif PLATFORM == 'WIN':
         driverpath = './Source/win/chromedriver.exe'
+    print(driverpath)
+    headless = False
 
     with Browser('chrome', executable_path=driverpath, headless=headless) as browser:
         # Visit URL
@@ -117,7 +116,7 @@ def start(data, browser):
     first_class_name = data[6]
     second_class_name = data[7]
 
-    pubStart(browser, url)
+    pubStart(browser, url, )
  
     # TODO title clear err 
     try:

@@ -4,21 +4,21 @@ from PyQt5.QtGui import *
 import sys
 import requests
 from CustomWidget import labelButton
-from PyQt5.QtWebEngineWidgets import QWebEngineView
-import webview
 import dbfunc
 import gfunc
 
 class VideoItem(QWidget):
     """ a widget contains a picture and two line of text """
-    def __init__(self, video, qqs, callback):
+
+
+
+    def __init__(self, video, uploaders):
         """
         :param title: str title
         :param subtitle: str subtitle
         :param icon_path: path of picture
         """
         super().__init__()
-        self.callback = callback
         self.video = video
         title = video[2]
         tags = video[5]
@@ -67,8 +67,8 @@ class VideoItem(QWidget):
         else:
             qqArr = ['']
             index = 0
-            for i in range(0, len(qqs)):
-                item = qqs[i][1]
+            for i in range(0, len(uploaders)):
+                item = uploaders[i][1]
                 qqArr.append(item)
                 if item == qq:
                     index = i+1
@@ -132,7 +132,8 @@ class VideoItem(QWidget):
     
     def qqclick(self):
         qq = self.qqbox.currentText()
-        dbfunc.updateVideoQQ(self.video[0], qq)
+        dic = { 'qq': qq }
+        self._updateVideo(dic)
 
     def titleChanged(self):
         title = self.lb_title.toPlainText()
@@ -140,7 +141,7 @@ class VideoItem(QWidget):
         self._updateVideo(dic)
 
     def _updateVideo(self, dic):
-        dbfunc.updateVideo(self.video[0], dic, 'videos')
+        dbfunc.updateVideo(dic, { 'id': self.video[0] })
 
     # 更新tags
     def tagsEdit(self):
@@ -156,7 +157,7 @@ class VideoItem(QWidget):
         else:
             self.first_class.setEditable(False)
         dic = {'first_class': firstText}
-        dbfunc.updateVideoFromData(self.video[0], dic, 'videos')
+        self._updateVideo(dic)
         self.writeClassify('first', firstText)
 
     # mode first second string
@@ -185,7 +186,7 @@ class VideoItem(QWidget):
         else:
             self.second_class.setEditable(False)
         dic = {'second_class': secondText}
-        dbfunc.updateVideoFromData(self.video[0], dic, 'videos')
+        self._updateVideo(dic)
         self.writeClassify('second', secondText)
 
 
@@ -204,8 +205,7 @@ class VideoItem(QWidget):
             dic['qq'] = qq
         if len(tags) > 0:
             dic['tags'] = tags  
-        print(dic)
-        dbfunc.updateVideo(self.video[0], dic, 'videos')
+        self._updateVideo(dic)
 
     def init_ui(self):
         """handle layout"""
@@ -245,16 +245,7 @@ class VideoItem(QWidget):
 
 
     def playClick(self):
-        self.callback(self.video[3])
-        # app = QApplication([])
-        # view = QWebEngineView()
-        # view.load(QUrl("http://www.baidu.com"))
-        # view.show()
-        # app.exec_()
-        # screen = webview.Form()
-        # screen.show()
-        # url = "https://www.baidu.com"
-        # screen.load(url)
+        print(self.video[3])
 
     def get_lb_title(self):
         return self.lb_title.text()

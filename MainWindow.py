@@ -1,13 +1,15 @@
 import sys
+from PyQt5 import sip
+
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 import qdarkstyle
-from SignIn import SignInWidget
+from HTSignIn import SignInWidget
 import sip
-from home import Home
 from config import *
 import gfunc
+from HTHome import Home
 
 class Main(QMainWindow):
     def __init__(self):
@@ -75,7 +77,7 @@ if __name__ == '__main__':
     app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
     mainMindow = Main()
     rect = QApplication.desktop().screenGeometry()
-    mainMindow.resize(rect.width(), rect.height())
+    mainMindow.resize(rect.width()-100, rect.height()-80)
     mainMindow.setWindowTitle('看点自动测试')
     mainMindow.show()
     sys.exit(app.exec_())

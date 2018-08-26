@@ -16,8 +16,6 @@ def getVideoInfo(url):
     text = urllib.request.urlopen(url).read().decode('utf8')
     videoTitle = ruleTitle.findall(text)
     showid = showId.findall(text)
-
-    print(showid)
     videoId = ruleId.findall(url)
     return videoTitle[0], videoId[0], showid[0]
 
@@ -25,8 +23,8 @@ def getRrueLink(videoid, link, showid):
     # url = 'https://acs.youku.com/h5/mtop.youku.play.ups.appinfo.get/1.1/?jsv=2.4.11&appKey=24679788&t=1533086546066&sign=73e9085d64e0bc7f80708d8c4c096fb8&api=mtop.youku.play.ups.appinfo.get&v=1.1&timeout=20000&YKPid=20160317PLF000211&YKLoginRequest=true&type=jsonp&dataType=jsonp&callback=mtopjsonp1&data={"steal_params":"{\"ccode\":\"0502\",\"client_ip\":\"192.168.1.1\",\"utid\":\"iTbUE8VuE3ECAXZyBV8VD0xE\",\"client_ts\":1533086546,\"version\":\"0.5.64\",\"ckey\":\"110#CgCkAUkfkzseyLJegkTuMuy2kMZ/buAMjQkgkGjx81HOJVaTfJF/83scuMF+AIjIjVK3+n4x8f+QlkGq3tdtW39TkuBWeMudjaYAkgax82ZTRcUIbR+qFMlnWS5QUqlm+rVu6w/oQSSirK4rsAkwsziN1w9ij9cwkP5ysn8ysbBJDyEesfSwnake9aZ/sTAu4CFSyL2usFjxkcZws3cwsGkkgOmOoc+Pkk2mswn/DY7f/1kKIsy2DHkkGEm29oFGnwSvpkkX8J0prq971c6hyj0D+pKHL5ssNvQjhpvfcu1pMDJ8UPIVaDYvNylyHhbJ4OZ9x2XjR4PRRh5BZW0XGsym6+1qcO+EEMHJ7U5GpXVOoPRF07y5/yN4vt8psb3NE0l4F8pxvqY9T5r/ePSfJYtZ1k9YwGCqCzG1oiT01nUjBvJCtTACkFm6n56JjSsHJjehjbAhp3kfXBNKGYWqw5S2Y8b9W/8C1Rgfvi+JJK==\"}","biz_params":"{\"vid\":\"XMzYzMjk0MDA2OA==\",\"current_showid\":\"396037\"}","ad_params":"{\"site\":1,\"wintype\":\"interior\",\"p\":1,\"fu\":0,\"vs\":\"1.0\",\"rst\":\"mp4\",\"dq\":\"hd2\",\"os\":\"mac\",\"osv\":\"\",\"d\":\"0\",\"bt\":\"pc\",\"aw\":\"w\",\"needbf\":1,\"atm\":\"\"}"}'
     # url = 'https://acs.youku.com/h5/mtop.youku.play.ups.appinfo.get/1.1/?jsv=2.4.11&appKey=24679788&t=1533091661422&sign=1b1c1fca1e5b797d5f29719ee02983ed&api=mtop.youku.play.ups.appinfo.get&v=1.1&timeout=20000&YKPid=20160317PLF000211&YKLoginRequest=true&type=jsonp&dataType=jsonp&callback=mtopjsonp1&data=%7B%22steal_params%22%3A%22%7B%5C%22ccode%5C%22%3A%5C%220502%5C%22%2C%5C%22client_ip%5C%22%3A%5C%22192.168.1.1%5C%22%2C%5C%22utid%5C%22%3A%5C%22iTbUE8VuE3ECAXZyBV8VD0xE%5C%22%2C%5C%22client_ts%5C%22%3A1533091661%2C%5C%22version%5C%22%3A%5C%220.5.64%5C%22%2C%5C%22ckey%5C%22%3A%5C%22110%23EjskAUkfkzUQHcBAgkTuMuy2kMZ%2FbiJgjQkgkGjx81GSmUTCeWpwN3snkg8VM3J%2F0NB2%2FngqNOnQiKvH3A8ETxzn2IIxPmjgjqwkizJ08MzQvKDCGTUt5EaZNH3%2FOEhTpBntGWfoTzRFiOf9T5KijTkiAfI0Slzis9kk4EKQFeKwtncO9PSwdOgpwTDsp9SwDxIkwYQWs9IiWGUkG9kwj9kimkk3sLsWDsOU%2BrmQsEkmDH2DBFw3Z52D2a2DsLgOkrFYrajM2pUkDoBADvt1%2FH9M6LKykq6o7zsSWOz8Id69kNScB41XgeRom9o7jvnidQqAR5SzjDgCltsYvKAoSaS3JCD1Q8P1gQwYvlpq%2FJ5inEm%2B0mGfWpexmUxGAvC6sg3HQdffJq6tK%2Fpfv7bwofwwONyiQynF%2BKFfbs%2BK2VBAsTj8TPe0DXuTOOhn8qGUqJwkv9zfDxv9dU7HDaqpC9sgGw3l2SbdSLrldr8mp1XhK7my%5C%22%7D%22%2C%22biz_params%22%3A%22%7B%5C%22vid%5C%22%3A%5C%22XMzYzMjk0MDA2OA%3D%3D%5C%22%2C%5C%22current_showid%5C%22%3A%5C%22396037%5C%22%7D%22%2C%22ad_params%22%3A%22%7B%5C%22site%5C%22%3A1%2C%5C%22wintype%5C%22%3A%5C%22interior%5C%22%2C%5C%22p%5C%22%3A1%2C%5C%22fu%5C%22%3A0%2C%5C%22vs%5C%22%3A%5C%221.0%5C%22%2C%5C%22rst%5C%22%3A%5C%22mp4%5C%22%2C%5C%22dq%5C%22%3A%5C%22hd2%5C%22%2C%5C%22os%5C%22%3A%5C%22mac%5C%22%2C%5C%22osv%5C%22%3A%5C%22%5C%22%2C%5C%22d%5C%22%3A%5C%220%5C%22%2C%5C%22bt%5C%22%3A%5C%22pc%5C%22%2C%5C%22aw%5C%22%3A%5C%22w%5C%22%2C%5C%22needbf%5C%22%3A1%2C%5C%22atm%5C%22%3A%5C%22%5C%22%7D%22%7D'
     
-    url = 'https://acs.youku.com/h5/mtop.youku.play.ups.appinfo.get/1.1/?jsv=2.4.11&appKey=24679788&t=1533091661422&sign=1b1c1fca1e5b797d5f29719ee02983ed&api=mtop.youku.play.ups.appinfo.get&v=1.1&timeout=20000&YKPid=20160317PLF000211&YKLoginRequest=true&type=jsonp&dataType=jsonp&callback=mtopjsonp1&data='
-    
+    url = 'https://acs.youku.com/h5/mtop.youku.play.ups.appinfo.get/1.1/?jsv=2.4.11&appKey=24679788&t=1533091661422&sign=1b1c1fca1e5b797d5f29719ee02983ed&api=mtop.youku.play.ups.appinfo.get&v=1.1&timeout=20000&YKPid=20160317PLF000211&YKLoginRequest=true&type=jsonp&dataType=jsonp&callback=mtopjsonp1&data='    
+    # url = 'https://acs.youku.com/h5/mtop.youku.play.ups.appinfo.get/1.1/'
     biz_params = {
         "vid":videoid,
         "current_showid":str(showid)
@@ -39,6 +37,25 @@ def getRrueLink(videoid, link, showid):
     }
 
     data = quote(json.dumps(data), 'utf-8')
+    # print(data)
+
+    return
+    pram = {
+        'jsv': '2.4.11',
+        'appkey': '24679788',
+        't': '1534842071024',
+        'sign': '657220dca238bf7e8f72810352074a93',
+        'api': 'mtop.youku.play.ups.appinfo.get',
+        'v': '1.1',
+        'timeout': '20000',
+        'YKPid': '20160317PLF000211',
+        'YKLoginRequest': 'true',
+        'type': 'json',
+        'dataType': 'jsonp',
+        'callback': 'mtopjsonp1',
+        'data': data
+    }
+
     url = url + data
     # 多空格 替换
     url = url.replace('%20', '')
@@ -86,6 +103,9 @@ def getRrueLink(videoid, link, showid):
 def main():
     link = 'https://v.youku.com/v_show/id_XMzYzMjk0MDA2OA==.html'
     videotitle, videoid, showid = getVideoInfo(link)
+    print(videotitle)
+    print(videoid)
+    print(showid)
     getRrueLink(videoid, link, showid)
 
 

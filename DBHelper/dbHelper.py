@@ -86,8 +86,10 @@ class database:
                 print(str(e))
                 flag = False
         return flag
-
-    def fetchUser(self, sql):
+    
+    # v1.1 查询 
+    def fetch(self, sql):
+        res = []
         if (self._conn):
             try:
                 self._cursor.execute(sql)
@@ -95,44 +97,10 @@ class database:
             except Exception as e:
                 res = []
         return res
-            
-    # 查询
-    def fetch(self, sql, limit=None):
-        # TODO 登录
-        login = gfunc.getLoginNameForLocal()
-        # print(login)
-        if login[0]:
-            if sql.find('where') != -1 or sql.find('WHERE') != -1:
-                extSql = " AND fromUserId = '%s'" % (login[2])
-            else:
-                extSql = " where fromUserId = '%s'" % (login[2])
-        else:
-            return []
 
-        if limit != None:
-            extSql = extSql + "limit 0,%d" % int(limit)
-        res = []
-        # print(sql+extSql)
-        if (self._conn):
-            try:
-                self._cursor.execute(sql+extSql)
-                res = self._cursor.fetchall()
-            except Exception as e:
-                res = []
-        return res
-
-    # 更新
+    # v1.1 更新
     def update(self, sql):
         flag = False
-        # TODO 登录
-        login = gfunc.getLoginNameForLocal()
-        if login[0]:
-            if sql.find('where') != -1 or sql.find('WHERE') != -1:
-                extSql = "AND fromUserId = '%s'" % (login[2])
-            else:
-                extSql = "where fromUserId = '%s'" % (login[2])
-        else:
-            return flag
         if (self._conn):
             try:
                 self._cursor.execute(sql)
@@ -143,7 +111,7 @@ class database:
                 flag = False
         return flag
 
-    # 插入
+    # v1.1 插入
     def inset(self, sql):
         flag = False
         if (self._conn):

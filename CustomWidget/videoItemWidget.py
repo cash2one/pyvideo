@@ -8,6 +8,9 @@ from PyQt5.QtWebEngineWidgets import QWebEngineView
 import webview
 import dbfunc
 import gfunc
+import re
+import subprocess
+
 
 class VideoItem(QWidget):
     """ a widget contains a picture and two line of text """
@@ -20,6 +23,7 @@ class VideoItem(QWidget):
         super().__init__()
         self.callback = callback
         self.video = video
+        self.url = self.video[3]
         title = video[2]
         tags = video[5]
         icon_path = ''
@@ -210,6 +214,8 @@ class VideoItem(QWidget):
     def init_ui(self):
         """handle layout"""
         ly_main = QVBoxLayout()
+        ly_top = QHBoxLayout()
+        ly_top_right = QVBoxLayout()
         ly_right = QVBoxLayout()
         ly_right.addWidget(self.lb_title)
         ly_right.addWidget(self.time)
@@ -234,14 +240,116 @@ class VideoItem(QWidget):
 
         ly_right.addLayout(ly_h_class)
 
-        # ly_right.setAlignment(Qt.AlignVCenter)
-        # ly_main.setAlignment(Qt.AlignVCenter)
         ly_right.setSpacing(2)
         ly_main.fillWidth = True
-        ly_main.addWidget(self.lb_icon)
+        # ly_main.addWidget(self.lb_icon)
+        is_exist_local = self.video[14]
+        text = 'D'
+        if str(is_exist_local) == '1':
+            text = 'E'
+        self.downBtn = QPushButton(text)
+        if str(is_exist_local) == '1':
+            self.downBtn.setEnabled(False)
+        else:
+            self.downBtn.setEnabled(True)
+
+        self.downBtn.clicked.connect(self.downClick)
+
+        ly_top_right.addWidget(self.downBtn)
+
+        if str(is_exist_local) == '1':
+            self.playbtn = QPushButton('P')
+            self.playbtn.clicked.connect(self.playbtnClick)
+            ly_top_right.addWidget(self.playbtn)
+
+            self.qubtn = QPushButton('Q')
+            self.qubtn.clicked.connect(self.qubtnClick)
+            ly_top_right.addWidget(self.qubtn)
+
+
+        ly_top.addWidget(self.lb_icon)
+        ly_top.addLayout(ly_top_right)
+
+        ly_main.addLayout(ly_top)
         ly_main.addLayout(ly_right)
         self.setLayout(ly_main)
         # self.resize(130, 100)
+
+    def qubtnClick(self):
+        # 去水印
+        infile = self.video[15]
+        outfile =  self.video[15].replace('.mp4', '_new.mp4')
+        # 960
+        x = '690'
+        y = '30'
+        w = '135'
+        h = '40'
+        strcmd = ['ffmpeg -i ' +infile+' -vf delogo=x='+x+':y='+y+':w='+w+':h='+h +' '+outfile]
+        result=subprocess.run(args=strcmd,stdout=subprocess.PIPE,shell=True)
+
+        if gfunc.isfile(outfile):
+            print('存入去水印的视频')
+            dic = {
+                'local_path': outfile
+            }
+            dbfunc.updateVideoFromData(self.video[0], dic, 'videos')
+
+
+    def playbtnClick(self):
+        paggname = self.video[15]
+        # 960
+        x = '690'
+        y = '30'
+        w = '135'
+        h = '40'
+        # ffplay -i infile/v0769lodrau.mp4 -vf delogo=x=10:y=10:w=195:h=55:show=1
+        strcmd = ['ffplay -i ' +paggname+' -vf delogo=x='+x+':y='+y+':w='+w+':h='+h+':show=1']
+        result=subprocess.run(args=strcmd,stdout=subprocess.PIPE,shell=True)
+
+    # 下载
+    def downClick(self):
+        base = 'http://192.168.1.23/qq.php?url='
+        url = base+self.url
+        print(url)
+
+        gfunc.createDir('videos')
+
+        res = requests.get(url)
+        text = res.text
+        url = re.findall("http:.*", text)[0]
+        print(url)
+        self.writeFile(url)
+
+    def writeFile(self, url):
+        urlArr = url.split('/')
+        filename = ''
+        for item in urlArr:
+            if item.find('mp4') != -1:
+                print(item)
+                filename = item.split('?')[0]        
+
+        filename = 'videos/'+filename
+        print(filename)
+        isfile = gfunc.isfile(filename)
+        if isfile == False:
+
+            res = requests.get(url)
+            data = res.content
+            with open(filename, "wb") as code:
+                code.write(data)
+
+            print('视频写入文件成功')
+        else:
+            print('视频已经下载')
+
+        # 存入数据库
+        print('存入数据库')
+        dic = {
+            'is_exist_local': '1',
+            'local_path': filename
+        }
+        dbfunc.updateVideoFromData(self.video[0], dic, 'videos')
+        # 处理水印
 
 
     def playClick(self):

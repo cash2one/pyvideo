@@ -162,10 +162,8 @@ class Ffmpeg(QWidget):
         w = self.wLabel.text()
         h = self.hLabel.text()
 
-
         strcmd = ['ffplay -i ' +infile+' -vf delogo=x='+x+':y='+y+':w='+w+':h='+h+':show=1']
         result=subprocess.run(args=strcmd,stdout=subprocess.PIPE,shell=True)
-        print(result)
 
         
     def ffmpegButtonClick(self):

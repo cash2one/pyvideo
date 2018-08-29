@@ -9,7 +9,7 @@ from bs4 import BeautifulSoup
 import dbfunc
 import kandian
 import qq
-from CustomWidget import videoItemWidget, consoleWidget, userWidget
+from CustomWidget import videoItemWidget, consoleWidget, userWidget, Runthead
 import time
 import webview
 import txvideo
@@ -63,6 +63,9 @@ class Home(QWidget):
         currentBtn = QPushButton('当前')
         currentBtn.clicked.connect(self.currentKandianClick)
 
+        allBtn = QPushButton('所有账号')
+        allBtn.clicked.connect(self.allbtnClick)
+
         self.consoleWidget = consoleWidget.MyConsole()
         self.rightVBoxLayout.addWidget(addKandianBtn)
         self.rightVBoxLayout.addWidget(self.combBox)
@@ -70,6 +73,8 @@ class Home(QWidget):
 
         hbox.addWidget(qqBtn)
         hbox.addWidget(currentBtn)
+        self.rightVBoxLayout.addWidget(allBtn)
+
         self.rightVBoxLayout.addWidget(self.consoleWidget)
 
     def centerUI(self):
@@ -132,8 +137,7 @@ class Home(QWidget):
         self.centerListWidget.setViewMode(QListView.IconMode)
         self.centerListWidget.setFlow(QListView.LeftToRight)
         # self.centerListWidget.addItems(['%s' % video[2] for video in self.videos])
-        for video in self.videos:
-            self._setItem(video)
+        self.updateListWedget()
 
         self.centerBottomHLayout = QHBoxLayout()
         self.centerBottomHLayout.setAlignment(Qt.AlignCenter)
@@ -317,15 +321,22 @@ class Home(QWidget):
             print('更新腾讯主播：'+ self.anchors[index][1])
 
             res = dbfunc.fetchVideoFromAnchor(aid)
-            print(self.anchors[index][1] + ' 总共视频数量: '+ str(len(res)))
-            self.centerListWidget.clear()
             self.videos = res
-            for video in self.videos:
-                self._setItem(video)
+
+            self.updateListWedget()
 
     
     # 更新list videos
     def updateListWedget(self):
+        self.runUpdateList()
+
+    def updateList(self):
+        thread = Runthead.Runthread()
+        thread.start()
+
+        thread._signal.connect(self.runUpdateList())
+    
+    def runUpdateList(self):
         print('更新列表：'+str(len(self.videos)))
         self.centerListWidget.clear()
         for video in self.videos:
@@ -357,7 +368,15 @@ class Home(QWidget):
     # 更新当前 videos
     def updateCurrentClick(self):
         self.currentChanged()
-    
+
+    # 上传看点
+
+    def allbtnClick(self):
+        for item in self.kdusers:
+            kandian.login(item[1], item[2])
+            time.sleep(5)
+
+
     # 上传看点 今天的
     def startKandianClick(self):
         index = self.combBox.currentIndex()

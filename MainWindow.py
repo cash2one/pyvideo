@@ -77,5 +77,7 @@ if __name__ == '__main__':
     rect = QApplication.desktop().screenGeometry()
     mainMindow.resize(rect.width(), rect.height())
     mainMindow.setWindowTitle('看点自动测试')
+    # mainMindow.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
+
     mainMindow.show()
     sys.exit(app.exec_())

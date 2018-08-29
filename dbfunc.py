@@ -311,11 +311,7 @@ def fetchTodayVideo():
     sql = "SELECT * FROM videos WHERE create_time >= date_format(NOW(),'%Y-%m-%d')"
     res = db.fetch(sql)
 
-    dd = []
-    for item in res:
-        if item[8].find('小时') != -1:
-            dd.append(item)
-    return dd
+    return res
 
 # TODO 特殊
 def updateAllFromId():

@@ -256,6 +256,7 @@ class VideoItem(QWidget):
         self.downBtn.clicked.connect(self.downClick)
 
         ly_top_right.addWidget(self.downBtn)
+        ly_top_right.setSpacing(2)
 
         if str(is_exist_local) == '1':
             self.playbtn = QPushButton('P')
@@ -275,15 +276,16 @@ class VideoItem(QWidget):
         self.setLayout(ly_main)
         # self.resize(130, 100)
 
+    def getQuRectVideo(self, pagename):
+        width, height = gfunc.getVideoSize(pagename)
+        return gfunc.getQuSize(width, height)
+
     def qubtnClick(self):
         # 去水印
         infile = self.video[15]
         outfile =  self.video[15].replace('.mp4', '_new.mp4')
-        # 960
-        x = '690'
-        y = '30'
-        w = '135'
-        h = '40'
+
+        x, y, w, h = self.getQuRectVideo(infile)
         strcmd = ['ffmpeg -i ' +infile+' -vf delogo=x='+x+':y='+y+':w='+w+':h='+h +' '+outfile]
         result=subprocess.run(args=strcmd,stdout=subprocess.PIPE,shell=True)
 
@@ -298,17 +300,15 @@ class VideoItem(QWidget):
     def playbtnClick(self):
         paggname = self.video[15]
         # 960
-        x = '690'
-        y = '30'
-        w = '135'
-        h = '40'
+        x, y, w, h = self.getQuRectVideo(paggname)
+
         # ffplay -i infile/v0769lodrau.mp4 -vf delogo=x=10:y=10:w=195:h=55:show=1
         strcmd = ['ffplay -i ' +paggname+' -vf delogo=x='+x+':y='+y+':w='+w+':h='+h+':show=1']
         result=subprocess.run(args=strcmd,stdout=subprocess.PIPE,shell=True)
 
     # 下载
     def downClick(self):
-        base = 'http://192.168.1.23/qq.php?url='
+        base = 'http://www.ht9145.com/jx/tencent.php?url='
         url = base+self.url
         print(url)
 

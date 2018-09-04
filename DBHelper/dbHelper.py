@@ -2,6 +2,7 @@
 from DBHelper import mod_config
 import pymysql
 import gfunc
+from PyQt5.QtSql import *
 
 
 #读取配置文件
@@ -39,6 +40,15 @@ def createDB(isNew=None):
     except Exception as e:
         print('create db error: '+str(e))
         return False
+
+def createLocalDB():
+    db = QSqlDatabase.addDatabase("QSQLITE")
+    db.setDatabaseName('./db/Kandian.db')
+    db.open()
+    sql = ('show databases')
+    db.exec_(sql)
+    db.commit()
+
 
 class database:
     def __init__(self, dbname=None, dbhost=None):
@@ -168,7 +178,7 @@ class database:
 
 
 def main():
-    createDB()
+    createLocalDB()
 
 if __name__ == '__main__':
     main()

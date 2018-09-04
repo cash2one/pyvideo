@@ -4,6 +4,10 @@ from config import *
 import random
 import gfunc
 
+def createDB():
+    dbHelper.createLocalDB()
+
+
 # 删除
 def delVideos():
     db = dbHelper.database()
@@ -294,6 +298,22 @@ def fetchVideo(qq, day=None, count=None):
     res = db.fetch(sql, limit=count)
     return res
 
+# 待发布视频
+def fetchTodayWartPublishVideo():
+    db = dbHelper.database()
+    day_sql = "AND create_time >= date_format(NOW(),'%Y-%m-%d')"
+    
+    sql = "SELECT * FROM videos WHERE qq !=0 AND publish_time is null %s" % (day_sql)
+    res = db.fetch(sql)
+    return res
+
+def fetchVideoFormId(ID):
+    db = dbHelper.database()
+    sql = "SELECT * FROM videos WHERE id='%s' " % ID
+    res = db.fetch(sql)
+    return res
+
+
 def fetchVideoFromAlias(qq, alias):
     db = dbHelper.database()
     sql = "SELECT * FROM videos WHERE qq = '%s' AND publish_time is null AND alias = '%s'" % (qq, alias)
@@ -321,7 +341,7 @@ def updateAllFromId():
     db.update("update anchor set fromUserId = '1'")
 
 def main():
-    updateAllFromId()
+    # updateAllFromId()
     # createUser()
     # delVideos()
     # fetchVideoFromAlias('3216598385', 'b')
@@ -329,6 +349,7 @@ def main():
     # createTablekduser()
     # createBaseTable()
     # createTable()
+    createDB()
 
 if __name__ == '__main__':
     main()

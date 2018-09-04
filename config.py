@@ -1,7 +1,8 @@
 # 平台
 PLATFORM = 'MAC'  # MAC WIN
+SQLTYPT = 'mysql'  # mysql qsql
 
-account = '1194332304'
+account = '3216598385'
 
 pwdDic = {
     '1194332304': 'mima1325049637', # 绝地求生 cf 王者荣耀 lol
@@ -34,6 +35,7 @@ Comic33 = [
     '骨傲天',
     '我在皇宫当巨巨',
     '西行纪',
+    '名侦探柯南',
 ]
 
 Comic81 = [
@@ -115,6 +117,7 @@ Teleplay = [
     '如懿传',
     '泡沫之夏',
     '甄嬛传',
+    '沙海',
 ]
 
 # 电影

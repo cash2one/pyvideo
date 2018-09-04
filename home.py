@@ -7,15 +7,18 @@ import qdarkstyle
 import requests
 from bs4 import BeautifulSoup 
 import dbfunc
+import gfunc
 import kandian
 import qq
-from CustomWidget import videoItemWidget, consoleWidget, userWidget, Runthead
+from CustomWidget import videoItemWidget, consoleWidget, userWidget, Runthread
 import time
 import webview
 import txvideo
 import localVideo
 import douyinWidget
 from txVideoWidget import TXVideoWidget
+from Collect import tencent
+
 
 
 class Home(QWidget):
@@ -108,7 +111,7 @@ class Home(QWidget):
         todayVideoBtn = QPushButton('今天视频')
         todayVideoBtn.clicked.connect(self.todayVideoClick)
 
-        notPubAllVideoBtn = QPushButton('未发布视频')
+        notPubAllVideoBtn = QPushButton('下载视频并去水印')
         notPubAllVideoBtn.clicked.connect(self.notPubAllVideoClick)
 
         showVideoNumBtn = QPushButton('展示今天账号视频数量')
@@ -228,9 +231,6 @@ class Home(QWidget):
             f.write(video)
 
 
-
-
-
     def _setItem(self, video):
         QApplication.processEvents()
 
@@ -241,9 +241,6 @@ class Home(QWidget):
 
         videoWidget = videoItemWidget.VideoItem(video, self.kdusers, self.callback)
         self.centerListWidget.setItemWidget(item_widget, videoWidget)  
-
-        QApplication.processEvents()
-
 
     def addUI(self):
         self.setLayout(self.boxLayout)
@@ -282,13 +279,49 @@ class Home(QWidget):
             # QApplication.processEvents()
 
         print(text)
-        self.showVideoNumLabel.setText(text)
+        self.showVideoNumLabel.setText(text)            
 
-    # 未发布的视频
+    # 下载视频并去水印
     def notPubAllVideoClick(self):
-        res = dbfunc.fetchNotPublishedAndQQ()
-        self.videos = res
-        self.updateListWedget()
+        # res = dbfunc.fetchNotPublishedAndQQ()
+        # self.videos = res
+        # self.updateListWedget()
+
+        self.thread = Runthread.Runthread()
+        self.thread._signal.connect(self.callbacklog)
+        self.thread.start()
+
+    def callbacklog(self):
+        res = dbfunc.fetchTodayWartPublishVideo()
+
+        for item in res:
+            is_exist_local = item[14]
+            local_path = item[15]
+            url = item[3]
+            idd = item[0]
+            print(str(idd)+' :  '+local_path)
+            if gfunc.isfile(local_path) == False:
+                # 1. 下载
+                local_path = gfunc.downVideo(url)
+                print(local_path)
+                # 2. 存入数据库
+                print('存入数据库')
+                is_exist_local = '1'
+                dic = {
+                    'is_exist_local': is_exist_local,
+                    'local_path': local_path
+                }
+                dbfunc.updateVideoFromData(idd, dic, 'videos')
+            
+            # 2.去水印
+            outfile = gfunc.watermarks(local_path)
+
+            print('存入去水印的视频')
+            if outfile:
+                dic = { 'local_path': outfile }
+                dbfunc.updateVideoFromData(item[0], dic, 'videos')
+            time.sleep(1)
+        print('下载完成去水印完成')
 
     # 展示当前腾讯视频数量
     def currentVideoNumClick(self):
@@ -328,13 +361,13 @@ class Home(QWidget):
     
     # 更新list videos
     def updateListWedget(self):
-        self.runUpdateList()
+        self.updateList()
 
     def updateList(self):
-        thread = Runthead.Runthread()
-        thread.start()
+        self.listthread = Runthread.Runthread()
+        self.listthread._signal.connect(self.runUpdateList)
+        self.listthread.start()
 
-        thread._signal.connect(self.runUpdateList())
     
     def runUpdateList(self):
         print('更新列表：'+str(len(self.videos)))
@@ -354,16 +387,24 @@ class Home(QWidget):
         print('采集当前主播所有视频')
         index = self.leftListWidget.currentRow()
         print(index)
-        qq.main([self.anchors[index]], page='all')
+        self.collectVideo([self.anchors[index]], page='all')
 
     # 采集腾讯视频
     def collectAllClick(self):
         print('开始采集腾讯视频')
-        qq.main()
+        self.collectVideo()
         print('采集结束')
+    
+    def collectVideo(self, anchors=None, page=None):
+        qq.main(anchors, page)
+        # self.cthread = Runthread.Runthread()
+        # self.cthread._signal.connect(lambda:self.runcollect(anchors, page))
+        # self.cthread.start()
+        # tencent.Tencent(anchors, page)
 
-    def callbackCollectAllVideo(self):
-        qq.main()
+
+    def runcollect(self, anchors=None, page=None):
+        tencent.Tencent(anchors, page)
 
     # 更新当前 videos
     def updateCurrentClick(self):
@@ -371,19 +412,30 @@ class Home(QWidget):
 
     # 上传看点
 
-    def allbtnClick(self):
-        for item in self.kdusers:
-            kandian.login(item[1], item[2])
-            time.sleep(5)
+    def uploadKandian(self, name=None, pwd=None, data=None):
+        # self.uthread = Runthread.Runthread()
+        # self.uthread._signal.connect(lambda:self.runupload(name, pwd, data))
+        # self.uthread.start()
+        self.runupload(name, pwd, data)
 
+    def runupload(self, name, pwd, data):
+        if name == None:
+            for item in self.kdusers:
+                kandian.login(item[1], item[2])
+                time.sleep(5)
+        else:
+            kandian.login(name, pwd, data)
+
+    def allbtnClick(self):
+        self.uploadKandian()
 
     # 上传看点 今天的
     def startKandianClick(self):
         index = self.combBox.currentIndex()
         name = self.kdusers[index][1]
         pwd = self.kdusers[index][2]
-        kandian.login(name, pwd)
-        # print(str(index))
+        self.uploadKandian(name, pwd)
+
     # 当前页选中的
     def currentKandianClick(self):
         data = []
@@ -397,8 +449,7 @@ class Home(QWidget):
             qq = video[1]
             if qq == name and publish_time is None:
                 data.append(video)
-
-        kandian.login(name, pwd, data)
+        self.uploadKandian(name, pwd, data)
 
             
     def addTxClick(self):

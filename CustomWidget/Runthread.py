@@ -17,5 +17,6 @@ class Runthread(QtCore.QThread):
         self.wait()
  
     def run(self):
-        self._signal.emit();
+        self._signal.emit()
+
  

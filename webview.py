@@ -10,7 +10,7 @@ class Form(QMainWindow):
         super(Form, self).__init__(parent)
 
         self.setWindowTitle("client")
-        self.setWindowIcon(QIcon('icons/icon.png'))
+        self.setWindowIcon(QIcon('Source/images/icon.png'))
         self.resize(900, 600)
         self.show()
         # self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
@@ -35,10 +35,10 @@ class Form(QMainWindow):
 
         #QAction类提供了抽象的用户界面action，这些action可以被放置在窗口部件中
         # 添加前进、后退、停止加载和刷新的按钮
-        back_button = QAction(QIcon('icons/back.png'), 'Back', self)
-        next_button = QAction(QIcon('icons/next.png'), 'Forward', self)
-        stop_button = QAction(QIcon('icons/cross.png'), 'stop', self)
-        reload_button = QAction(QIcon('icons/renew.png'), 'reload', self)
+        back_button = QAction(QIcon('Source/images/back.png'), 'Back', self)
+        next_button = QAction(QIcon('Source/images/next.png'), 'Forward', self)
+        stop_button = QAction(QIcon('Source/images/cross.png'), 'stop', self)
+        reload_button = QAction(QIcon('Source/images/renew.png'), 'reload', self)
 
         back_button.triggered.connect(self.browser.back)
         next_button.triggered.connect(self.browser.forward)
@@ -78,9 +78,9 @@ class Form(QMainWindow):
         self.show()
         self.browser.show()
 
-# if __name__ == '__main__':
-#     app = QApplication(sys.argv)
-#     screen = Form()
-#     url = "https://www.baidu.com"
-#     screen.load(url)
-#     sys.exit(app.exec_())
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    screen = Form()
+    url = "https://www.baidu.com"
+    screen.load(url)
+    sys.exit(app.exec_())

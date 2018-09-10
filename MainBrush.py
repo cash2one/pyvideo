@@ -2,6 +2,9 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 import sys
+# import loggor
+import myglobalmodule
+import test04
 
 class MainBrush(QMainWindow):
     def __init__(self):
@@ -9,16 +12,23 @@ class MainBrush(QMainWindow):
         
         self.setupUi()
         self.resize(200, 100)
-        self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
+        # self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
 
     def setupUi(self):
-        pass
+        btn = QPushButton('btn', self)
+        btn.clicked.connect(self.btnAction)
+
         
+    def btnAction(self):
+        loggor.info('MainBrush')
+        test04.run()
+
 
 def main():
     app = QApplication(sys.argv)
     app.setStyle("Fusion")
-    MainBrush()
+    bb = MainBrush()
+    bb.show()
     sys.exit(app.exec_())
 
 

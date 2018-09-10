@@ -3,6 +3,8 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5 import QtCore
+from PyQt5.QtSvg import QSvgWidget
+
 import qdarkstyle
 import requests
 from bs4 import BeautifulSoup 
@@ -18,7 +20,7 @@ import localVideo
 import douyinWidget
 from txVideoWidget import TXVideoWidget
 from Collect import tencent
-
+from config import *
 
 
 class Home(QWidget):
@@ -68,6 +70,8 @@ class Home(QWidget):
 
         allBtn = QPushButton('所有账号')
         allBtn.clicked.connect(self.allbtnClick)
+        kdCollectBtn = QPushButton('看点采集')
+        kdCollectBtn.clicked.connect(self.kdCollectAction)
 
         self.consoleWidget = consoleWidget.MyConsole()
         self.rightVBoxLayout.addWidget(addKandianBtn)
@@ -77,6 +81,8 @@ class Home(QWidget):
         hbox.addWidget(qqBtn)
         hbox.addWidget(currentBtn)
         self.rightVBoxLayout.addWidget(allBtn)
+        self.rightVBoxLayout.addWidget(kdCollectBtn)
+
 
         self.rightVBoxLayout.addWidget(self.consoleWidget)
 
@@ -139,12 +145,45 @@ class Home(QWidget):
         self.centerVBoxLayout.addWidget(self.centerListWidget)
         self.centerListWidget.setViewMode(QListView.IconMode)
         self.centerListWidget.setFlow(QListView.LeftToRight)
+        # self.centerListWidget.verticalScrollBar().actionTriggered.connect(self.onActionTriggered)
+
         # self.centerListWidget.addItems(['%s' % video[2] for video in self.videos])
         self.updateListWedget()
+
+        # self.loadWidget = QSvgWidget(minimumHeight=60, minimumWidth=60, visible=False)
+        # # self.centerVBoxLayout.addWidget(self.loadWidget)
+        # self.loadWidget.load(Svg_icon_loading)
 
         self.centerBottomHLayout = QHBoxLayout()
         self.centerBottomHLayout.setAlignment(Qt.AlignCenter)
         self.centerVBoxLayout.addLayout(self.centerBottomHLayout)
+        # self.loadWidget.setVisible(True)
+
+    # def resizeEvent(self, event):
+    #     super(Home, self).resizeEvent(event)
+    #     self.loadWidget.setGeometry(
+    #         10,
+    #         10,
+    #         self.loadWidget.minimumWidth(),
+    #         self.loadWidget.minimumHeight()
+    #     )
+
+    # def onActionTriggered(self, action):
+    #     # 这里要判断action=QAbstractSlider.SliderMove，可以避免窗口大小改变的问题
+    #     # 同时防止多次加载同一个url
+    #     if action != QAbstractSlider.SliderMove:
+    #         return
+    #     # 使用sliderPosition获取值可以同时满足鼠标滑动和拖动判断
+    #     if self.centerListWidget.verticalScrollBar().sliderPosition() == self.centerListWidget.verticalScrollBar().maximum():
+    #         # 可以下一页了
+    #         self.load()
+
+    # def load(self):
+        # self.loadWidget.setVisible(True)
+        # QTimer.singleShot(5000, self._load)
+
+    # def _load(self):
+        # self.loadWidget.setVisible(False)
 
 
     def addPage(self):
@@ -370,6 +409,8 @@ class Home(QWidget):
 
     
     def runUpdateList(self):
+        # self.loadWidget.setVisible(False)
+
         print('更新列表：'+str(len(self.videos)))
         self.centerListWidget.clear()
         for video in self.videos:
@@ -451,7 +492,10 @@ class Home(QWidget):
                 data.append(video)
         self.uploadKandian(name, pwd, data)
 
-            
+    # 看点采集 需登录看点或者拿到cookes
+    def kdCollectAction(self):
+        brush.main()
+        
     def addTxClick(self):
         value, ok = QInputDialog.getText(self, "添加腾讯用户", "请输入文本uin:", QLineEdit.Normal, "")
 

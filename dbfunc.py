@@ -15,6 +15,45 @@ def delVideos():
     db.update(sql)
     db.close()
 
+# 看点视频
+def createTablekdvideo():
+    db = dbHelper.database()
+    table = 'kdvideo'
+    sql = """create table kdvideo (
+            id int auto_increment primary key, 
+            url varchar(255),
+            title varchar(255),
+            vid varchar(50),
+            num int(30) default 0,
+            kid varchar(20),
+            fromUserId varchar(20)
+        )"""
+    db.createTable(table, sql)
+# 加入
+def addKdvideo(url, title, vid, kid):
+    # login = gfunc.getLoginNameForLocal()
+    # if login[0] == False:
+    #     return False
+    # uid = login[2]
+    flag = False
+    db = dbHelper.database()
+    isExist = db.fetch("select * from kdvideo where vid = '%s'" % vid )
+    if isExist:
+        pass
+    else:
+        uid = '1'
+        sql = "insert into kdvideo (url, title, vid, kid, fromUserId) values ('%s', '%s', '%s', '%s', '%s')" % (url, title, vid, kid, uid)
+        print(sql)
+        flag = db.update(sql)
+        db.close()
+    return flag
+
+def getKdvideo(kid=None):
+    db = dbHelper.database()
+    sql = 'select * from kdvideo'
+    res = db.fetch(sql)
+    return res
+
 # 创建 anchor
 def createBaseTable():
     db = dbHelper.database()
@@ -293,7 +332,7 @@ def fetchVideo(qq, day=None, count=None):
     day_sql = ''
     if day != None:
         day_sql = "AND create_time >= date_format(NOW(),'%Y-%m-%d')"
-    
+        
     sql = "SELECT * FROM videos WHERE qq = '%s' AND publish_time is null %s" % (qq, day_sql)
     res = db.fetch(sql, limit=count)
     return res
@@ -319,8 +358,8 @@ def fetchVideoFromAlias(qq, alias):
     sql = "SELECT * FROM videos WHERE qq = '%s' AND publish_time is null AND alias = '%s'" % (qq, alias)
     res = db.fetch(sql)
     return res
-
-def fetchVideoFromAnchor(aid):
+# 
+def fetchVideoFromAnchor(aid, cousr=0):
     db = dbHelper.database()
     sql = "select * from videos where aid = '%d' and publish_time is null " % int(aid)
     res = db.fetch(sql)
@@ -349,7 +388,8 @@ def main():
     # createTablekduser()
     # createBaseTable()
     # createTable()
-    createDB()
+    # createDB()
+    createTablekdvideo()
 
 if __name__ == '__main__':
     main()

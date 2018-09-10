@@ -120,7 +120,8 @@ class database:
             return []
 
         if limit != None:
-            extSql = extSql + "limit 0,%d" % int(limit)
+            num = 13
+            extSql = extSql + " limit 0,%d" % int(limit)
         res = []
         # print(sql+extSql)
         if (self._conn):

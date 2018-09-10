@@ -22,7 +22,6 @@ def login(name=account, pwd=pwdDic[account], videos=None):
     allnum = 10
 
     makePubNum = allnum - todayPubNum
-
     if videos is None:
         datas = dbfunc.fetchVideo(name, 'today', makePubNum)
     else:
@@ -130,31 +129,45 @@ def isElementExist(browser, xpath):
                 
 # isexist = isElementExist(browser, '//div[@class="video-material-showcase"and@style="display: block;"]')
 def checkUploadSuccess(browser):
-    print('检查视频是否上传成功..')
+    text = '检查视频是否上传成功..'
+    print(text, end='\r')
+    flag = False
     for i in range(0, 200):
-        print('.')
+        text=text+'.'
+        print(text, end='\r')
+
         text_scc = browser.find_by_text('视频上传成功')
         if len(text_scc) > 0:
-            return True
-        time.sleep(2)
-    return False
+            flag = True
+            break
+        time.sleep(1)
+    print('')
+    print('视频上传完成')
+    return flag
 
 def checkImg(browser):
-    print('检查视频封面..')
+    text = '检查视频封面..'
+    print(text, end='\r')
+    flag = False
     for i in range(0, 200):
-        find = False
         try:
             img = browser.find_by_id('video_content_cover_bg_img')[0]
             src = img['src']
-            print('.')
+            text=text+'.'
+            print(text, end='\r')
+
             if len(src) > 20:
-                find = True
+                flag = True
+                break
         except Exception as e:
             pass
-        if find == True:
-            return True
-        time.sleep(2)
-    return False
+
+        time.sleep(1)
+
+    print('')
+    print('视频封面完成')
+
+    return flag
 
 # 发布视频
 def pubVideo(browser, row_url, is_exist_local, local_path):

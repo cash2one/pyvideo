@@ -4,6 +4,9 @@ import sys
 from config import *
 import random
 import json
+import hashlib
+
+
 '''
 分词
 '''
@@ -154,6 +157,12 @@ def getUserName():
 def isLogin():
     data = readJsonFile('app')
     return data['isLogin']
+
+def pwdEncrypt(pwd):
+    hl = hashlib.md5()
+    hl.update(pwd.encode(encoding='utf-8'))
+    md5pwd = hl.hexdigest()
+    return md5pwd
 
         
          

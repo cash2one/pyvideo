@@ -89,23 +89,31 @@ class SignInWidget(QWidget):
 
     def signInCheck(self):
         name = self.lineEdit1.text()
-        password = self.lineEdit2.text()
-        if (name == "" or password == ""):
-            print(QMessageBox.warning(self, "警告", "用户和密码不可为空!", QMessageBox.Yes, QMessageBox.Yes))
+        pwd = self.lineEdit2.text()
+        if (name == "" or pwd == ""):
+            QMessageBox.warning(self, "警告", "用户和密码不可为空!", QMessageBox.Yes, QMessageBox.Yes)
             return
-        # 打开数据库连接
-        res = dbfunc.fetchUserFromName(name)
-        # md5编码
-        hl = hashlib.md5()
-        hl.update(password.encode(encoding='utf-8'))
-        md5password = hl.hexdigest()
 
-        if res == False or len(res) == 0:
-            # TODO 不存在 创建用户
-            dbfunc.insetUser(name, md5password)
-            self.login(name, md5password, None)
+        # 得到所有用户
+        res = dbfunc.getUser({'name': name})  # []
+        if len(res) == 0:
+            # TODO 不存在 提示创建用户
+            reply = QMessageBox.information(self, '温馨提示', '是否创建用户并登陆', QMessageBox.Yes, QMessageBox.No)
+            if reply == QMessageBox.Yes:
+                self.addUser(name, pwd)
+
+            else:
+                pass
         else:
-            self.login(name, md5password, res)
+            self.login(name, pwd, res)
+
+    def addUser(self, name, pwd):
+        res = dbfunc.addUser(name, pwd)
+        if res == True:
+            self.login(name, pwd)
+        else:
+            print('插入用户失败')
+
 
     def login(self, name, password, res=None):
         if res is not None:
@@ -114,13 +122,10 @@ class SignInWidget(QWidget):
                 self.login_signal.emit(name, str(res[0][0]))
             else:
                 # 密码错误
-                print(QMessageBox.information(self, "提示", "密码错误!", QMessageBox.Yes, QMessageBox.Yes))
+                QMessageBox.information(self, "提示", "密码错误!", QMessageBox.Yes, QMessageBox.Yes)
         else:
             # 登录
-            # 
-            print
-            res = dbfunc.fetchUserFromName(name)
-            print(res)
+            res = dbfunc.getUser({'name': name})
             self.login_signal.emit(name, str(res[0][0]))
 
 

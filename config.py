@@ -143,3 +143,57 @@ Movie = [
     '大话西游',
     '人在囧途'
 ]
+
+
+# [创建数据库]
+
+CreateUserSql = """CREATE TABLE user(
+        userId int auto_increment primary key,
+        name varchar(100),
+        pwd varchar(100),
+        md5pwd varchar(100),
+        pic varchar(100)
+        )"""
+
+CreateUploaderSql = """CREATE TABLE uploader(
+                id int auto_increment primary key,
+                account varchar(50),
+                pwd varchar(50),
+                fromUserId int(10),
+                platform varchar(10)，
+                ext varchar(255)
+                )"""
+
+CreateAnchorSql = """CREATE TABLE anchor (
+        aid int auto_increment primary key, 
+        name varchar(100), 
+        uin varchar(100),
+        intr varchar(255),
+        vnum int(10) default 0,
+        page int(10) default 1,
+
+        fromUserId varchar(10),
+        platform varchar(20)
+        )"""
+
+CreateVideosSql = """CREATE TABLE videos (
+                id int auto_increment primary key,
+                qq varchar(20),
+                title varchar(255), 
+                url varchar(255), 
+                alias varchar(255), 
+                tags varchar(255), 
+                first_class varchar(10),
+                second_class varchar(10),
+                platform_create_time varchar(50), 
+                create_time DATETIME, 
+                publish_time DATETIME, 
+                aid varchar(100),
+                vid varchar(50),
+                pic varchar(255),
+                is_exist_local int(1), 
+                local_path varchar(255), 
+                fromUserId int(10),
+                platform varchar(20) )
+                """
+

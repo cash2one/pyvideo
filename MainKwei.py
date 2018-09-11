@@ -10,7 +10,7 @@ class KweiWidget(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.anchors = dbfunc.getAnchorFromPlatform(KuaishouPlatform)
+        self.anchors = dbfunc.getAnchor(KuaishouPlatform)
         self.initUI()
 
     def initUI(self):

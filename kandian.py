@@ -45,38 +45,41 @@ def login(name=account, pwd=pwdDic[account], videos=None):
         driverpath = './Source/win/chromedriver.exe'
 
     # 检查是否下载了
-    print('检查本地是否有一个视频')
-    for item in datas:
-        is_exist_local = item[14]
-        local_path = item[15]
-        url = item[3]
-        idd = item[0]
-        print(str(idd)+' :  '+local_path)
-        # TODO
-        if gfunc.isfile(local_path) == False:
-            # 1. 下载 todo 视频不存在怎么处理
-            local_path = gfunc.downVideo(url)
-            print(local_path)
-            if (local_path):
-            # 2. 存入数据库
-                print('存入数据库')
-                is_exist_local = '1'
-                dic = {
-                    'is_exist_local': is_exist_local,
-                    'local_path': local_path
-                }
-                dbfunc.updateVideoFromData(idd, dic, 'videos')
+    #  start
+    # print('检查本地是否有一个视频')
+    # for item in datas:
+    #     is_exist_local = item[14]
+    #     local_path = item[15]
+    #     url = item[3]
+    #     idd = item[0]
+    #     print(str(idd)+' :  '+local_path)
+    #     # TODO
+    #     if gfunc.isfile(local_path) == False:
+    #         # 1. 下载 todo 视频不存在怎么处理
+    #         local_path = gfunc.downVideo(url)
+    #         print(local_path)
+    #         if (local_path):
+    #         # 2. 存入数据库
+    #             print('存入数据库')
+    #             is_exist_local = '1'
+    #             dic = {
+    #                 'is_exist_local': is_exist_local,
+    #                 'local_path': local_path
+    #             }
+    #             dbfunc.updateVideoFromData(idd, dic, 'videos')
             
-        # 2.去水印
-        if local_path:
-            outfile = gfunc.watermarks(local_path)
+    #     # 2.去水印
+    #     if local_path:
+    #         outfile = gfunc.watermarks(local_path)
 
-        print('存入去水印的视频')
-        if outfile:
-            dic = { 'local_path': outfile }
-            dbfunc.updateVideoFromData(item[0], dic, 'videos')
-        time.sleep(1)
-    print('下载完成去水印完成')
+    #     print('存入去水印的视频')
+    #     if outfile:
+    #         dic = { 'local_path': outfile }
+    #         dbfunc.updateVideoFromData(item[0], dic, 'videos')
+    #     time.sleep(1)
+    # print('下载完成去水印完成')
+    # end
+    
     dataArr = []
     for item in datas:
         res = dbfunc.fetchVideoFormId(item[0])

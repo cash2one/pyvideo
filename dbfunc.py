@@ -54,8 +54,15 @@ def getKdvideo(kid=None):
     res = db.fetch(sql)
     return res
 
+def createMysql():
+    createTableAnchor()
+    createTableVideos()
+    createTablekduser()
+    createTableUser()
+
+
 # 创建 anchor
-def createBaseTable():
+def createTableAnchor():
     db = dbHelper.database()
     table = 'anchor'
     sql = """create table anchor (
@@ -66,12 +73,12 @@ def createBaseTable():
         vnum int(10),
         page int(10) default 1,
         allpage int(10) default 1,
-        fromId int(10),
+        fromUserId int(10),
         ext varchar(255) )"""
     db.createTable(table, sql)
 
 # videos
-def createTable():
+def createTableVideos():
     db = dbHelper.database()
     table = 'videos'
     sql = """CREATE TABLE videos (
@@ -91,7 +98,7 @@ def createTable():
                 pic varchar(255),
                 is_exist_local int(1), 
                 local_path varchar(255), 
-                fromId int(10),
+                fromUserId int(10),
                 ext varchar(255) )
                 """
     res = db.createTable(table, sql)
@@ -109,13 +116,13 @@ def createTablekduser():
                 id int auto_increment primary key,
                 qq varchar(50),
                 pwd varchar(50),
-                fromId int(10),
+                fromUserId int(10),
                 ext varchar(255)
                 )"""
     res = db.createTable(table, sql)
 
 # 创建用户
-def createUser():
+def createTableUser():
     db = dbHelper.database()
     table = 'user'
     sql = """CREATE TABLE user(
@@ -373,23 +380,14 @@ def fetchTodayVideo():
     return res
 
 # TODO 特殊
-def updateAllFromId():
+def updateAllfromUserId():
     db = dbHelper.database()
     db.update("update kduser set fromUserId = '1'")
     db.update("update videos set fromUserId = '1'")
     db.update("update anchor set fromUserId = '1'")
 
 def main():
-    # updateAllFromId()
-    # createUser()
-    # delVideos()
-    # fetchVideoFromAlias('3216598385', 'b')
-    # updateAllVideo()
-    # createTablekduser()
-    # createBaseTable()
-    # createTable()
-    # createDB()
-    createTablekdvideo()
+    createMysql()
 
 if __name__ == '__main__':
     main()

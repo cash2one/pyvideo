@@ -13,7 +13,7 @@ class TencentWidget(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.anchors = dbfunc.getAnchorFromPlatform(TencentPlatform)
+        self.anchors = dbfunc.getAnchor(TencentPlatform)
         self.initUI()
 
     def initUI(self):
@@ -43,7 +43,7 @@ class TencentWidget(QWidget):
     def addAnchorSuccess(self, suc):
         if suc == 'success':
             # 刷新主播
-            self.anchors =  dbfunc.getAnchorFromPlatform(TencentPlatform)
+            self.anchors =  dbfunc.getAnchor(TencentPlatform)
             print('刷新主播列表')
             QApplication.processEvents()
             self.anchorList.updateData(self.anchors)

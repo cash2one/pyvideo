@@ -14,7 +14,7 @@ class UploadWidget(QWidget):
                     {'name': '看点', 'platform': KandianPlatform},
                     {'name': '企鹅号', 'platform': QierhaoPlatform},
                 ]
-        self.uploaders = dbfunc.getUploaderWithPlatform(self.platforms[0]['platform'])
+        self.uploaders = dbfunc.getUploader(self.platforms[0]['platform'])
         self.setUI()
 
     def setUI(self):
@@ -57,12 +57,12 @@ class UploadWidget(QWidget):
 
 
     def callbackSuccess(self, platform):
-        self.uploaders = dbfunc.getUploaderWithPlatform(platform)
+        self.uploaders = dbfunc.getUploader(platform)
         self.account.clear()
         self._setAccount()
 
     def changedPlatform(self):
         index = self.platform.currentIndex()
-        self.uploaders = dbfunc.getUploaderWithPlatform(self.platforms[index]['platform'])
+        self.uploaders = dbfunc.getUploader(self.platforms[index]['platform'])
         self.account.clear()
         self._setAccount()

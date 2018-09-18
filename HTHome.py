@@ -7,7 +7,6 @@ from MainUpload import UploadWidget
 class Home(QWidget):
     def __init__(self):
         super().__init__()
-
         self.setUI()
 
     def setUI(self):

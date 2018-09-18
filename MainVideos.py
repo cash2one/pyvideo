@@ -18,10 +18,10 @@ class VideosWidget(QWidget):
             未填写 分了类 未分类 下载了和未下载
         '''
         self.anchor = anchor
-        self.statusArray = StatusArray
-        self.uploaderArr = dbfunc.getUploaderWithPlatform(KandianPlatform)
-        self.videos = dbfunc.getUnpublishedVideo(self.anchor[0], [0, 13])
-        self.uploaders = dbfunc.getUploaderWithPlatform(KandianPlatform)
+        self.videoStatus = VideoStatus
+        self.videos = dbfunc.getVideos()
+        self.uploaders = dbfunc.getUploader(KandianPlatform)
+
         self.setUI()
         self.setTopUI()
         self.setListWidget()
@@ -48,7 +48,7 @@ class VideosWidget(QWidget):
         self.statusBox.currentIndexChanged.connect(self.statusChanged)
         self.uploaderLab = QLabel(' 上传账号:')
         self.uploaderBox = QComboBox()
-        self.uploaderBox.addItems('%s' % item[1] for item in self.uploaderArr)
+        self.uploaderBox.addItems('%s' % item[1] for item in self.uploaders)
         self.uploaderBox.currentIndexChanged.connect(self.uploaderChanged)
 
         self.topLayout.addWidget(self.statusLab, 0, 0)

@@ -23,7 +23,7 @@ class TencentWidget(QWidget):
         self.anchorList.addBtnClicked_signal.connect(self.addAnchorAction)
         self.anchorList.itemBtnClicked_signal[int].connect(self.anchorRowCollectionAction)
 
-        self.videosWidget = VideosWidget()
+        self.videosWidget = VideosWidget(self.anchors[0])
 
         
         self.mainLayout.addWidget(self.anchorList)
@@ -50,7 +50,8 @@ class TencentWidget(QWidget):
 
     def anchorRowAction(self, row):
         aid = self.anchors[row][0]
-        videos = dbfunc.getNotPublishVideoFromAid(aid, [0, 13])
+        videos = dbfunc.getUnpublishedVideo(aid, [0, 13])
+        self.videosWidget.anchor = self.anchor[row]
         self.videosWidget.updateListData(videos)
 
     # 采集

@@ -122,7 +122,7 @@ def insertUploader(account, pwd, ext, platform):
 
 def getUploaderWithPlatform(platform):
     dic = addFromUserId({'platform': platform})
-    res = selectAllData('uploader', dic)
+    res = selectData('uploader', dic)
     return res
 
 # [ 主播 ]
@@ -187,41 +187,58 @@ def updateVideo(setDic, whereDic):
     flag = updateData('videos', setDic, whereDic)
     return flag
 
+# 获得video
+def getVideo(dic={}, other='', limit=[]):
+    dic = addFromUserId(dic)
+    res = selectData('videos', dic, other, limit)
+    return res
+
+
 # 获得数据库所有的视频
 def getAllVideo(limit=[]):
     dic = addFromUserId()
-    res = selectAllData('videos', dic, limit=limit)
+    res = selectData('videos', dic, limit=limit)
     return res
+
+# 今天采集的
+def getTodayVideo(limit=[]):
+    other = " and create_time >= date_format(NOW(),'%Y-%m-%d')"
+    res = getVideo(other=other, limit=limit)
+    return res
+
+# 今天待发布的
+def getTodayWartpublishVideo(account='', limit=[]):
+    dic = {}
+    if len(account) > 0:
+        dic = { 'qq': account }
+    other = " and create_time >= date_format(NOW(),'%Y-%m-%d') and publish_time is null"
+    return getVideo(dic, other=other, limit=limit)
 
 # 未发布 [0, 13]
-def getNotPublishVideoFromAid(aid, limit=[]):
+def getUnpublishedVideo(aid='', limit=[]):
     dic = { 'aid': aid }
-    dic = addFromUserId(dic)
-    res = selectAllData('videos', dic, 'publish_time is null', limit)
+    other = 'and publish_time is null'
+    return getVideo(dic, other=other, limit=limit)
+
+# 待发布
+def getWartpublishVideo(account='', limit=[]):
+    dic = {}
+    other = 'and publish_time is null'
+    if len(account) > 0:
+        dic['qq'] = account
+    else:
+        other = 'qq!=0 and publish_time is null'
+    return getVideo(dic, other=other, limit=limit)
+
+# 今天已发布视频
+def getTodayPublishedVideo(account='', limit=[]):
+    dic = {}
+    if len(account) > 0:
+        dic = { 'qq': account }
+    other = " and publish_time >= date_format(NOW(),'%Y-%m-%d')"
+    res = getVideo(dic, other=other, limit=limit)
     return res
 
-
-
-
-
-# 今天已发布的视频
-def fetchTodayPublishedVideo(qq):
-    db = dbHelper.database()  
-    day_sql = "AND publish_time >= date_format(NOW(),'%Y-%m-%d')"
-    
-    sql = "SELECT * FROM videos WHERE qq = '%s' %s" % (qq, day_sql)
-
-    res = db.fetch(sql)
-    return res
-
-# 未发布视频 qq
-def fetchNotPublishedAndQQ():
-    db = dbHelper.database()
-    sql = "SELECT * FROM videos WHERE qq!=0 AND publish_time is null"
-    res = db.fetch(sql)
-    if res:
-        return res
-    return []
 
 def fetchVideo(qq, day=None, count=None):
     db = dbHelper.database()
@@ -232,29 +249,6 @@ def fetchVideo(qq, day=None, count=None):
     sql = "SELECT * FROM videos WHERE qq = '%s' AND publish_time is null %s" % (qq, day_sql)
     res = db.fetch(sql, limit=count)
     return res
-
-def fetchVideoFromAlias(qq, alias):
-    db = dbHelper.database()
-    sql = "SELECT * FROM videos WHERE qq = '%s' AND publish_time is null AND alias = '%s'" % (qq, alias)
-    res = db.fetch(sql)
-    return res
-
-def fetchVideoFromAnchor(aid):
-    db = dbHelper.database()
-    sql = "select * from videos where aid = '%d' and publish_time is null " % int(aid)
-    res = db.fetch(sql)
-    return res
-
-def fetchTodayVideo():
-    db = dbHelper.database()
-    sql = "SELECT * FROM videos WHERE create_time >= date_format(NOW(),'%Y-%m-%d')"
-    res = db.fetch(sql)
-
-    dd = []
-    for item in res:
-        if item[8].find('小时') != -1:
-            dd.append(item)
-    return dd
 
 # [ Public ]
 
@@ -282,16 +276,12 @@ def updateData(table, setDic, whereDic):
     return flag
 
 # 获得所有数据 table conditionDic other:publish_time is null create_time >= date_format(NOW(),'%Y-%m-%d' 
-def selectAllData(table, dic={}, other='', limit=[]):
+def selectData(table, dic={}, other='', limit=[]):
     db = dbHelper.database()
     keys = dic.keys()
     sql = 'select * from %s where ' % table + ' and '.join([ key+'='+ "'%s'" % dic[key] for key in keys])
     if len(other) > 0:
-        if sql.find('and') == -1:
-            sql = sql + other
-        else:
-            sql = sql + ' and ' + other
-
+        sql = sql + ' ' + other
     if limit != None and len(limit) == 2:
         sql = sql + " limit %d,%d" % (int(limit[0]),int(limit[1]))
     print(sql)
@@ -301,7 +291,7 @@ def selectAllData(table, dic={}, other='', limit=[]):
 
 # 检查该数据是否存在 table conditionDic
 def checkDataExistToTable(table, conditionDic={}):
-    res = selectAllData(table, conditionDic)
+    res = selectData(table, conditionDic)
     if len(res) > 0:
         return True
     else:

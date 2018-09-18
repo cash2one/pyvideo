@@ -1,3 +1,5 @@
+from enum import Enum
+
 # 平台
 PLATFORM = 'WIN'  # MAC WIN
 
@@ -16,6 +18,20 @@ VPlusBaseUrl = 'http://v.qq.com/vplus/'
 
 # video 状态
 VideoStatus = ['未发布', '今天', '待发布', '已发布']
+# 枚举
+class VideoStatus(Enum):
+    unpublisthed = 1
+    tody         = 2
+    waitpublish  = 3
+    published    = 4
+
+StatusArray = [
+    {'name': '未发布', 'status': VideoStatus.unpublisthed},
+    {'name': '今天', 'status': VideoStatus.tody},
+    {'name': '待发布', 'status': VideoStatus.waitpublish},
+    {'name': '已发布', 'status': VideoStatus.published}
+]
+
 
 account = '2030657847'
 

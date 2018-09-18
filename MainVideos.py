@@ -9,19 +9,18 @@ import time
 from HTQThread import HTQThread
 
 class VideosWidget(QWidget):
-    def __init__(self):
+    def __init__(self, anchor):
         super().__init__()
-
-        
         '''
             video 状态
             1.已发布 账号来查询 今天和昨天的数量 4--10
             2.未发布 今天 以前 填写了所属账号（待发布）以账号查询 
             未填写 分了类 未分类 下载了和未下载
         '''
-        self.videoStatus = VideoStatus
+        self.anchor = anchor
+        self.statusArray = StatusArray
         self.uploaderArr = dbfunc.getUploaderWithPlatform(KandianPlatform)
-        self.videos = dbfunc.getAllVideo([0, 13])
+        self.videos = dbfunc.getUnpublishedVideo(self.anchor[0], [0, 13])
         self.uploaders = dbfunc.getUploaderWithPlatform(KandianPlatform)
         self.setUI()
         self.setTopUI()
@@ -45,7 +44,7 @@ class VideosWidget(QWidget):
     def setTopUI(self):
         self.statusLab = QLabel('发布状态:')
         self.statusBox = QComboBox()
-        self.statusBox.addItems(self.videoStatus)
+        self.statusBox.addItems(item['name'] for item in self.statusArray)
         self.statusBox.currentIndexChanged.connect(self.statusChanged)
         self.uploaderLab = QLabel(' 上传账号:')
         self.uploaderBox = QComboBox()
@@ -88,7 +87,23 @@ class VideosWidget(QWidget):
         self.setListWidget()
 
     def statusChanged(self):
-        pass
+        index = self.statusBox.currentIndex()
+        status = self.statusArray[index]['status']
+        aid = self.anchor[0]
+        if status == VideoStatus.tody:
+            self.videos = dbfunc.getTodayVideo()
+            self.setListWidget()
+        elif status == VideoStatus.unpublisthed:
+            self.videos = dbfunc.getUnpublishedVideo(aid, [0, 13])
+            self.setListWidget()
+        elif status == VideoStatus.waitpublish:
+            self.videos = dbfunc.getWartpublishVideo('', [0, 13])
+            self.setListWidget()
+        elif status == VideoStatus.published:
+            pass
+        
+
+
     def uploaderChanged(self):
         pass
     

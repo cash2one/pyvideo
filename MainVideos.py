@@ -9,7 +9,7 @@ import time
 from HTQThread import HTQThread
 
 class VideosWidget(QWidget):
-    def __init__(self, anchor):
+    def __init__(self, anchor=None):
         super().__init__()
         '''
             video 状态
@@ -19,8 +19,9 @@ class VideosWidget(QWidget):
         '''
         self.anchor = anchor
         self.videoStatus = VideoStatus
+        self.statusArray = StatusArray
         self.videos = dbfunc.getVideos()
-        self.uploaders = dbfunc.getUploader(KandianPlatform)
+        self.uploaders = dbfunc.getUploader(PlatformType.kandian.value)
 
         self.setUI()
         self.setTopUI()

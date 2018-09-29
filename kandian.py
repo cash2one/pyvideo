@@ -10,31 +10,31 @@ from PyQt5.QtWidgets import *
 
 def login(name=account, pwd=pwdDic[account], videos=None):
 
-    print('准备上传看点用户：'+ name)
-    # QApplication.processEvents()
-    todayPub = dbfunc.fetchTodayPublishedVideo(name)
+    # print('准备上传看点用户：'+ name)
+    # # QApplication.processEvents()
+    # todayPub = dbfunc.fetchTodayPublishedVideo(name)
 
-    todayPubNum = len(todayPub)
-    allnum = 10
+    # todayPubNum = len(todayPub)
+    # allnum = 10
 
-    makePubNum = allnum - todayPubNum
+    # makePubNum = allnum - todayPubNum
 
-    if videos is None:
-        datas = dbfunc.fetchVideo(name, 'today', makePubNum)
-    else:
-        if len(videos) <= makePubNum:
-            datas = videos
-        else:
-            datas = videos[0:makePubNum]
+    # if videos is None:
+    #     datas = dbfunc.fetchVideo(name, 'today', makePubNum)
+    # else:
+    #     if len(videos) <= makePubNum:
+    #         datas = videos
+    #     else:
+    #         datas = videos[0:makePubNum]
 
-    # TODO
-    if len(datas) < 10:
-        pass
+    # # TODO
+    # if len(datas) < 10:
+    #     pass
     
-    print('当前账号 '+name+' 可用视频为: '+ str(len(datas)))
+    # print('当前账号 '+name+' 可用视频为: '+ str(len(datas)))
 
-    if len(datas) == 0:
-        return False
+    # if len(datas) == 0:
+    #     return False
     # QApplication.processEvents()
     driverpath = ''
     if PLATFORM == 'MAC':
@@ -48,7 +48,7 @@ def login(name=account, pwd=pwdDic[account], videos=None):
         # Visit URL
         url = LoginURL
         browser.visit(url)
-
+        time.sleep(100000)
         with browser.get_iframe("login_if") as iframe:
             print('正在登录qq: '+name+ '   请稍后...')
             iframe.find_by_id('switcher_plogin').first.click()

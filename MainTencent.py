@@ -13,7 +13,7 @@ class TencentWidget(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.anchors = dbfunc.getAnchor(TencentPlatform)
+        self.anchors = dbfunc.getAnchor(PlatformType.tencent.value)
         self.initUI()
 
     def initUI(self):
@@ -23,7 +23,10 @@ class TencentWidget(QWidget):
         self.anchorList.addBtnClicked_signal.connect(self.addAnchorAction)
         self.anchorList.itemBtnClicked_signal[int].connect(self.anchorRowCollectionAction)
 
-        self.videosWidget = VideosWidget(self.anchors[0])
+        anchor = None
+        if len(self.anchors) > 0 :
+            anchor = self.anchors[0]
+        self.videosWidget = VideosWidget(anchor)
 
         
         self.mainLayout.addWidget(self.anchorList)
@@ -43,7 +46,7 @@ class TencentWidget(QWidget):
     def addAnchorSuccess(self, suc):
         if suc == 'success':
             # 刷新主播
-            self.anchors =  dbfunc.getAnchor(TencentPlatform)
+            self.anchors =  dbfunc.getAnchor(PlatformType.tencent.value)
             print('刷新主播列表')
             QApplication.processEvents()
             self.anchorList.updateData(self.anchors)

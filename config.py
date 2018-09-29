@@ -3,21 +3,38 @@ from enum import Enum
 # 平台
 PLATFORM = 'WIN'  # MAC WIN
 
-# 平台
-TencentPlatform = 'tencent'
-KuaishouPlatform = 'kuaishou'
-
-KandianPlatform = 'kandian'
-QierhaoPlatform = 'qierhao'
-
+if PLATFORM == 'MAC':
+    DRIVERPATH = './Source/mac/chromedriver'
+elif PLATFORM == 'WIN':
+    DRIVERPATH = './Source/win/chromedriver.exe'
+    
 Headers = {
     'user_agent': 'Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)'
 }
 
 VPlusBaseUrl = 'http://v.qq.com/vplus/'
 
-# video 状态
-VideoStatus = ['未发布', '今天', '待发布', '已发布']
+LOGINQiERHAOURL = 'https://om.qq.com/userAuth/index'
+
+# 平台
+class PlatformType(Enum):
+    tencent = 'tencent'
+    kuaishou = 'kuaishou'
+    kandian = 'kandian'
+    qierhao = 'qierhao' 
+
+UploadPlatformData = [
+                    {'name': '看点', 'platform': PlatformType.kandian.value},
+                    {'name': '企鹅号', 'platform': PlatformType.qierhao.value},
+                ]
+
+# 登陆方式
+class LoginType(Enum):
+    account = 'account'
+    qq = 'qq'
+    email = 'email'
+    other = 'other'
+
 # 枚举
 class VideoStatus(Enum):
     unpublisthed = 1
@@ -50,6 +67,11 @@ pwdDic = {
 LoginURL = 'https://kandian.mp.qq.com/vpage/login'
 
 PubVideoURL = 'https://kandian.mp.qq.com/page/video#video_pub'
+
+#[v2]
+Comic = [
+    '灵邪记',
+]
 
 # 动漫
 Comic33 = [
@@ -163,7 +185,7 @@ Movie = [
 
 # [创建数据库]
 
-CreateUserSql = """CREATE TABLE user(
+CreateUserSql = """create table user(
         userId int auto_increment primary key,
         name varchar(100),
         pwd varchar(100),
@@ -176,13 +198,16 @@ CreateUploaderSql = """CREATE TABLE uploader(
                 account varchar(50),
                 pwd varchar(50),
                 fromUserId int(10),
-                platform varchar(10)，
+                platform varchar(10),
+                loginType varchar(10),
+                usableNum int(10),
+                usedTotal int(10),
                 ext varchar(255)
                 )"""
 
 CreateAnchorSql = """CREATE TABLE anchor (
-        aid int auto_increment primary key, 
-        name varchar(100), 
+        aid int auto_increment primary key,
+        name varchar(100),
         uin varchar(100),
         intr varchar(255),
         vnum int(10) default 0,
@@ -195,21 +220,21 @@ CreateAnchorSql = """CREATE TABLE anchor (
 CreateVideosSql = """CREATE TABLE videos (
                 id int auto_increment primary key,
                 qq varchar(20),
-                title varchar(255), 
-                url varchar(255), 
-                alias varchar(255), 
-                tags varchar(255), 
+                title varchar(255),
+                url varchar(255),
+                alias varchar(255),
+                tags varchar(255),
                 first_class varchar(10),
                 second_class varchar(10),
-                platform_create_time varchar(50), 
-                create_time DATETIME, 
-                publish_time DATETIME, 
+                platform_create_time varchar(50),
+                create_time DATETIME,
+                publish_time DATETIME,
                 aid varchar(100),
                 vid varchar(50),
                 pic varchar(255),
-                is_exist_local int(1), 
-                local_path varchar(255), 
+                is_exist_local int(1),
+                local_path varchar(255),
                 fromUserId int(10),
-                platform varchar(20) )
-                """
+                platform varchar(20) 
+                )"""
 

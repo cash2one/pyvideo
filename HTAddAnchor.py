@@ -62,7 +62,7 @@ class AddAnchor(QWidget):
         # 3 验证数据库中是否存在 uin platform fromUserId
         dd = {
             'uin': uin,
-            'platform': TencentPlatform,
+            'platform': PlatformType.tencent.value,
             'fromUserId': gfunc.getUserId()
         }
         isExist = dbfunc.checkAnchor(dd)
@@ -84,7 +84,7 @@ class AddAnchor(QWidget):
             'uin': uin,
             'intr': intr,
             'vnum': vnum,
-            'platform': TencentPlatform
+            'platform': PlatformType.tencent.value
         }
 
         flag = dbfunc.addAnchor(dic)

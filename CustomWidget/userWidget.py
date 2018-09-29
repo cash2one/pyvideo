@@ -3,6 +3,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 import sys
 import dbfunc
+from config import *
 
 class UserWidget(QWidget):
 
@@ -52,7 +53,12 @@ class UserWidget(QWidget):
             QMessageBox.warning(self, '', "请输入账号和密码", QMessageBox.Yes)
             return
         platform = self.platformItem['platform']
-        res = dbfunc.insertUploader(name, pwd, ext, platform)
+        # 登陆方式 qq email
+        loginType = LoginType.qq.value
+        if name.find('@') != -1:
+            loginType = LoginType.email.value
+
+        res = dbfunc.insertUploader(name, pwd, ext, platform, loginType)
 
         if res:
             print('添加'+self.platformItem['name']+'用户成功：' + name)

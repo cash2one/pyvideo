@@ -43,7 +43,7 @@ def addVideo(video, aid):
         'is_exist_local': 0,
         'local_path': '',
         'fromUserId': gfunc.getUserId(),
-        'platform': TencentPlatform
+        'platform': PlatformType.tencent.value
     }
     # 
     dbfunc.insertVideo(dic)

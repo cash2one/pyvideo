@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import *
 from MainTencent import TencentWidget
 from MainKwei import KweiWidget
 from MainUpload import UploadWidget
+from MainLocal import LocalWidget
 
 class Home(QWidget):
     def __init__(self):
@@ -17,8 +18,10 @@ class Home(QWidget):
 
         self.tencent = TencentWidget()
         self.kwei = KweiWidget()
+        self.local = LocalWidget()
         self.tab.addTab(self.tencent, '腾讯视频')
         self.tab.addTab(self.kwei, '快手视频')
+        self.tab.addTab(self.local, '本地视频')
 
         self.mainLayout.addWidget(self.tab)
         self.mainLayout.addWidget(self.upload)

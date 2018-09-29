@@ -27,6 +27,13 @@ def participle(str):
     
     return res_list
 
+# [v2]
+def classFromTitle(title):
+    for item in Comic:
+        if title.find(item) != -1:
+            return ['动漫', '动漫']
+    return ['', '']
+
 def classFromTags(tags):
     # 动漫 3 3327083625 810359132 3056371919
     for item in Comic33:

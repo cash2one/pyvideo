@@ -13,10 +13,10 @@ def delVideos():
 
 def createTable():
     db = dbHelper.database()
-    db.createTable(CreateUserSql, 'User')
-    db.createTable(CreateUploaderSql, 'uploader')
-    db.createTable(CreateAnchorSql, 'anchor')
-    db.createTable(CreateVideosSql, 'videos')
+    db.createTable('User', CreateUserSql)
+    db.createTable('uploader', CreateUploaderSql)
+    db.createTable('anchor', CreateAnchorSql)
+    db.createTable('videos', CreateVideosSql)
 
 def getUser(dic={}):
     return getData('user', dic)
@@ -35,14 +35,15 @@ def addUser(name, pwd, pic=''):
 
 # [ uploader ]
 
-def insertUploader(account, pwd, ext, platform):
+def insertUploader(account, pwd, ext, platform, loginType):
     if gfunc.isLogin == False:
         return False
     dic = {
         'account': account,
         'pwd': pwd,
         'ext': ext,
-        'platform': platform
+        'platform': platform,
+        'loginType': loginType
     }
     dic = addFromUserId(dic)
 
@@ -110,7 +111,6 @@ def updateVideo(setDic, whereDic):
     flag = updateData('videos', setDic, whereDic)
     return flag
 
-<<<<<<< HEAD
 # 获得video
 def getVideo(dic={}, other='', limit=[]):
     dic = addFromUserId(dic)
@@ -136,8 +136,6 @@ def getVideos(data={}, other='', cursor=0):
     count = 9
     limit = [int(cursor), int(cursor)+count]
     return getData('videos', dic, other, limit)
-
-def getVideos
 
 # 未发布 [0, 13]
 def getNotPublishVideoFromAid(aid, limit=[]):
@@ -253,7 +251,8 @@ def updateAllFromUserId():
     db.update("update videos set fromUserId = '1'")
     db.update("update anchor set fromUserId = '1'")
 
-def main():    
+def main():  
+    # createTable()  
     pass
 
 if __name__ == '__main__':

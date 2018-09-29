@@ -5,16 +5,16 @@ from PyQt5.QtCore import *
 import dbfunc
 from config import *
 from CustomWidget import userWidget, consoleWidget
+from HTUpload import Upload
+from MainLocal import LocalWidget
 
 class UploadWidget(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.platforms = [
-                    {'name': '看点', 'platform': KandianPlatform},
-                    {'name': '企鹅号', 'platform': QierhaoPlatform},
-                ]
-        self.uploaders = dbfunc.getUploader(self.platforms[0]['platform'])
+        self.platforms = UploadPlatformData
+        self.selectPlatfrom = self.platforms[0]['platform']
+        self.uploaders = dbfunc.getUploader(self.selectPlatfrom)
         self.setUI()
 
     def setUI(self):
@@ -31,10 +31,13 @@ class UploadWidget(QWidget):
         self._setAccount()
         self.consoleWidget = consoleWidget.MyConsole()
 
+        self.uploadBtn = QPushButton('上传')
+        self.uploadBtn.clicked.connect(self.uploadAction)
 
         self.mainLayout.addWidget(self.platform)
         self.mainLayout.addWidget(self.addBtn)
         self.mainLayout.addWidget(self.account)
+        self.mainLayout.addWidget(self.uploadBtn)
         # self.mainLayout.addWidget(self.consoleWidget)
 
 
@@ -55,7 +58,6 @@ class UploadWidget(QWidget):
         self.user.show()
         self.user.raise_()
 
-
     def callbackSuccess(self, platform):
         self.uploaders = dbfunc.getUploader(platform)
         self.account.clear()
@@ -63,6 +65,14 @@ class UploadWidget(QWidget):
 
     def changedPlatform(self):
         index = self.platform.currentIndex()
-        self.uploaders = dbfunc.getUploader(self.platforms[index]['platform'])
+        self.selectPlatfrom = self.platforms[index]['platform']
+        self.uploaders = dbfunc.getUploader(self.selectPlatfrom)
         self.account.clear()
         self._setAccount()
+
+    # 上传
+    def uploadAction(self):
+        data = LocalWidget().getData()
+        print(data)
+        upload = Upload(self.selectPlatfrom, data)
+        upload.run()

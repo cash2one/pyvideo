@@ -52,13 +52,7 @@ def classFromTags(tags):
     for item in Gamewz:
         if tags.find(item) != -1:
             # 随机   
-            flag = random.choice('ab')
-            qq = '3216598385'
-            if flag == 'a':
-                qq = '3216598385'
-            elif flag == 'b':
-                qq = '2030657847'
-            return ['游戏', '游戏', qq]
+            return ['游戏', '游戏', '2030657847']
 
     for item in Variety:
         if tags.find(item) != -1:
@@ -220,20 +214,24 @@ def writeFile(url):
             filename = item.split('?')[0]        
 
     filename = 'videos/'+filename
-    print(filename)
+    # print(filename)
     is_file = isfile(filename)
     if is_file == False:
-        res = requests.get(url)
+        try:
+            res = requests.get(url, timeout=Timeout)
+            data = res.content
+            with open(filename, "wb") as code:
+                if data:
+                    code.write(data)
+                else:
+                    writeFile(url)
+                    return
+        except Exception as e:
+            print(str(e))
+            return
         
         # with closing(requests.get(url)) as response:
-        data = res.content
-        with open(filename, "wb") as code:
-            if data:
-                code.write(data)
-            else:
-                writeFile(url)
-                return
-
+        
         print('视频写入文件成功')
     else:
         print('视频已经下载')

@@ -6,7 +6,9 @@ from splinter import Browser
 import dbfunc
 from config import *
 from PyQt5.QtWidgets import *
-import gfunc
+import gfunc    
+from io import BytesIO
+from PIL import Image
 
 
 def login(name=account, pwd=pwdDic[account], videos=None):
@@ -14,7 +16,7 @@ def login(name=account, pwd=pwdDic[account], videos=None):
     print('准备上传看点用户：'+ name)
     # QApplication.processEvents()
 
-    headless = True
+    headless = False
 
     todayPub = dbfunc.fetchTodayPublishedVideo(name)
 
@@ -44,47 +46,49 @@ def login(name=account, pwd=pwdDic[account], videos=None):
     elif PLATFORM == 'WIN':
         driverpath = './Source/win/chromedriver.exe'
 
+    # start
     # 检查是否下载了
-    #  start
-    # print('检查本地是否有一个视频')
-    # for item in datas:
-    #     is_exist_local = item[14]
-    #     local_path = item[15]
-    #     url = item[3]
-    #     idd = item[0]
-    #     print(str(idd)+' :  '+local_path)
-    #     # TODO
-    #     if gfunc.isfile(local_path) == False:
-    #         # 1. 下载 todo 视频不存在怎么处理
-    #         local_path = gfunc.downVideo(url)
-    #         print(local_path)
-    #         if (local_path):
-    #         # 2. 存入数据库
-    #             print('存入数据库')
-    #             is_exist_local = '1'
-    #             dic = {
-    #                 'is_exist_local': is_exist_local,
-    #                 'local_path': local_path
-    #             }
-    #             dbfunc.updateVideoFromData(idd, dic, 'videos')
+     
+    print('检查本地是否有一个视频')
+    for item in datas:
+        is_exist_local = item[14]
+        local_path = item[15]
+        url = item[3]
+        idd = item[0]
+        print(str(idd)+' :  '+local_path)
+        # TODO
+        if gfunc.isfile(local_path) == False:
+            # 1. 下载 todo 视频不存在怎么处理
+            local_path = gfunc.downVideo(url)
+            print(local_path)
+            if (local_path):
+            # 2. 存入数据库
+                print('存入数据库')
+                is_exist_local = '1'
+                dic = {
+                    'is_exist_local': is_exist_local,
+                    'local_path': local_path
+                }
+                dbfunc.updateVideoFromData(idd, dic, 'videos')
             
-    #     # 2.去水印
-    #     if local_path:
-    #         outfile = gfunc.watermarks(local_path)
+        # 2.去水印
+        if local_path:
+            outfile = gfunc.watermarks(local_path)
 
-    #     print('存入去水印的视频')
-    #     if outfile:
-    #         dic = { 'local_path': outfile }
-    #         dbfunc.updateVideoFromData(item[0], dic, 'videos')
-    #     time.sleep(1)
-    # print('下载完成去水印完成')
-    # end
+        print('存入去水印的视频')
+        if outfile:
+            dic = { 'local_path': outfile }
+            dbfunc.updateVideoFromData(item[0], dic, 'videos')
+        time.sleep(1)
+    print('下载完成去水印完成')
     
+    # end
+
     dataArr = []
     for item in datas:
         res = dbfunc.fetchVideoFormId(item[0])
         dataArr.append(res[0])
-
+    # dataArr = datas
 
     with Browser('chrome', executable_path=driverpath, headless=headless) as browser:
         # Visit URL
@@ -100,7 +104,17 @@ def login(name=account, pwd=pwdDic[account], videos=None):
 
             iframe.find_by_id("login_button").first.click()
 
-        time.sleep(5)
+            time.sleep(1)
+        
+            # 验证是否有验证码
+            vcode = iframe.find_by_id('newVcodeIframe')
+            if len(vcode) > 0:
+                # 图形验证码
+                print('需验证图形码')
+                time.sleep(20)
+            else:
+                time.sleep(4)
+
         print('看点账号：'+ name +' 登录成功')
         for i in range(0, len(dataArr)):
             # data = datas[len(datas)-i-1]
@@ -192,7 +206,7 @@ def pubVideo(browser, row_url, is_exist_local, local_path):
             if ss == False:
                 return False
         else:
-            # 腾讯在线
+        # 腾讯在线
             browser.find_by_id('select_from_video_url').first.click()
             time.sleep(1)
             # 链接
@@ -230,8 +244,8 @@ def start(data, browser):
     is_exist_local = data[14]
     local_path = data[15]
     print(is_exist_local)
-    if str(is_exist_local) == '0':
-        return
+    # if str(is_exist_local) == '0':
+    #     return
 
     pubStart(browser, url, is_exist_local, local_path)
  
@@ -285,5 +299,7 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
 
 

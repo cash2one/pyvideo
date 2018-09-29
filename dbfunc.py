@@ -387,7 +387,8 @@ def updateAllfromUserId():
     db.update("update anchor set fromUserId = '1'")
 
 def main():
-    createMysql()
+    # createMysql()
+    pass
 
 if __name__ == '__main__':
     main()

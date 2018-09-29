@@ -5,7 +5,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 
 import subprocess
-
+import os
 
 class Ffmpeg(QWidget):
     def __init__(self):
@@ -29,7 +29,7 @@ class Ffmpeg(QWidget):
         self.yLabel = QLineEdit("45")
         # self.yLabel.setFrameStyle(QFrame.Panel|QFrame.Sunken)
         self.wLabel = QLineEdit("195")
-        # self.wLable.setFrameStyle(QFrame.Panel|QFrame.Sunken)
+        # self.wLabel.setFrameStyle(QFrame.Panel|QFrame.Sunken)
         self.hLabel = QLineEdit("55")
         # self.hLabel.setFrameStyle(QFrame.Panel|QFrame.Sunken
 
@@ -110,7 +110,7 @@ class Ffmpeg(QWidget):
 
         x = self.xLabel.text()
         y = self.yLabel.text()
-        w = self.wLable.text()
+        w = self.wLabel.text()
         h = self.hLabel.text()
 
         path = 'infile'

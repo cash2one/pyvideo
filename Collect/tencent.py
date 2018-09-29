@@ -4,6 +4,7 @@ import gfunc
 import re
 import json
 import math
+import time
 
 '''
 todo 分布式采集

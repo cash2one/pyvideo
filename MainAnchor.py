@@ -10,6 +10,7 @@ class AnchorList(QWidget):
     clicked_signal = pyqtSignal(int)
     addBtnClicked_signal = pyqtSignal()
     itemBtnClicked_signal = pyqtSignal(int)
+    collectLatest_signal = pyqtSignal()
     # data [[aid, name, uin, intr, vnum, page, fromUserId, fromPlatform], []]
     def __init__(self, btnTitle='', data=[]):
         super().__init__()
@@ -23,6 +24,8 @@ class AnchorList(QWidget):
         self.mainLayout = QVBoxLayout()
         self.addBtn = QPushButton(self.btnTitle)
         self.addBtn.clicked.connect(self.addBtnAction)
+        self.collectLatestBtn = QPushButton('采集最新视频')
+        self.collectLatestBtn.clicked.connect(self.collectLatestAction)
         self.listWidget = QListWidget()
         self.listWidget.setCurrentRow(0)
         self.listWidget.clicked.connect(self.clickedAction)
@@ -34,6 +37,7 @@ class AnchorList(QWidget):
 
         self.setLayout(self.mainLayout)
         self.mainLayout.addWidget(self.addBtn)
+        self.mainLayout.addWidget(self.collectLatestBtn)
         self.mainLayout.addWidget(self.listWidget)
 
     def _renderItem(self, item, index):
@@ -74,3 +78,7 @@ class AnchorList(QWidget):
     def addBtnAction(self):
         if self.addBtnClicked_signal:
             self.addBtnClicked_signal.emit()
+
+    def collectLatestAction(self):
+        if self.collectLatest_signal:
+            self.collectLatest_signal.emit()

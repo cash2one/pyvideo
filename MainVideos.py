@@ -7,6 +7,7 @@ from CustomWidget import videoItemWidget
 import dbfunc
 import time
 from HTQThread import HTQThread
+from global_data import global_data
 
 class VideosWidget(QWidget):
     def __init__(self, anchor=None):
@@ -21,7 +22,6 @@ class VideosWidget(QWidget):
         self.videoStatus = VideoStatus
         self.statusArray = StatusArray
         self.videos = dbfunc.getVideos()
-        self.uploaders = dbfunc.getUploader(PlatformType.kandian.value)
 
         self.setUI()
         self.setTopUI()
@@ -42,6 +42,12 @@ class VideosWidget(QWidget):
         self.mainLayout.addWidget(self.listWidget)
         self.setLayout(self.mainLayout)
 
+    # TODO 更新上传者 外部
+    def updateUploaderBox(self):
+    
+        self.uploaderBox.clear()
+        # self.uploaderBox.addItems('%s' % item[1] for item in global_data.UploaderArray)
+
     def setTopUI(self):
         self.statusLab = QLabel('发布状态:')
         self.statusBox = QComboBox()
@@ -49,7 +55,7 @@ class VideosWidget(QWidget):
         self.statusBox.currentIndexChanged.connect(self.statusChanged)
         self.uploaderLab = QLabel(' 上传账号:')
         self.uploaderBox = QComboBox()
-        self.uploaderBox.addItems('%s' % item[1] for item in self.uploaders)
+        self.uploaderBox.addItems('%s' % item[1] for item in global_data.UploaderArray)
         self.uploaderBox.currentIndexChanged.connect(self.uploaderChanged)
 
         self.topLayout.addWidget(self.statusLab, 0, 0)
@@ -80,7 +86,7 @@ class VideosWidget(QWidget):
         item_widget.setSizeHint(QSize(210, 305))
         self.listWidget.addItem(item_widget)
 
-        videoWidget = videoItemWidget.VideoItem(video, self.uploaders)
+        videoWidget = videoItemWidget.VideoItem(video)
         self.listWidget.setItemWidget(item_widget, videoWidget)  
 
     def updateListData(self, videos):

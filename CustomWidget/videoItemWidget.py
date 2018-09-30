@@ -6,13 +6,14 @@ import requests
 from CustomWidget import labelButton
 import dbfunc
 import gfunc
+from global_data import global_data 
 
 class VideoItem(QWidget):
     """ a widget contains a picture and two line of text """
 
 
 
-    def __init__(self, video, uploaders):
+    def __init__(self, video):
         """
         :param title: str title
         :param subtitle: str subtitle
@@ -67,8 +68,8 @@ class VideoItem(QWidget):
         else:
             qqArr = ['']
             index = 0
-            for i in range(0, len(uploaders)):
-                item = uploaders[i][1]
+            for i in range(0, len(global_data.UploaderArray)):
+                item = global_data.UploaderArray[i][1]
                 qqArr.append(item)
                 if item == qq:
                     index = i+1

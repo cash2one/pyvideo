@@ -114,14 +114,14 @@ def updateVideo(setDic, whereDic):
 # 获得video
 def getVideo(dic={}, other='', limit=[]):
     dic = addFromUserId(dic)
-    res = selectData('videos', dic, other, limit)
+    res = getData('videos', dic, other, limit)
     return res
 
 
 # 获得数据库所有的视频
 def getAllVideo(limit=[]):
     dic = addFromUserId()
-    res = selectData('videos', dic, limit=limit)
+    res = getData('videos', dic, limit=limit)
     return res
 
 # 今天采集的

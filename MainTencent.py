@@ -7,7 +7,7 @@ from MainAnchor import AnchorList
 from config import *
 from HTAddAnchor import AddAnchor
 from MainVideos import VideosWidget
-import qq
+from Collect import tencent
 
 class TencentWidget(QWidget):
     def __init__(self):
@@ -22,6 +22,7 @@ class TencentWidget(QWidget):
         self.anchorList.clicked_signal[int].connect(self.anchorRowAction)
         self.anchorList.addBtnClicked_signal.connect(self.addAnchorAction)
         self.anchorList.itemBtnClicked_signal[int].connect(self.anchorRowCollectionAction)
+        self.anchorList.collectLatest_signal.connect(self.collectLatestAction)
 
         anchor = None
         if len(self.anchors) > 0 :
@@ -54,12 +55,19 @@ class TencentWidget(QWidget):
     def anchorRowAction(self, row):
         aid = self.anchors[row][0]
         videos = dbfunc.getUnpublishedVideo(aid, [0, 13])
-        self.videosWidget.anchor = self.anchor[row]
+        self.videosWidget.anchor = self.anchors[row]
         self.videosWidget.updateListData(videos)
 
     # 采集
     def anchorRowCollectionAction(self, row):
         anchor = self.anchors[row]
-        qq.main([anchor], 'all')
+        tencent.Tencent([anchor], CollectType.latest).start()
+
+    # 采集最新视频
+    def collectLatestAction(self):
+        tc = tencent.Tencent().start()
+
+    def updateUploader(self):
+        self.videosWidget.updateUploaderBox()
         
 

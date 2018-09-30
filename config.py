@@ -1,7 +1,7 @@
 from enum import Enum
 
 # 平台
-PLATFORM = 'WIN'  # MAC WIN
+PLATFORM = 'MAC'  # MAC WIN
 
 if PLATFORM == 'MAC':
     DRIVERPATH = './Source/mac/chromedriver'
@@ -35,7 +35,7 @@ class LoginType(Enum):
     email = 'email'
     other = 'other'
 
-# 枚举
+# 枚举 视频状态
 class VideoStatus(Enum):
     unpublisthed = 1
     tody         = 2
@@ -48,6 +48,12 @@ StatusArray = [
     {'name': '待发布', 'status': VideoStatus.waitpublish},
     {'name': '已发布', 'status': VideoStatus.published}
 ]
+
+# 采集类型 最新 所有
+class CollectType(Enum):
+    latest = 1  # 最新
+    allpage = 2    # 所有页面
+    alllatest = 3     # 所有账号最新
 
 
 account = '2030657847'
@@ -69,118 +75,96 @@ LoginURL = 'https://kandian.mp.qq.com/vpage/login'
 PubVideoURL = 'https://kandian.mp.qq.com/page/video#video_pub'
 
 #[v2]
-Comic = [
-    '灵邪记',
-]
+# 视频类型
+class VideoType(Enum):
+    comic = 1
+    movie = 2
+    game = 3
+    tv = 4
 
-# 动漫
-Comic33 = [
-    '盛世妆娘',
-    '魔道祖师',
-    '武庚纪',
-    '秦时明月',
-    '狐妖小红娘',
-    '火影忍者',
-    '博人传',
-    '海贼王',
-    '刺客伍六七',
-    '天行九歌',
-    '骨傲天',
-    '我在皇宫当巨巨',
-]
 
-Comic81 = [
-    '蜡笔小新',
-    '爆笑虫子',
-    '禽兽超人',
-    '搞笑小动画', 
-    '王者荣耀动漫',
-    '峡谷重案组',
-    '搞笑动画',
-    '吃鸡大作战',
-    '火线传奇',
-    '非人哉',
-]
+Classly = {
+    '3327083625': {'type': VideoType.comic, 'data': [
+        '盛世妆娘',
+        '魔道祖师',
+        '武庚纪',
+        '秦时明月',
+        '狐妖小红娘',
+        '火影忍者',
+        '博人传',
+        '海贼王',
+        '刺客伍六七',
+        '天行九歌',
+        '骨傲天',
+        '我在皇宫当巨巨',
+    ]},
+    '810359132': {'type': VideoType.comic, 'data': [
+        '爆笑虫子',
+        '搞笑小动画', 
+        '王者荣耀动漫',
+        '峡谷重案组',
+        '搞笑动画',
+        '吃鸡大作战',
+        '火线传奇',
+        '非人哉',
+    ]},
+    '3056371919': {'type': VideoType.comic, 'data': [
+        '一禅小和尚',
+        '哆啦A梦',
+        '猫和老鼠',
+        '憨豆先生动画版'
+    ]},
+    '1194332304': {'type': VideoType.comic, 'data': [
+        '蜡笔小新',
 
-Comic30 = [
-    '一禅小和尚',
-    '哆啦A梦',
-    '猫和老鼠',
-    '憨豆先生动画版'
-]
+    ]},
+    '3216598385': {'type': VideoType.comic, 'data': [
+        '禽兽超人',
 
-# 游戏
-Gamelol = [
-    '徐老师来巡山',
-    'LOL',
-    'lol',
-    '英雄联盟',
-    '小学生炸了'
-]
+    ]},
 
-Gamewz = [
-    '王者荣耀',
-]
+    '2030657847': {'type': VideoType.game, 'data': [
+        '徐老师来巡山',
+        'LOL',
+        'lol',
+        '英雄联盟',
+        '小学生炸了',
+        '王者荣耀',
+        '绝地求生',
+        '刺激战场',
+        'CF手游',
+        '穿越火线',
 
-Gamecj = [
-    '绝地求生',
-    '刺激战场',
-]
+    ]},
+    '1325049637': {'type': VideoType.tv, 'data': [
+        '扶摇',
+        '甜蜜暴击',
+        '流星花园',
+        '香蜜沉沉烬如霜',
+        '香蜜沉沉',
+        '延禧攻略',
+        '楚乔传',
+        '情深深雨濛濛',
+        '爱情公寓',
+        '还珠格格',
+    ]},
+    '169964440': {'type': VideoType.movie, 'data': [
+        '唐人街探案',
+        '唐伯虎点秋香',
+        '周星驰',
+        '成龙',
+        '刘德华',
+        '周润发',
+        '赌侠',
+        '赌圣',
+        '林正英',
+        '让子弹飞',
+        '大话西游',
+        '人在囧途'
+    ]},
 
-Gamecj_cf = [
-    '绝地求生',
-    '刺激战场',
-    'CF手游',
-    '穿越火线',
-]
 
-Games = [
-    '徐老师来巡山',
-    'LOL',
-    'lol',
-    '英雄联盟',
-    '王者荣耀',
-    '绝地求生',
-    '刺激战场',
-    'CF手游',
-    '穿越火线',
-]
-
-# Variety 综艺
-Variety = [
-    '中餐厅',
-    '明日之子'
-]
-
-# teleplay 电视剧
-Teleplay = [
-    '扶摇',
-    '甜蜜暴击',
-    '流星花园',
-    '香蜜沉沉烬如霜',
-    '香蜜沉沉',
-    '延禧攻略',
-    '楚乔传',
-    '情深深雨濛濛',
-    '爱情公寓',
-    '还珠格格',
-]
-
-# 电影
-Movie = [
-    '唐人街探案',
-    '唐伯虎点秋香',
-    '周星驰',
-    '成龙',
-    '刘德华',
-    '周润发',
-    '赌侠',
-    '赌圣',
-    '林正英',
-    '让子弹飞',
-    '大话西游',
-    '人在囧途'
-]
+}
 
 
 # [创建数据库]

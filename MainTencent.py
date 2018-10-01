@@ -29,14 +29,44 @@ class TencentWidget(QWidget):
             anchor = self.anchors[0]
         self.videosWidget = VideosWidget(anchor)
 
+        self.otherLayout = QVBoxLayout()
+        self.renderOther()
         
         self.mainLayout.addWidget(self.anchorList)
         self.mainLayout.addWidget(self.videosWidget)
+        self.mainLayout.addLayout(self.otherLayout)
 
         self.mainLayout.setStretchFactor(self.anchorList, 1)
         self.mainLayout.setStretchFactor(self.videosWidget, 5)
-
+        self.mainLayout.setStretchFactor(self.otherLayout, 1)
+        self.mainLayout.setContentsMargins(2,2,2,2)
         self.setLayout(self.mainLayout)
+
+    def renderOther(self):
+        self.updateVideoNumBtn = QPushButton('更新视频')
+        self.updateVideoNumBtn.clicked.connect(self.updateVideoNumAction)
+        self.showVideoNumLabel = QLabel()
+        self.showVideoNumLabel.setWordWrap(True)
+        self.otherLayout.addWidget(self.updateVideoNumBtn)
+        self.otherLayout.addWidget(self.showVideoNumLabel)
+
+
+    def updateVideoNumAction(self):
+        anchors = dbfunc.getUploader(PlatformType.kandian.value)
+        self.showVideoNumLabel.clear()
+        text = ''
+        for anchor in anchors:
+            qq = anchor[1]
+            res = dbfunc.getTodayWartpublishVideo(qq)
+            res_all = dbfunc.getWartpublishVideo(qq)
+
+            todayres = dbfunc.getTodayPublishedVideo(qq)
+            text = text + qq+': \n        '+ str(len(todayres)) + ' -- ' + str(len(res)) + ' -- ' + str(len(res_all)) + '\n'
+            # 刷新页面
+            # QApplication.processEvents()
+
+        print(text)
+        self.showVideoNumLabel.setText(text)
 
     def addAnchorAction(self):
         self.addAnchor = AddAnchor()
@@ -55,6 +85,7 @@ class TencentWidget(QWidget):
     def anchorRowAction(self, row):
         aid = self.anchors[row][0]
         videos = dbfunc.getUnpublishedVideo(aid, [0, 13])
+        
         self.videosWidget.anchor = self.anchors[row]
         self.videosWidget.updateListData(videos)
 

@@ -283,15 +283,21 @@ def downloadVideo(datas):
 
     return dataArr
 
-def getVideosFromUploader(uploader):
+def getVideosFromUploader(uploader, datas=[]):
     name = uploader[1]
     pwd = uploader[2]
-    todayVideo = dbfunc.getTodayWartpublishVideo(name)
+    todayPubVideo = dbfunc.getTodayPublishedVideo(name)
     allnum = 10
-    makePubNum = allnum - len(todayVideo)
-
+    makePubNum = allnum - len(todayPubVideo)
     if makePubNum > 0:
-        return todayVideo[0:makePubNum]
+        if len(datas) > 0:
+            todayVideo = datas
+        else:
+            todayVideo = dbfunc.getTodayWartpublishVideo(name)
+        if makePubNum >= len(todayVideo):
+            return todayVideo
+        else:
+            return todayVideo[0:makePubNum]
     else:
         return []
     return []

@@ -7,7 +7,7 @@ import gfunc
 # 删除
 def delVideos():
     db = dbHelper.database()
-    sql = "DELETE FROM videos where pic is null"
+    sql = "DELETE FROM videos where aid ='22'"
     db.update(sql)
     db.close()
 
@@ -128,7 +128,7 @@ def getAllVideo(limit=[]):
 def getTodayVideo(limit=[]):
     other = " and create_time >= date_format(NOW(),'%Y-%m-%d')"
     res = getVideo(other=other, limit=limit)
-
+    return res
 
 def getVideos(data={}, other='', cursor=0):
     # TODO data 注销登陆会记录上一次登陆的userid 不知什么原因 目前强制加入userid
@@ -253,6 +253,7 @@ def updateAllFromUserId():
 
 def main():  
     # createTable()  
+    delVideos()
     pass
 
 if __name__ == '__main__':

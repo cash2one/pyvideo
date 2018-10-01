@@ -12,7 +12,8 @@ class global_data(object):
     UploaderPlatform = PlatformType.kandian.value
     # 上传者
     UploaderArray = []
-    # 选中上传者
+    # 展示的视频
+    Videos = []
 
 
 # 更新上传平台 上传者

@@ -44,7 +44,8 @@ class Upload(object):
         name = uploader[1]
         pwd = uploader[2]
         loginType = uploader[5]
-        datas = gfunc.getVideosFromUploader(uploader)
+       
+        datas = gfunc.getVideosFromUploader(uploader, self.data)
         print('当前账号 '+name+' 可用视频为: '+ str(len(datas)))
 
         if len(datas) == 0:
@@ -62,7 +63,17 @@ class Upload(object):
                 iframe.find_by_id('u').first.fill(name)
                 iframe.find_by_id('p').first.fill(pwd)
                 iframe.find_by_id("login_button").first.click()
-            time.sleep(5)
+
+                time.sleep(1)
+                # 验证是否有验证码
+                vcode = iframe.find_by_id('newVcodeIframe')
+                if len(vcode) > 0:
+                    # 图形验证码
+                    print('需验证图形码')
+                    time.sleep(20)
+                else:
+                    time.sleep(4)
+
             print('看点账号：'+ name +' 登录成功')
             for item in datas:
                 self.startKandian(item, browser)
@@ -129,7 +140,7 @@ class Upload(object):
             # TODO 验证 发布成功
             today = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) 
 
-            dic = {'publish_time': today, 'qq': str(name)}
+            dic = {'publish_time': today}
             dbfunc.updateVideo(dic, {'id': data[0]})
 
             print('发布成功')
@@ -154,7 +165,7 @@ class Upload(object):
         print('成功上传视频，检查标题。。')
         check = self.checkTitle(browser)
         if check == False:
-            pubStart(browser, row_url, is_exist_local, local_path)
+            self.pubStart(browser, row_url, is_exist_local, local_path)
 
     def checkUploadSuccess(self, browser):
         text = '检查视频是否上传成功..'

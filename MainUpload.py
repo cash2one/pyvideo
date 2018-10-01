@@ -37,10 +37,14 @@ class UploadWidget(QWidget):
         self.uploadBtn = QPushButton('上传')
         self.uploadBtn.clicked.connect(self.uploadAction)
 
+        self.uploadCurrentBtn = QPushButton('当前上传')
+        self.uploadCurrentBtn.clicked.connect(self.uploadCurrentAction)
+
         self.mainLayout.addWidget(self.platform)
         self.mainLayout.addWidget(self.addBtn)
         self.mainLayout.addWidget(self.account)
         self.mainLayout.addWidget(self.uploadBtn)
+        self.mainLayout.addWidget(self.uploadCurrentBtn)
         # self.mainLayout.addWidget(self.consoleWidget)
 
 
@@ -86,3 +90,20 @@ class UploadWidget(QWidget):
         upload = Upload(global_data.UploaderPlatform, uploaders=[selectUploader])
         upload.run()
 
+    def uploadCurrentAction(self):
+        data = []
+
+        index = self.account.currentIndex()
+        selectUploader = global_data.UploaderArray[index]
+        name = selectUploader[1]
+        videos = global_data.Videos
+        print(videos)
+        for video in videos:
+            publish_time = video[10]
+
+            qq = video[1]
+            if qq == name and publish_time is None:
+                data.append(video)
+
+        upload = Upload(global_data.UploaderPlatform, uploaders=[selectUploader], data=data)
+        upload.run()

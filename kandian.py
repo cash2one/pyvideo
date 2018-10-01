@@ -58,7 +58,16 @@ def login(name=account, pwd=pwdDic[account], videos=None):
 
             iframe.find_by_id("login_button").first.click()
 
-        time.sleep(5)
+            time.sleep(1)
+            # 验证是否有验证码
+            vcode = iframe.find_by_id('newVcodeIframe')
+            if len(vcode) > 0:
+                # 图形验证码
+                print('需验证图形码')
+                time.sleep(20)
+            else:
+                time.sleep(4)
+
         print('看点账号：'+ name +' 登录成功')
         for i in range(0, len(datas)):
             # data = datas[len(datas)-i-1]

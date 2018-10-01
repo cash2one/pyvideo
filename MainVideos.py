@@ -75,12 +75,13 @@ class VideosWidget(QWidget):
         self.listWidget.addItem(QListWidgetItem())
         self.listWidget.clear()
         QApplication.processEvents()
-
         for video in self.videos:
+            QApplication.processEvents()
+
             self._setItem(video)
 
     def _setItem(self, video):
-
+        
         item_widget = QListWidgetItem()
         # 必须设置这个 大小才显示
         item_widget.setSizeHint(QSize(210, 305))
@@ -89,9 +90,14 @@ class VideosWidget(QWidget):
         videoWidget = videoItemWidget.VideoItem(video)
         self.listWidget.setItemWidget(item_widget, videoWidget)  
 
+    # 外部
     def updateListData(self, videos):
         self.videos = videos
+        global_data.Videos = videos
         self.setListWidget()
+    # 外部
+    def getVideos(self):
+        return self.videos
 
     def statusChanged(self):
         index = self.statusBox.currentIndex()

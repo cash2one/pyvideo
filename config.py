@@ -97,6 +97,7 @@ Classly = {
         '天行九歌',
         '骨傲天',
         '我在皇宫当巨巨',
+        '西行纪',
     ]},
     '810359132': {'type': VideoType.comic, 'data': [
         '爆笑虫子',
@@ -116,11 +117,12 @@ Classly = {
     ]},
     '1194332304': {'type': VideoType.comic, 'data': [
         '蜡笔小新',
+        '卡通盒系列'
 
     ]},
     '3216598385': {'type': VideoType.comic, 'data': [
         '禽兽超人',
-
+        '兽王争锋',
     ]},
 
     '2030657847': {'type': VideoType.game, 'data': [
@@ -147,6 +149,7 @@ Classly = {
         '情深深雨濛濛',
         '爱情公寓',
         '还珠格格',
+        '橙红年代'
     ]},
     '169964440': {'type': VideoType.movie, 'data': [
         '唐人街探案',

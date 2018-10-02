@@ -138,13 +138,24 @@ class Upload(object):
                 dialog.find_by_text('确定')[0].click()
 
             # TODO 验证 发布成功
-            today = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) 
 
-            dic = {'publish_time': today}
-            dbfunc.updateVideo(dic, {'id': data[0]})
-
-            print('发布成功')
+            # https://mp.qq.com/page/article_manager
             time.sleep(3)
+            arturl = 'https://mp.qq.com/page/article_manager'
+            browser.visit(arturl)
+            pp = browser.find_by_text(title)
+            if len(pp) > 0:
+                # 发布成功
+                today = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) 
+
+                dic = {'publish_time': today}
+                dbfunc.updateVideo(dic, {'id': data[0]})
+
+                print('发布成功')
+                time.sleep(3)
+            else:
+                print('发布失败')
+
         except Exception as e:
             print(str(e))
 
@@ -171,7 +182,7 @@ class Upload(object):
         text = '检查视频是否上传成功..'
         print(text, end='\r')
         flag = False
-        for i in range(0, 200):
+        for i in range(0, 30):
             text=text+'.'
             print(text, end='\r')
 
@@ -188,7 +199,7 @@ class Upload(object):
         text = '检查视频封面..'
         print(text, end='\r')
         flag = False
-        for i in range(0, 200):
+        for i in range(0, 30):
             try:
                 img = browser.find_by_id('video_content_cover_bg_img')[0]
                 src = img['src']
@@ -221,12 +232,14 @@ class Upload(object):
                 # 上传中
                 suc = self.checkUploadSuccess(browser)
                 if suc == False:
-                    return
+                    self.pubVideo(browser, row_url, is_exist_local, local_path)
+
                 # 上传成功
                 # 封面
                 ss = self.checkImg(browser)
                 if ss == False:
-                    return False
+                    self.pubVideo(browser, row_url, is_exist_local, local_path)
+
             else:
                 # 腾讯在线
                 browser.find_by_id('select_from_video_url').first.click()

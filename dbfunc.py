@@ -252,8 +252,7 @@ def updateAllFromUserId():
     db.update("update anchor set fromUserId = '1'")
 
 def main():  
-    # createTable()  
-    delVideos()
+    createTable()  
     pass
 
 if __name__ == '__main__':

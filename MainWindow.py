@@ -76,7 +76,7 @@ if __name__ == '__main__':
     app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
     mainMindow = Main()
     rect = QApplication.desktop().screenGeometry()
-    mainMindow.resize(rect.width()-100, rect.height()-80)
+    mainMindow.resize(rect.width()-200, rect.height()-200)
     mainMindow.setWindowTitle('看点自动测试')
     mainMindow.show()
     sys.exit(app.exec_())

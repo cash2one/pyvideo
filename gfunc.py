@@ -10,8 +10,11 @@ import requests
 import re
 import subprocess
 import time
+import contextlib
+import progressbar
 
-
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
+requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 '''
 分词
@@ -87,6 +90,11 @@ def readJsonFile(name, dirname='Source'):
 # 文件是否存在
 def isfile(file):
     return os.path.isfile(file)
+# 文件删除
+def removefile(file):
+    if isfile(file):
+        os.remove(file)
+
 
 # 文件夹是否存在
 def exists(dir):
@@ -149,6 +157,12 @@ def pwdEncrypt(pwd):
     md5pwd = hl.hexdigest()
     return md5pwd
 
+'''获取文件的大小,结果保留两位小数，单位为MB'''
+def get_FileSize(filePath):
+    fsize = os.path.getsize(filePath)
+    fsize = fsize/float(1024*1024)
+    return round(fsize,2)
+
 
 def downVideo(url):
     base = 'http://www.ht9145.com/jx/tencent.php?url='
@@ -165,33 +179,73 @@ def downVideo(url):
     print(url)
     return writeFile(url)
 
-def writeFile(url):
+# 根据url 获得MP4文件名
+def get_FileNameFromUrl(url):
     urlArr = url.split('/')
     filename = ''
     for item in urlArr:
         if item.find('mp4') != -1:
-            print(item)
             filename = item.split('?')[0]        
 
     filename = 'videos/'+filename
+    return filename
+
+def writeFile(url):
+    filename = get_FileNameFromUrl(url)
     print(filename)
     is_file = isfile(filename)
     if is_file == False:
-        res = requests.get(url)
         
-        # with closing(requests.get(url)) as response:
-        data = res.content
-        with open(filename, "wb") as code:
-            if data:
-                code.write(data)
-            else:
-                writeFile(url)
-                return
-
-        print('视频写入文件成功')
+        return writeLocal(url, filename)
+        
     else:
         print('视频已经下载')
+        # 计算大小 MB
+        filesize = get_FileSize(filename)
+        if filesize < 0.1:
+            # TODO 是否要先删除文件
+            removefile(filename)
+            # 重新下载
+            return writeLocal(url, filename)
+
+
+
     return filename
+
+def writeLocal(url, filename):
+    try:
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36',
+            'Proxy-Connection': 'keep-alive',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+
+        }
+        resp = requests.get(url, stream=True, headers=headers)
+        # print(resp.content)
+        total_length = int(resp.headers.get("Content-Length"))
+        print('video total length: '+ str(total_length))
+
+        with open(filename, "wb") as f:
+            widgets = ['Progress: ', progressbar.Percentage(), ' ',
+                   progressbar.Bar(marker='#', left='[', right=']'),
+                   ' ', progressbar.ETA(), ' ', progressbar.FileTransferSpeed()]
+            pbar = progressbar.ProgressBar(widgets=widgets, maxval=total_length).start()
+
+            for chunk in resp.iter_content(chunk_size=1024):
+                if chunk:
+                    f.write(chunk)
+                    f.flush()
+                    os.fsync(f.fileno())
+
+                pbar.update(len(chunk) + 1)
+            pbar.finish()
+            print('视频写入成功')
+            return filename
+    except Exception as e:
+        print('视频写入失败：'+str(e))
+        # todo 写入错误 删除文件
+        removefile(filename)
+        writeLocal(url, filename)
 
 def watermarks(pagename):
     # new
@@ -203,7 +257,7 @@ def watermarks(pagename):
     outfile =  pagename.replace('.mp4', '_new.mp4')
 
     x, y, w, h = getQuRectVideo(infile)
-    strcmd = ['ffmpeg -i ' +infile+' -vf delogo=x='+x+':y='+y+':w='+w+':h='+h +' '+outfile]
+    strcmd = ['ffmpeg -i ' +infile+' -vf delogo=x='+x+':y='+y+':w='+w+':h='+h +' '+outfile + ' -y']
     result=subprocess.run(args=strcmd,stdout=subprocess.PIPE,shell=True)
     print(result)
     return outfile
@@ -212,7 +266,7 @@ def getQuRectVideo(pagename):
     width, height = getVideoSize(pagename)
     return getQuSize(width, height)
 
-# 视频的大小
+# 视频的高宽
 def getVideoSize(pagename):
     bb = 'ffprobe -v error -show_entries stream=width,height -of default=noprint_wrappers=1 ' + pagename
     strcmd = [bb]
@@ -224,6 +278,43 @@ def getVideoSize(pagename):
     width = arr[0].replace('width=', '')
     height = arr[1].replace('height=', '')
     return int(width), int(height)
+
+'''
+[v3]
+ffmpeg
+ffprobe
+获得本地视频的宽度 高度
+'''
+def get_video_size(filename):
+    filepath = VIDEODIRNAME+'/'+filename
+    show = 'ffprobe -v error -show_entries stream=width,height -of default=noprint_wrappers=1 ' + filepath
+    string = subprocess.check_output(show, shell=True)
+    string = string.decode('utf-8')
+    print(string)
+    arr = string.split('\n')
+    width = arr[0].replace('width=', '')
+    height = arr[1].replace('height=', '')
+    return int(width), int(height)
+
+'''
+[v3]
+width   1280 x=1045:y=45:w=195:h=55
+        960  x=width-158:y=30:w=135:h=40
+        450  x=width-100:y=15:w=90:h=30
+
+获取水印的大小 根据本地视频
+x y w h
+'''
+def get_watermark_size(filename):
+    width, height = get_video_size(filename)
+    if width > 1000:
+        return str(width-235), '45', '195', '55'
+    elif 500 < width < 1000:
+        return str(width-158), '30', '135', '40'
+    else:
+        return str(width-100), '15', '90', '30'
+
+
 # 去水印的大小
 def getQuSize(width, height):
     x = ''
@@ -234,11 +325,18 @@ def getQuSize(width, height):
     # 960 x=690
     # 848-690=158
     print(width)
-    if width < 1000:
+    if 500 < width < 1000:
         x = str(width-158)  
         y = '30'
         w = '135'
         h = '40' 
+
+    if width < 500:
+        x = str(width-100)  
+        y = '15'
+        w = '90'
+        h = '30'
+
     return x, y, w,h
 
 def downloadVideo(datas):
@@ -268,10 +366,19 @@ def downloadVideo(datas):
         if local_path:
             outfile = watermarks(local_path)
 
-        print('存入去水印的视频')
+        print('存入去水印的视频：')
         if outfile:
-            dic = { 'local_path': outfile }
-            dbfunc.updateVideo(dic, {'id': item[0]})
+            # 验证是否有大于100kb
+            if get_FileSize(outfile) > 0.1:
+                # 移除源文件
+                removefile(local_path)
+
+                dic = { 'local_path': outfile }
+                dbfunc.updateVideo(dic, {'id': item[0]})
+            else:
+                print('视频怎么这么小呢，删除了')
+                removefile(outfile)
+                # 重新下载 或者重新去水印
 
         time.sleep(1)
     print('下载完成去水印完成')
@@ -301,16 +408,4 @@ def getVideosFromUploader(uploader, datas=[]):
     else:
         return []
     return []
-
-
-
-
-
-
-        
-
-        
-         
-
-
 

@@ -55,6 +55,7 @@ class AddAnchor(QWidget):
             name = name.replace('/videos', '')
             uin = name.replace('http://v.qq.com/vplus/', '')
         uin = uin.strip()
+
         # 2 验证数据库是否存在 uin
         if len(uin) < 20:
             QMessageBox.warning(self, '', '请正确填写腾讯主播链接', QMessageBox.Yes) 
@@ -70,7 +71,7 @@ class AddAnchor(QWidget):
             QMessageBox.warning(self, '', "该主播已存在，不需再添加", QMessageBox.Yes)   
             return
 
-        res = requests.get(name, headers=Headers)
+        res = requests.get(url, headers=Headers)
         # TODO html编码问题 用content
         text = res.content
         soup = BeautifulSoup(text, 'html.parser')

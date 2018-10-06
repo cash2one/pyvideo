@@ -6,3 +6,5 @@ bs4
 splinter
 pyqt5
 requests
+progressbar
+you-get

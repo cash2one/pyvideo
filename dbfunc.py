@@ -225,7 +225,6 @@ def getData(table, dic={}, other='', limit=[]):
         sql = sql + " limit %d,%d" % (int(limit[0]),int(limit[1]))
     print(sql)
     res = db.fetch(sql)
-    print(len(res))
     return res
 
 # 检查该数据是否存在 table conditionDic
@@ -252,7 +251,7 @@ def updateAllFromUserId():
     db.update("update anchor set fromUserId = '1'")
 
 def main():  
-    createTable()  
+    # createTable()  
     pass
 
 if __name__ == '__main__':

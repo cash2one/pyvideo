@@ -16,6 +16,12 @@ VPlusBaseUrl = 'http://v.qq.com/vplus/'
 
 LOGINQiERHAOURL = 'https://om.qq.com/userAuth/index'
 
+# 腾讯解析地址
+BASEURLTENCENTJX = 'http://www.ht9145.com/jx/tencent.php?url='
+
+# 视频存储位置
+VIDEODIRNAME = '/Users/huangtao/Desktop/Video'
+
 # 平台
 class PlatformType(Enum):
     tencent = 'tencent'
@@ -117,7 +123,7 @@ Classly = {
     ]},
     '1194332304': {'type': VideoType.comic, 'data': [
         '蜡笔小新',
-        '卡通盒系列'
+        '卡通盒系列',
 
     ]},
     '3216598385': {'type': VideoType.comic, 'data': [

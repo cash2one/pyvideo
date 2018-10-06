@@ -44,6 +44,8 @@ class AnchorList(QWidget):
         itemWidget = QWidget()
         hLayout = QHBoxLayout()
         lab = QLabel(item[1])
+        lab.setFont(QFont('Timers', 10))
+        lab.setFixedWidth(36)
         btn = QPushButton('采集')
         btn.clicked.connect(lambda: self.itemBtnAction(index))
         hLayout.addWidget(lab)

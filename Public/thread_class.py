@@ -10,3 +10,5 @@ class MyThread(threading.Thread):
 
     def run(self):
         self.runback()
+        print('ddddd:'+ threading.currentThread().getName() + '\n')
+        print(threading.activeCount())

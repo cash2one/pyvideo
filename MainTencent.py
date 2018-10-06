@@ -39,7 +39,7 @@ class TencentWidget(QWidget):
         self.mainLayout.setStretchFactor(self.anchorList, 1)
         self.mainLayout.setStretchFactor(self.videosWidget, 5)
         self.mainLayout.setStretchFactor(self.otherLayout, 1)
-        self.mainLayout.setContentsMargins(2,2,2,2)
+        self.mainLayout.setContentsMargins(1,1,1,1)
         self.setLayout(self.mainLayout)
 
     def renderOther(self):

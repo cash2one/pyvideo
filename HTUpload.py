@@ -4,27 +4,35 @@ import time
 from splinter import Browser
 import dbfunc
 from config import *
-from HTThread import HTThread
+from Public import thread_class
+
 import gfunc
+import threading
+import download
 
 
 class Upload(object):
-    def __init__(self, platfrom, data=[], uploaders=[]):
+    def __init__(self, platfrom='kandian', data=[], uploaders=[]):
         super().__init__()
         self.data = data
         self.uploaders = uploaders
         self.platfrom = platfrom
         self.driverpath = DRIVERPATH
         self.headless = False  # 展示
+        # 线程 
+        self.thread = None
 
-    def run(self):
+    def run(self, platfrom, data=[], uploaders=[]):
+        self.data = data
+        self.uploaders = uploaders
+        self.platfrom = platfrom
+        
         if len(self.uploaders) == 0:
             return
-        self.thread = HTThread(self.runStart)
-        self.thread.setDaemon(True)
-        self.thread.start()
-        
 
+        mythread = thread_class.MyThread(self.runStart)
+        mythread.start()
+        
     def runStart(self):
         print(self.platfrom)
 
@@ -52,7 +60,7 @@ class Upload(object):
             return
 
         # TODO 是否需要下载
-        datas = gfunc.downloadVideo(datas)
+        datas = download.main(datas)
 
         with Browser('chrome', executable_path=self.driverpath, headless=self.headless) as browser:
             self.browser = browser
@@ -90,7 +98,8 @@ class Upload(object):
         first_class_name = data[6]
         second_class_name = data[7]
         is_exist_local = data[14]
-        local_path = data[15]
+        local_path = VIDEODIRNAME + '/'+ data[15]
+        print(local_path)
 
         flag = self.pubStart(browser, url, is_exist_local, local_path)
         if flag == 'fail':
@@ -226,8 +235,9 @@ class Upload(object):
             browser.visit(url)
             # 本地 腾讯
             if str(is_exist_local) == '1':
-                page = os.getcwd()+'/'+local_path
-                browser.find_by_xpath('//input[@name="qcloud_upload_file"]')[0].fill(page)
+                # page = os.getcwd()+'/'+local_path
+                
+                browser.find_by_xpath('//input[@name="qcloud_upload_file"]')[0].fill(local_path)
                 time.sleep(3)
                 # 上传中
                 suc = self.checkUploadSuccess(browser)

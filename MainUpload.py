@@ -18,6 +18,8 @@ class UploadWidget(QWidget):
         updateUploaderPlatform(self.platforms[0]['platform'])
 
         self.setUI()
+        # 上传 使用线程
+        self.upload = Upload()
 
     def setUI(self):
         self.mainLayout = QVBoxLayout()
@@ -87,8 +89,7 @@ class UploadWidget(QWidget):
         index = self.account.currentIndex()
         selectUploader = global_data.UploaderArray[index]
         print(selectUploader)
-        upload = Upload(global_data.UploaderPlatform, uploaders=[selectUploader])
-        upload.run()
+        self.upload.run(global_data.UploaderPlatform, uploaders=[selectUploader])
 
     def uploadCurrentAction(self):
         data = []
@@ -105,5 +106,4 @@ class UploadWidget(QWidget):
             if qq == name and publish_time is None:
                 data.append(video)
 
-        upload = Upload(global_data.UploaderPlatform, uploaders=[selectUploader], data=data)
-        upload.run()
+        self.upload.run(global_data.UploaderPlatform, uploaders=[selectUploader], data=data)

@@ -7,7 +7,6 @@ from config import *
 from Public import thread_class
 
 import gfunc
-import threading
 import download
 
 
@@ -19,8 +18,7 @@ class Upload(object):
         self.platfrom = platfrom
         self.driverpath = DRIVERPATH
         self.headless = False  # 展示
-        # 线程 
-        self.thread = None
+        
 
     def run(self, platfrom, data=[], uploaders=[]):
         self.data = data
@@ -30,8 +28,30 @@ class Upload(object):
         if len(self.uploaders) == 0:
             return
 
-        mythread = thread_class.MyThread(self.runStart)
+        if self.platfrom == PlatformType.kandian.value:
+            # 上传看点
+            mythread = thread_class.MyThread(target=self.uploaderKandian)
+            mythread.start()
+            
+
+    def uploaderKandian(self, args):
+        for uploader in self.uploaders:
+                self.download(uploader)
+
+    def download(self, uploader):
+        name = uploader[1]
+        pwd = uploader[2]
+        loginType = uploader[5]
+       
+        datas = gfunc.getVideosFromUploader(uploader, self.data)
+        if len(datas) == 0:
+            return
+        # TODO 是否需要下载
+        datas = download.main(datas)
+
+        mythread = thread_class.MyThread(target=self.runKandian,args=[uploader, datas])
         mythread.start()
+
         
     def runStart(self):
         print(self.platfrom)
@@ -48,21 +68,17 @@ class Upload(object):
         for uploader in self.uploaderList:
             self.runItem(uploader)
 
-    def runKandian(self, uploader):
+    def runKandian(self, args):
+        uploader = args[0]
+        datas = args[1]
         name = uploader[1]
         pwd = uploader[2]
         loginType = uploader[5]
-       
-        datas = gfunc.getVideosFromUploader(uploader, self.data)
-        print('当前账号 '+name+' 可用视频为: '+ str(len(datas)))
-
-        if len(datas) == 0:
-            return
-
-        # TODO 是否需要下载
-        datas = download.main(datas)
 
         with Browser('chrome', executable_path=self.driverpath, headless=self.headless) as browser:
+
+            print('当前账号 '+name+' 可用视频为: '+ str(len(datas)))
+
             self.browser = browser
             browser.visit(LoginURL)
             with browser.get_iframe("login_if") as iframe:

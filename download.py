@@ -5,6 +5,8 @@ from config import *
 import gfunc
 import subprocess
 import dbfunc
+from Public import thread_class
+
 
 # 屏蔽warning信息
 requests.packages.urllib3.disable_warnings()
@@ -14,6 +16,7 @@ you-get
 -o 设置路径
 -O 设置下载文件的名称
 --debug
+批量下载
 '''
 def cmd_download(url, filename, dirname=VIDEODIRNAME):
 
@@ -22,6 +25,25 @@ def cmd_download(url, filename, dirname=VIDEODIRNAME):
     info = os.system(r'you-get -o {} -O {} {}'.format(dirname, filename, url))
     print(info)
     return filename
+
+'''
+批量下载 arr = [{url, filename}]
+'''
+def cmd_downloads(arr, dirname=VIDEODIRNAME):
+    gfunc.createDir(dirname)
+
+    youget = 'you-get'
+
+    for item in arr:
+        os.system(r'you-get -o {} -O {} {}'.format(dirname, item['filename'], item['url']))
+    #     outfile = ''
+    #     if item.__contains__('filename'):
+    #         outfile = '-O '+item['filename']
+    #     string = ' -o %s %s %s' % (VIDEODIRNAME, outfile, item['url'])
+    #     youget += string
+    # os.system(youget)
+
+    return arr
 
 '''
 ffmpeg 去水印 并删除原来的视频
@@ -36,6 +58,15 @@ def cmd_watermark(filename, to_filename):
     if int(result) == 0:
         gfunc.removefile(infile)
 
+def cmd_watermarks(arr):
+    to_arr = []
+    for item in arr:
+        filename = item['filename']+'.mp4'
+        to_filename = item['filename']+'_new'+'.mp4'
+
+        cmd_watermark(filename, to_filename)
+        to_arr.append(to_filename)
+    return to_arr
 
 '''
 vid 腾讯视频url
@@ -45,8 +76,41 @@ def get_vid(url):
     vid = urlArr[len(urlArr)-1].replace('.html', '')
     return vid
 
+def download_videos(datas):
+    arr = []
+    for item in datas:
+        is_exist_local = item[14]
+        local_path = VIDEODIRNAME+'/'+item[15]
+        url = item[3]
+        idd = item[0]
+        vid = get_vid(url)
+
+        if gfunc.isfile(local_path) == False or local_path.find('new') == -1:
+            dic = {
+                'id': idd,
+                'url': url,
+                'filename': vid
+            }
+            arr.append(dic)
+
+    print(arr)
+
+    # 下载
+    cmd_downloads(arr)
+    # 去水印
+    cmd_watermarks(arr)
+    # 更新
+    for i in arr:
+        dic = {
+            'is_exist_local': '1',
+            'local_path': i['filename']+'_new'+'.mp4'
+        }
+        dbfunc.updateVideo(dic, {'id': i['id']})
+
+
 
 def download_video(url):
+    print(url)
     vid = get_vid(url)
     # 1 下载视频
     cmd_download(url, vid)
@@ -56,23 +120,9 @@ def download_video(url):
     cmd_watermark(filename, to_filename)
     return to_filename
 
-def main(datas):
-    for item in datas:
-        is_exist_local = item[14]
-        local_path = VIDEODIRNAME+'/'+item[15]
-        url = item[3]
-        idd = item[0]
-        print(str(idd)+' :  '+local_path)
 
-        if gfunc.isfile(local_path) == False or local_path.find('new') == -1:
-            # 下载
-            new_filename = download_video(url)
-            # 存入数据库
-            dic = {
-                'is_exist_local': '1',
-                'local_path': new_filename
-            }
-            dbfunc.updateVideo(dic, {'id': idd})
+def main(datas):
+    download_videos(datas)
 
     # 重新获得数据库里的数据 是不是多此一举呢 todo
     dataArr = []

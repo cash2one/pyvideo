@@ -2,13 +2,14 @@ import threading
 import time
 
 class MyThread(threading.Thread):
-    def __init__(self, runback):
+    def __init__(self, target, args=None):
         super().__init__()
-        self.runback = runback
+        self.target = target
+        self.args = args
 
         self.setDaemon(True)
 
     def run(self):
-        self.runback()
-        print('ddddd:'+ threading.currentThread().getName() + '\n')
+        self.target(self.args)
+        print('currentThread:'+ threading.currentThread().getName() + '\n')
         print(threading.activeCount())

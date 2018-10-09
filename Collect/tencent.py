@@ -27,7 +27,7 @@ class Tencent(object):
         mythread.start()
 
     
-    def runback(self):
+    def runback(self, args):
 
         for anchor in self.anchors:
             aid = anchor[0]

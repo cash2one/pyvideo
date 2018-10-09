@@ -207,7 +207,7 @@ class Upload(object):
         text = '检查视频是否上传成功..'
         print(text, end='\r')
         flag = False
-        for i in range(0, 30):
+        for i in range(0, 60):
             text=text+'.'
             print(text, end='\r')
 
@@ -224,7 +224,7 @@ class Upload(object):
         text = '检查视频封面..'
         print(text, end='\r')
         flag = False
-        for i in range(0, 30):
+        for i in range(0, 60):
             try:
                 img = browser.find_by_id('video_content_cover_bg_img')[0]
                 src = img['src']

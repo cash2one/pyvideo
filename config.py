@@ -1,12 +1,16 @@
 from enum import Enum
 
 # 平台
-PLATFORM = 'MAC'  # MAC WIN
+PLATFORM = 'WIN'  # MAC WIN
 
 if PLATFORM == 'MAC':
     DRIVERPATH = './Source/mac/chromedriver'
+    VIDEODIRNAME = '/Users/huangtao/Desktop/Vidos'
+
 elif PLATFORM == 'WIN':
     DRIVERPATH = './Source/win/chromedriver.exe'
+    VIDEODIRNAME = 'C:\\Users\\Administrator\\Desktop\\Video'
+
     
 Headers = {
     'user_agent': 'Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)'
@@ -20,7 +24,6 @@ LOGINQiERHAOURL = 'https://om.qq.com/userAuth/index'
 BASEURLTENCENTJX = 'http://www.ht9145.com/jx/tencent.php?url='
 
 # 视频存储位置
-VIDEODIRNAME = '/Users/huangtao/Desktop/Video'
 
 # 平台
 class PlatformType(Enum):

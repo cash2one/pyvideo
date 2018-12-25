@@ -79,19 +79,26 @@ def get_vid(url):
 def download_videos(datas):
     arr = []
     for item in datas:
+        # 是否下载
+        aid = item[11]
+        anchor = dbfunc.getAnchorFromAid(aid)[0]
+        is_download = anchor[10]
+        print(is_download)
+
         is_exist_local = item[14]
         local_path = VIDEODIRNAME+'/'+item[15]
         url = item[3]
         idd = item[0]
         vid = get_vid(url)
 
-        if gfunc.isfile(local_path) == False or local_path.find('new') == -1:
-            dic = {
-                'id': idd,
-                'url': url,
-                'filename': vid
-            }
-            arr.append(dic)
+        if is_download == 'y':
+            if gfunc.isfile(local_path) == False or local_path.find('new') == -1 :
+                dic = {
+                    'id': idd,
+                    'url': url,
+                    'filename': vid
+                }
+                arr.append(dic)
 
     print(arr)
 

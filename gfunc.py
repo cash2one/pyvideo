@@ -47,15 +47,47 @@ def classFromTitle(title):
         for ii in data:
             if title.find(ii) != -1:
                 if tt == VideoType.comic:
-                    return ['动漫', '动漫', item]
-                if tt == VideoType.movie:
-                    return ['电影', '电影剪辑', item]
+                    return ['动漫', '国产动漫', item]
+                
                 if tt == VideoType.game:
                     return ['游戏', '游戏', item]
                 if tt == VideoType.tv:
                     return ['电视剧', '连续剧', item]
+                if tt == VideoType.cinema:
+                    return ['动漫', '少儿动漫', item]
+                if tt == VideoType.movie:
+                    return ['娱乐', '电影', item]
+                if tt == VideoType.gc_comic:
+                    return ['动漫', '国产动漫', item]
+                if tt == VideoType.wz_game:
+                    return ['游戏', '手机游戏', item]
+                if tt == VideoType.cj_game:
+                    return ['游戏', '手机游戏', item]
+
     # 【分类 分类 qq】
     return ['', '', '']
+
+# [v3] 三级分类 todo second_class二级分类, qq 来判断
+def getThirdClass(second_class, qq):
+    if second_class == '少儿动漫':
+        return '少儿动漫-其他'
+    if second_class == '国产动漫':
+        return '国产动漫-其他'
+    if second_class == '日本动漫':
+        return '日本动漫-其他'
+    if second_class == '欧美动漫':
+        return '欧美动漫-其他'
+    if second_class == '电影':
+        return '电影片段'
+    # TODO
+    if second_class == '手机游戏':
+        if qq == '3056371919':
+            return '王者荣耀玩家视频'
+        if qq == '3216598385':
+            return '吃鸡'
+
+    return ''
+
 
 def createDir(dir):
     # if sys.version_info.major >= 3: # if the interpreter version is 3.X, use 'input',
@@ -313,6 +345,17 @@ def get_watermark_size(filename):
         return str(width-158), '30', '135', '40'
     else:
         return str(width-100), '15', '90', '30'
+
+'''
+获得视频第五秒的图片
+'''
+def get_image_video(pathname):
+    outfile = pathname.replace('.mp4', '.jpg')
+    show = 'ffmpeg -ss 00:00:16 -i %s -frames:v 1 %s -y' % (pathname, outfile)
+    string = subprocess.check_output(show, shell=True)
+    return outfile
+
+
 
 
 # 去水印的大小

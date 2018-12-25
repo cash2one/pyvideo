@@ -27,6 +27,7 @@ class VideoItem(QWidget):
         qq = video[1]
         first_text = video[6]
         second_text = video[7]
+        third_text = video[18] if video[18] else ""
         time = video[8]
         create_time = str(video[9])
         finish_time = str(video[10])
@@ -39,13 +40,13 @@ class VideoItem(QWidget):
         # self.lb_title.setWordWrap(True)
 
         self.time = QLabel('腾讯发送日期：'+time)
-        self.time.setFont(QFont("Arial", 10, QFont.StyleItalic))
+        self.time.setFont(QFont("Arial", 8, QFont.StyleItalic))
 
         self.create_time = QLabel('收集日期: '+ create_time)
-        self.create_time.setFont(QFont("Arial", 10, QFont.StyleItalic))
+        self.create_time.setFont(QFont("Arial", 8, QFont.StyleItalic))
 
         self.finish_time = QLabel('完成日期: '+ finish_time)
-        self.finish_time.setFont(QFont("Arial", 10, QFont.StyleItalic))
+        self.finish_time.setFont(QFont("Arial", 8, QFont.StyleItalic))
 
         # tags
         self.lb_subtitle = QTextEdit(tags)
@@ -81,6 +82,7 @@ class VideoItem(QWidget):
         self.qqbox.currentIndexChanged.connect(self.qqclick)
 
         self.data = gfunc.readJsonFile('classify')
+        # 1
         firstArr = self.data['first']
 
         self.first_class = QComboBox()
@@ -98,7 +100,7 @@ class VideoItem(QWidget):
         self.first_class.setCurrentIndex(firstIndex)
         self.first_class.currentIndexChanged.connect(self.firstclick)
         
-
+        # 2
         secondArr = self.data['second']
         self.second_class = QComboBox()
         self.second_class.addItems(["%s" % item for item in secondArr])
@@ -114,6 +116,22 @@ class VideoItem(QWidget):
         self.second_class.setCurrentIndex(secondIndex)
         self.second_class.currentIndexChanged.connect(self.secondclick)
         
+        # 3
+        thirdArr = self.data['third']
+        self.third_class = QComboBox()
+        self.third_class.addItems(["%s" % item for item in thirdArr])
+        thirdIndex = 0
+        if len(third_text) > 0:
+            for i in range(0, len(thirdArr)):
+                if third_text == thirdArr[i]:
+                    thirdIndex = i 
+        if thirdIndex == 0:
+            self.third_class.setEditable(True) 
+        else:
+            self.third_class.setEditable(False)       
+        self.third_class.setCurrentIndex(thirdIndex)
+        self.third_class.currentIndexChanged.connect(self.thirdclick)
+
 
         pic = video[13] 
         if pic is None:
@@ -149,7 +167,7 @@ class VideoItem(QWidget):
         text = self.lb_subtitle.toPlainText()
         dic = {'tags': text}
         self._updateVideo(dic)
-
+    # 1
     def firstclick(self):
         firstText = self.first_class.currentText()
         index = self.first_class.currentIndex()
@@ -178,7 +196,7 @@ class VideoItem(QWidget):
             print(self.data)
             gfunc.writeJsonFile(self.data, 'classify')
                 
-        
+    # 2  
     def secondclick(self):
         secondText = self.second_class.currentText()
         index = self.second_class.currentIndex()
@@ -189,6 +207,18 @@ class VideoItem(QWidget):
         dic = {'second_class': secondText}
         self._updateVideo(dic)
         self.writeClassify('second', secondText)
+
+    # 3
+    def thirdclick(self):
+        thirdText = self.third_class.currentText()
+        index = self.third_class.currentIndex()
+        if index == 0:
+            self.third_class.setEditable(True)
+        else:
+            self.third_class.setEditable(False)
+        dic = {'third_class': thirdText}
+        self._updateVideo(dic)
+        self.writeClassify('third', thirdText)
 
 
     def editingFinished(self):
@@ -210,28 +240,39 @@ class VideoItem(QWidget):
 
     def init_ui(self):
         """handle layout"""
-        ly_main = QVBoxLayout()
+        ly_main = QHBoxLayout()
         ly_right = QVBoxLayout()
         ly_right.addWidget(self.lb_title)
-        ly_right.addWidget(self.time)
+        self.lb_title.setFixedHeight(28)
 
-        ly_right.addWidget(self.create_time)
-        ly_right.addWidget(self.finish_time)
+        ly_row = QHBoxLayout()
+        ly_row.addWidget(self.time)
+        ly_row.addWidget(self.create_time)
+        ly_row.addWidget(self.finish_time)
 
-        ly_right.addWidget(self.lb_subtitle)
+        ly_right.addLayout(ly_row)
 
-        ly_right.addWidget(self.qqbox)
+        ly_row2 = QHBoxLayout()
+        ly_right.addLayout(ly_row2)
+
+        ly_row2.addWidget(self.qqbox)
         self.qqbox.setFixedHeight(22)
         self.qqbox.setFont(QFont("Arial", 12, QFont.StyleItalic))
+        ly_row2.addWidget(self.lb_subtitle)
+        self.lb_subtitle.setFixedHeight(25)
+
 
         ly_h_class = QHBoxLayout()
         ly_h_class.addWidget(self.first_class)
         ly_h_class.addWidget(self.second_class)
+        ly_h_class.addWidget(self.third_class)
 
         self.first_class.setFixedHeight(24)
         self.first_class.setFont(QFont("Arial", 12, QFont.StyleItalic))
         self.second_class.setFixedHeight(24)
         self.second_class.setFont(QFont("Arial", 12, QFont.StyleItalic))
+        self.third_class.setFixedHeight(24)
+        self.third_class.setFont(QFont("Arial", 12, QFont.StyleItalic))
 
         ly_right.addLayout(ly_h_class)
 

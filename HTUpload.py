@@ -17,7 +17,7 @@ class Upload(object):
         self.uploaders = uploaders
         self.platfrom = platfrom
         self.driverpath = DRIVERPATH
-        self.headless = False  # 展示
+        self.headless = True  # 展示
         
 
     def run(self, platfrom, data=[], uploaders=[]):
@@ -113,10 +113,15 @@ class Upload(object):
         tags = data[5]
         first_class_name = data[6]
         second_class_name = data[7]
+        third_class_name = data[18]
+
         is_exist_local = data[14]
         local_path = VIDEODIRNAME + '/'+ data[15]
-        print(local_path)
+        print("local path: "+local_path)
 
+         # 向上滚动点
+
+        # 上传视频
         flag = self.pubStart(browser, url, is_exist_local, local_path)
         if flag == 'fail':
             return
@@ -131,18 +136,25 @@ class Upload(object):
             titleinput = browser.find_by_id('title-fld').first
             titleinput.clear()
             titleinput.fill(title)
-        
+                
         # 分类
-        browser.find_by_id('normal_first_class')[0].find_by_css('a')[0].click()
+        # 1
+        browser.find_by_id('green_first_class')[0].find_by_css('a')[0].click()
         browser.find_by_xpath('//input[@type="search"and@placeholder="搜索"]').first.fill(first_class_name)
         browser.find_by_xpath('//li[@value="%s"]' % (first_class_name)).first.click()
-
-        browser.find_by_id('normal_second_class')[0].find_by_css('a').first.click()
+        # 2
+        browser.find_by_id('green_second_class')[0].find_by_css('a').first.click()
         browser.find_by_xpath('//input[@type="search"and@placeholder="搜索"]')[1].fill(second_class_name)
-        if first_class_name == second_class_name:
-            browser.find_by_xpath('//li[@value="%s"]' % (second_class_name))[1].click()
-        else:
-            browser.find_by_xpath('//li[@value="%s"]' % (second_class_name))[0].click()
+        browser.find_by_xpath('//li[@value="%s"]' % (second_class_name))[0].click()
+        # 3
+        browser.find_by_id('green_third_class')[0].find_by_css('a').first.click()
+        browser.find_by_xpath('//input[@type="search"and@placeholder="搜索"]')[2].fill(third_class_name)
+        browser.find_by_xpath('//li[@value="%s"]' % (third_class_name))[0].click()
+
+        # if first_class_name == second_class_name:
+        #     browser.find_by_xpath('//li[@value="%s"]' % (second_class_name))[1].click()
+        # else:
+        #     browser.find_by_xpath('//li[@value="%s"]' % (second_class_name))[0].click()
 
         # 标签
         browser.find_by_id('tag-input').first.fill(tags)
@@ -157,7 +169,10 @@ class Upload(object):
             browser.find_by_id('video_publish_commit').first.click()
 
             if is_exist_local:
-                pass
+                dialog = browser.find_by_xpath('//dialog[@class="ui_dialog_container ui_dialog_alert"]')[0]
+                dialog.find_by_xpath('//a[@class="ui_button ui_button_primary"]')[0].click()
+                # dialog.find_by_text('发布')[0].click()
+
             else:
                 dialog = browser.find_by_xpath('//dialog[@class="ui_dialog_container ui_dialog_alert"]')[0]
                 dialog.find_by_text('确定')[0].click()
@@ -168,7 +183,15 @@ class Upload(object):
             time.sleep(3)
             arturl = 'https://mp.qq.com/page/article_manager'
             browser.visit(arturl)
-            pp = browser.find_by_text(title)
+
+            # 中文符号需转成英文符号
+            tt = title.replace('，', ',')
+            tt = tt.replace('。', '.')
+            tt = tt.replace('：', ':')
+            tt = tt.replace('！', '!')
+            tt = tt.replace('？', '?')
+
+            pp = browser.find_by_text(tt)
             if len(pp) > 0:
                 # 发布成功
                 today = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) 
@@ -220,7 +243,48 @@ class Upload(object):
         print('视频上传完成')
         return flag
 
-    def checkImg(self, browser):
+    def checkImg(self, browser, pathname):
+        # 截取视频
+        # print('本地上传设置视频封面..')
+
+        # outfile = gfunc.get_image_video(pathname)
+        # print("out file image: "+outfile);
+        # print('点击手动设置封面图')
+
+        # browser.find_by_text('设置封面图')[0].click()
+        # time.sleep(0.2)
+        # dialog = browser.find_by_id('mask_captureCoverDialog')[0]
+
+        # print('上传图片')
+        # print('点击上传本地图片按钮')
+        # # dialog.find_by_text('上传本地图片')[0].click()
+        # # time.sleep(2)
+        # # todo 不上传 为毛
+        # dialog.find_by_xpath('//input[@class="webuploader-element-invisible"and@name="file"]')[0].fill(outfile)
+        # # dialog.find_by_xpath('//input[@name="file"]')[0].fill(outfile)
+        
+
+        # time.sleep(2000000)
+        # print('点击确定')
+        # # 元素不可见
+        # dialog.execute_script("var q=document.documentElement.scrollTop=200")
+
+        # dialog.find_by_text('确定')[0].click()
+        # time.sleep(1)
+        # print('检查视频封面')
+
+        # src = browser.find_by_id('video_content_cover_bg_img')[0]['src']
+        # flag = False
+        # if len(src) > 20:
+        #     flag = True
+        # print(str(flag))
+        # return flag
+
+        # 截图
+        outfile = gfunc.get_image_video(pathname)
+
+
+        # 自动加载封面的
         text = '检查视频封面..'
         print(text, end='\r')
         flag = False
@@ -261,8 +325,12 @@ class Upload(object):
                     self.pubVideo(browser, row_url, is_exist_local, local_path)
 
                 # 上传成功
+                browser.execute_script("var q=document.documentElement.scrollTop=300")
+
                 # 封面
-                ss = self.checkImg(browser)
+                ss = self.checkImg(browser, local_path)
+
+
                 if ss == False:
                     self.pubVideo(browser, row_url, is_exist_local, local_path)
 

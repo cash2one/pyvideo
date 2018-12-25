@@ -4,6 +4,7 @@ from config import *
 import random
 import gfunc
 
+
 # 删除
 def delVideos():
     db = dbHelper.database()
@@ -57,6 +58,10 @@ def getUploader(platform):
 # 获取主播
 def getAnchor(platform):
     dic = addFromUserId({'platform': platform})
+    return getData('anchor', dic)
+# 获取主播根据aid
+def getAnchorFromAid(aid):
+    dic = addFromUserId({'aid': aid})
     return getData('anchor', dic)
 
 # 添加主播 dic = {name, uin, intr, vnum, page, fromUserId, platform}
@@ -250,8 +255,37 @@ def updateAllFromUserId():
     db.update("update videos set fromUserId = '1'")
     db.update("update anchor set fromUserId = '1'")
 
+# 
+def addUploaders():
+    f = open("Source/uploaders.tex", "r")
+    lines = f.readline()
+    for line in lines:
+        arr = line.split("---")
+
+        account = arr[0]
+        pwd = arr[1]
+        ext = ''
+        platform = ''
+        if arr.count > 2:
+            ext = arr[3]
+            if ext.find('tag') >= 0:
+                # 包含
+                ext = ext.repleace('tag:', '')
+            else:
+                platform = PlatformType[ext]
+
+        # 登录方式 qq email
+        loginType = LoginType.qq.value
+        if name.find('@') != -1:
+            loginType = LoginType.email.value
+
+        res = dbfunc.insertUploader(name, pwd, ext, platform, loginType)
+
+
+        insertUploader(account, pwd, ext, platform, loginType)    
+
 def main():  
-    # createTable()  
+    createTable()  
     pass
 
 if __name__ == '__main__':

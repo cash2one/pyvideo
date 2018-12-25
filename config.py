@@ -1,15 +1,15 @@
 from enum import Enum
 
 # 平台
-PLATFORM = 'WIN'  # MAC WIN
+PLATFORM = 'MAC'  # MAC WIN
 
 if PLATFORM == 'MAC':
     DRIVERPATH = './Source/mac/chromedriver'
-    VIDEODIRNAME = '/Users/huangtao/Desktop/Vidos'
+    VIDEODIRNAME = '/Users/huangtao/Desktop/Videos'
 
 elif PLATFORM == 'WIN':
     DRIVERPATH = './Source/win/chromedriver.exe'
-    VIDEODIRNAME = 'C:\\Users\\Administrator\\Desktop\\Video'
+    VIDEODIRNAME = 'C:\\Users\\Administrator\\Desktop\\Videos'
 
     
 Headers = {
@@ -90,10 +90,17 @@ class VideoType(Enum):
     movie = 2
     game = 3
     tv = 4
+    cinema = 5 # 少儿动画
+    gc_comic = 6  # 国产动漫
+    japan_comic = 7 # 日本动漫
+    wz_game = 8  # 王者荣耀
+    cj_game = 9  # 吃鸡 
+
+# 分类 标记
 
 
 Classly = {
-    '3327083625': {'type': VideoType.comic, 'data': [
+    '3327083625': {'type': VideoType.gc_comic, 'data': [
         '盛世妆娘',
         '魔道祖师',
         '武庚纪',
@@ -107,6 +114,15 @@ Classly = {
         '骨傲天',
         '我在皇宫当巨巨',
         '西行纪',
+        '侠岚',
+        '全职法师',
+        '星辰变',
+        '我的天劫女友',
+        '妖怪名单',
+        '少年锦衣卫',
+        '斗魂卫',
+        '画江湖之不良人',
+        '雪鹰领主',
     ]},
     '810359132': {'type': VideoType.comic, 'data': [
         '爆笑虫子',
@@ -118,20 +134,21 @@ Classly = {
         '火线传奇',
         '非人哉',
     ]},
-    '3056371919': {'type': VideoType.comic, 'data': [
-        '一禅小和尚',
-        '哆啦A梦',
-        '猫和老鼠',
-        '憨豆先生动画版'
-    ]},
     '1194332304': {'type': VideoType.comic, 'data': [
         '蜡笔小新',
         '卡通盒系列',
-
+        '哆啦A梦',
+        '猫和老鼠',
+        '憨豆先生动画版',
+        '一拳超人',
+        '妖精的尾巴',
     ]},
-    '3216598385': {'type': VideoType.comic, 'data': [
-        '禽兽超人',
-        '兽王争锋',
+    '3216598385': {'type': VideoType.cj_game, 'data': [
+        '绝地求生',
+        '刺激战场'
+    ]},
+    '3056371919': {'type': VideoType.wz_game, 'data': [
+        '王者荣耀',
     ]},
 
     '2030657847': {'type': VideoType.game, 'data': [
@@ -140,25 +157,38 @@ Classly = {
         'lol',
         '英雄联盟',
         '小学生炸了',
-        '王者荣耀',
-        '绝地求生',
-        '刺激战场',
         'CF手游',
         '穿越火线',
-
     ]},
-    '1325049637': {'type': VideoType.tv, 'data': [
-        '扶摇',
-        '甜蜜暴击',
-        '流星花园',
-        '香蜜沉沉烬如霜',
-        '香蜜沉沉',
-        '延禧攻略',
-        '楚乔传',
-        '情深深雨濛濛',
-        '爱情公寓',
-        '还珠格格',
-        '橙红年代'
+    # '1325049637': {'type': VideoType.tv, 'data': [
+    #     '扶摇',
+    #     '甜蜜暴击',
+    #     '流星花园',
+    #     '香蜜沉沉烬如霜',
+    #     '香蜜沉沉',
+    #     '延禧攻略',
+    #     '楚乔传',
+    #     '情深深雨濛濛',
+    #     '爱情公寓',
+    #     '还珠格格',
+    #     '橙红年代'
+    # ]},
+    '1325049637': {'type': VideoType.gc_comic, 'data': [
+        '超级飞侠',
+        '赛尔号',
+        '汪汪队立大功',
+        '宝宝巴士',
+        '熊出没',
+
+        '不良人',
+        '成龙历险记',
+        '妖神记',
+        '成龙历险记',
+        '一禅小和尚',
+        '快把我哥带走',
+        '斗罗大陆',
+        '禽兽超人'
+
     ]},
     '169964440': {'type': VideoType.movie, 'data': [
         '唐人街探案',
@@ -172,7 +202,13 @@ Classly = {
         '林正英',
         '让子弹飞',
         '大话西游',
-        '人在囧途'
+        '人在囧途',
+        '逃学威龙',
+        '少林足球',
+        '功夫',
+        '星爷',
+        '鹿鼎记',
+        '夏洛特烦恼',
     ]},
 
 
@@ -181,7 +217,7 @@ Classly = {
 
 # [创建数据库]
 
-CreateUserSql = """create table user(
+CreateUserSql = """CREATE TABLE user(
         userId int auto_increment primary key,
         name varchar(100),
         pwd varchar(100),
@@ -210,7 +246,10 @@ CreateAnchorSql = """CREATE TABLE anchor (
         page int(10) default 1,
 
         fromUserId varchar(10),
-        platform varchar(20)
+        platform varchar(20),
+        belong_type varchar(20),
+        belong_uploader varchar(20),
+        is_download varchar(1) default 'y'
         )"""
 
 CreateVideosSql = """CREATE TABLE videos (
@@ -220,8 +259,8 @@ CreateVideosSql = """CREATE TABLE videos (
                 url varchar(255),
                 alias varchar(255),
                 tags varchar(255),
-                first_class varchar(10),
-                second_class varchar(10),
+                first_class varchar(30),
+                second_class varchar(30),
                 platform_create_time varchar(50),
                 create_time DATETIME,
                 publish_time DATETIME,
@@ -231,6 +270,32 @@ CreateVideosSql = """CREATE TABLE videos (
                 is_exist_local int(1),
                 local_path varchar(255),
                 fromUserId int(10),
-                platform varchar(20) 
+                platform varchar(20),
+                third_class varchar(30)
                 )"""
 
+# {
+# 	"id": "000000",
+# 	"data": [
+# 		{
+# 			"parentId": "000000",
+# 			"id": "000001",
+# 			"title": "娱乐",
+# 			"data": [
+# 				{
+# 					"parentId": "000001",
+# 					"id": "000011",
+# 					"title": "电影",
+# 					"data": [
+# 						{
+# 							"parentId": "000011",
+# 							"id": "000111",
+# 							"title": "电影片段",
+# 						}
+# 					]
+# 				}
+# 			],
+
+# 		}
+# 	]
+# }

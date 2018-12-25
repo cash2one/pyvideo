@@ -78,6 +78,9 @@ class Tencent(object):
         # 分类
         classly = gfunc.classFromTitle(title)
         qq = classly[2]
+        # 三级分类
+        third = gfunc.getThirdClass(classly[1], qq)
+
         dic = {
             'qq': qq,
             'title': title,
@@ -86,8 +89,9 @@ class Tencent(object):
             'tags': tags,
             'first_class': classly[0],
             'second_class': classly[1],
+            'third_class': third,
             'platform_create_time': video['uploadtime'],
-            'create_time': time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) ,
+            'create_time': time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),
             'aid': aid,
             'vid': video['vid'],
             'pic': video['pic'],

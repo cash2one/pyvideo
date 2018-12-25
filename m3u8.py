@@ -95,5 +95,7 @@ if __name__ == '__main__':
     # url = 'http://pl-ali.youku.com/playlist/m3u8?vid=XMzYzMjk0MDA2OA%3D%3D&type=hd2&ups_client_netip=dded2e63&utid=iTbUE8VuE3ECAXZyBV8VD0xE&ccode=0512&psid=38fbd7be3bd83e3abe1f537a09cf991c&duration=295&expire=18000&drm_type=1&drm_device=7&ups_ts=1533090628&onOff=0&encr=0&ups_key=0bb2f500fbafbccb45fc45258c4f3e2e'
     # url = 'http://183.66.104.115/sportsts.tc.qq.com/AVIo9SUuntMHJ8anwe6vTUC2lRA09JDybd6yx6IjCNX8/4TDxaVQl2c132vUv5tFfXzGfYLtKfOwKC2EzGvSurKakB18tMGyiuKgi_qrMuZsvoZKCEZTqb_HWymMxAymXXkwVWc-PiWcjjZeWVJcKLrJ0pBs_rkTS0Q/t0027ynq4y3.321003.ts.m3u8?ver=4'
     # url = 'http://ltsbsy.qq.com/uwMRJfz-r5jAYaQXGdGnCtD0ZkRh8BgOUQePMGh65cs/ZL5mczBKBiRr0gPwt4Kp1ZEqTKJEMlN37uO5ASCpifEj-c9wT_oPOavgD0DYxI9WvbaNRw09DrWkyxMdJzv-f5E9ycyUak_yqqUeGgyXWcirKWXxEN4Pzw/g0027mj8rbi.321003.ts.m3u8?ver=4'
-    url = 'http://61.128.151.150/sportsts.tc.qq.com/ANrdIeTsydtFT2TDk9KX5-lgTMatCwpOntG9JbJXD-HQ/H8NtiKJxSHbzsnJ12EamCeofeXBJZb-4TIOUhA2iJw-IuGsN-LJFqUL_TsvhCFBqCb8Mhc9xIJ5xLn9or9-GwJ1qT9Juj3TzHDznwa8-m4Rji18y1mMJFQ/i00275sy7c8.321003.ts.m3u8?ver=4'
+    # url = 'http://61.128.151.150/sportsts.tc.qq.com/ANrdIeTsydtFT2TDk9KX5-lgTMatCwpOntG9JbJXD-HQ/H8NtiKJxSHbzsnJ12EamCeofeXBJZb-4TIOUhA2iJw-IuGsN-LJFqUL_TsvhCFBqCb8Mhc9xIJ5xLn9or9-GwJ1qT9Juj3TzHDznwa8-m4Rji18y1mMJFQ/i00275sy7c8.321003.ts.m3u8?ver=4'
+
+    url = 'http://cctv12306.com/video/%E4%B8%AD%E5%9C%8B-%E7%B4%84%E7%B4%84%E5%93%A5%E8%97%9D%E6%A0%A1%E6%A5%B5%E5%93%81%E8%BA%AB%E6%9D%90%E5%B0%8F%E4%BB%99%E5%A5%B3%E7%90%B3%E7%90%B3/a.m3u8'
     downloader.run(url, '')

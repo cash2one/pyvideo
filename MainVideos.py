@@ -8,6 +8,7 @@ import dbfunc
 import time
 from HTQThread import HTQThread
 from global_data import global_data
+# import HTTableWidget
 
 class VideosWidget(QWidget):
     def __init__(self, anchor=None):
@@ -37,6 +38,8 @@ class VideosWidget(QWidget):
         # self.listWidget.setViewMode(QListView.IconMode)
         self.listWidget.setFlow(QListView.LeftToRight)
         self.listWidget.setWrapping(True)
+        
+        # self.tableWidget = HTTableWidget.TableWidget(self.videos)
 
         self.mainLayout.addLayout(self.topLayout)
         self.mainLayout.addWidget(self.listWidget)
@@ -64,6 +67,7 @@ class VideosWidget(QWidget):
         self.topLayout.addWidget(self.uploaderBox, 0, 3)
 
     def setListWidget(self):
+        # self.tableWidget.updateTable(self.videos)
 
         self.thread = HTQThread()
         self.thread.signal.connect(self.setList)
@@ -84,7 +88,7 @@ class VideosWidget(QWidget):
         
         item_widget = QListWidgetItem()
         # 必须设置这个 大小才显示
-        item_widget.setSizeHint(QSize(210, 305))
+        item_widget.setSizeHint(QSize(600, 120))
         self.listWidget.addItem(item_widget)
 
         videoWidget = videoItemWidget.VideoItem(video)

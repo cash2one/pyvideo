@@ -92,7 +92,8 @@ def download_videos(datas):
         vid = get_vid(url)
 
         if is_download == 'y':
-            if gfunc.isfile(local_path) == False or local_path.find('new') == -1 :
+            # or local_path.find('new') == -1
+            if gfunc.isfile(local_path) == False:
                 dic = {
                     'id': idd,
                     'url': url,
@@ -105,12 +106,12 @@ def download_videos(datas):
     # 下载
     cmd_downloads(arr)
     # 去水印
-    cmd_watermarks(arr)
+    # cmd_watermarks(arr)
     # 更新
     for i in arr:
         dic = {
             'is_exist_local': '1',
-            'local_path': i['filename']+'_new'+'.mp4'
+            'local_path': i['filename']+'.mp4'
         }
         dbfunc.updateVideo(dic, {'id': i['id']})
 
@@ -123,9 +124,9 @@ def download_video(url):
     cmd_download(url, vid)
     # 2 去水印
     filename = vid+'.mp4'
-    to_filename = vid+'_new'+'.mp4'
-    cmd_watermark(filename, to_filename)
-    return to_filename
+    # to_filename = vid+'_new'+'.mp4'
+    # cmd_watermark(filename, to_filename)
+    return filename
 
 
 def main(datas):

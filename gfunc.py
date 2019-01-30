@@ -50,7 +50,7 @@ def classFromTitle(title):
                     return ['动漫', '国产动漫', item]
                 
                 if tt == VideoType.game:
-                    return ['游戏', '游戏', item]
+                    return ['游戏', '电脑电竞游戏（MOBA）', item]
                 if tt == VideoType.tv:
                     return ['电视剧', '连续剧', item]
                 if tt == VideoType.cinema:
@@ -85,6 +85,9 @@ def getThirdClass(second_class, qq):
             return '王者荣耀玩家视频'
         if qq == '3216598385':
             return '吃鸡'
+    
+    if second_class == '电脑电竞游戏（MOBA）':
+        return '英雄联盟玩家视频'
 
     return ''
 
